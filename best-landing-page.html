@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en" style="height: auto; min-height: 100%;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlgoArena - Turn Algorithms Into Action</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link id="heading-font-link" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link id="body-font-link" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+heading: ['var(--font-heading-name)', 'sans-serif'],
+body: ['var(--font-body-name)', 'sans-serif'],
+},
+spacing: {
+base: 'var(--space-base)',
+},
+borderRadius: {
+small: 'var(--radius-small)',
+large: 'var(--radius-large)',
+},
+boxShadow: {
+custom: 'var(--shadow-custom)',
+'custom-hover': 'var(--shadow-custom-hover)',
+},
+}
+}
+}
+</script>
+<style>
+:root {
+--font-heading-name: 'Montserrat';
+--font-body-name: 'Inter';
+--font-heading: 'Montserrat', sans-serif;
+--font-body: 'Inter', sans-serif;
+--letter-spacing-heading: 0.5px;
+--letter-spacing-body: 0px;
+--space-base: 1rem;
+--radius-small: 8px;
+--radius-large: 16px;
+--border-width: 2px;
+--shadow-color: 34 211 238;
+--shadow-offset-x: 0px;
+--shadow-offset-y: 4px;
+--shadow-blur: 16px;
+--shadow-spread: 0px;
+--shadow-opacity: 0.3;
+--shadow-custom: 0px 4px 16px rgba(var(--shadow-color), 0.3);
+--shadow-custom-hover: 0px 8px 24px rgba(var(--shadow-color), 0.5);
+}
+
+.spotlight-bg {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+z-index: 0;
+}
+
+.spotlight {
+position: absolute;
+width: 600px;
+height: 600px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, transparent 70%);
+pointer-events: none;
+transition: all 0.1s ease-out;
+transform: translate(-50%, -50%);
+}
+
+.pixel-grid {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+display: grid;
+grid-template-columns: repeat(15, 1fr);
+grid-template-rows: repeat(15, 1fr);
+gap: 8px;
+padding: 20px;
+pointer-events: none;
+z-index: 1;
+}
+
+.pixel {
+background: rgba(34, 211, 238, 0.05);
+border-radius: 4px;
+transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 10px;
+font-weight: 600;
+color: transparent;
+font-family: monospace;
+}
+
+.pixel.revealed {
+background: rgba(34, 211, 238, 0.2);
+color: rgba(34, 211, 238, 0.9);
+box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+transform: scale(1.1);
+}
+
+.game-cube {
+opacity: 0;
+transform: scale(0.5) translateY(-20px);
+animation: cubeAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes cubeAppear {
+to {
+opacity: 1;
+transform: scale(1) translateY(0);
+}
+}
+
+.typing-dots span {
+animation: typing 1.4s infinite;
+}
+
+.typing-dots span:nth-child(2) {
+animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(3) {
+animation-delay: 0.4s;
+}
+
+@keyframes typing {
+0%, 60%, 100% { opacity: 0.3; }
+30% { opacity: 1; }
+}
+
+.progress-fill {
+animation: fillProgress 3s ease-in-out infinite;
+}
+
+@keyframes fillProgress {
+0% { width: 0%; }
+50% { width: 100%; }
+100% { width: 0%; }
+}
+
+.fade-in-up {
+animation: fadeInUp 0.6s ease-out forwards;
+opacity: 0;
+}
+
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(30px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.stat-card {
+animation: fadeInUp 0.8s ease-out forwards;
+opacity: 0;
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.1s; }
+.stat-card:nth-child(2) { animation-delay: 0.2s; }
+.stat-card:nth-child(3) { animation-delay: 0.3s; }
+.stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+.game-transition {
+animation: gameSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes gameSlideIn {
+from {
+opacity: 0;
+transform: translateX(30px);
+}
+to {
+opacity: 1;
+transform: translateX(0);
+}
+}
+
+.spotlight-card {
+position: relative;
+overflow: hidden;
+}
+
+.spotlight-card::before {
+content: '';
+position: absolute;
+top: 50%;
+left: 50%;
+width: 200%;
+height: 200%;
+background: radial-gradient(circle, rgba(34, 211, 238, 0.1) 0%, transparent 50%);
+transform: translate(-50%, -50%);
+opacity: 0;
+transition: opacity 0.3s ease;
+pointer-events: none;
+}
+
+.spotlight-card:hover::before {
+opacity: 1;
+}
+
+.floating-code {
+position: absolute;
+font-family: monospace;
+font-size: 12px;
+color: rgba(34, 211, 238, 0.1);
+pointer-events: none;
+animation: float 20s linear infinite;
+}
+
+@keyframes float {
+0% {
+transform: translateY(100vh) translateX(0);
+opacity: 0;
+}
+10% {
+opacity: 0.3;
+}
+90% {
+opacity: 0.3;
+}
+100% {
+transform: translateY(-100px) translateX(50px);
+opacity: 0;
+}
+}
+
+.header-spotlight {
+position: absolute;
+top: 0;
+left: 0;
+width: 300px;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.05), transparent);
+pointer-events: none;
+transition: left 0.1s ease-out;
+}
+
+.arena-spotlight-glow {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 120%;
+height: 120%;
+background: radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, transparent 60%);
+pointer-events: none;
+z-index: 0;
+}
+
+.arena-container {
+position: relative;
+z-index: 10;
+}
+</style>
+</head>
+<body class="font-body bg-gray-900 text-gray-100" style="height: auto; min-height: 100%;">
+
+<!-- Sticky Header with Spotlight -->
+<header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-gray-900/90 border-b border-gray-800">
+<div class="header-spotlight" id="headerSpotlight"></div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<div class="flex items-center justify-between h-16">
+<!-- Logo -->
+<div class="flex items-center">
+<h1 class="font-heading text-2xl font-bold text-cyan-400">AlgoArena</h1>
+</div>
+
+<!-- Navigation -->
+<nav class="hidden md:flex items-center space-x-8">
+<a href="#home" class="text-gray-300 hover:text-cyan-400 transition-colors">Home</a>
+<a href="#games" class="text-gray-300 hover:text-cyan-400 transition-colors">Games</a>
+<a href="#features" class="text-gray-300 hover:text-cyan-400 transition-colors">Features</a>
+<a href="#leaderboards" class="text-gray-300 hover:text-cyan-400 transition-colors">Leaderboards</a>
+<a href="#community" class="text-gray-300 hover:text-cyan-400 transition-colors">Community</a>
+</nav>
+
+<!-- CTA Buttons -->
+<div class="flex items-center space-x-4">
+<button class="hidden sm:block px-4 py-2 text-gray-300 hover:text-cyan-400 transition-colors rounded-small">Login</button>
+<button class="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 text-gray-900 font-semibold rounded-small transition-all shadow-custom hover:shadow-custom-hover">Start Coding</button>
+</div>
+</div>
+</div>
+</header>
+
+<!-- Hero Section with Dynamic Spotlight -->
+<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden" style="max-height: 1000px;">
+<!-- Spotlight Background -->
+<div class="spotlight-bg">
+<div class="spotlight" id="heroSpotlight"></div>
+</div>
+
+<!-- Pixel Grid with Hidden Languages -->
+<div class="pixel-grid" id="pixelGrid"></div>
+
+<!-- Floating Code Snippets -->
+<div class="floating-code" style="top: 10%; left: 10%; animation-delay: 0s;">function solve() {</div>
+<div class="floating-code" style="top: 30%; left: 80%; animation-delay: 3s;">const result = [];</div>
+<div class="floating-code" style="top: 60%; left: 15%; animation-delay: 6s;">return optimized;</div>
+<div class="floating-code" style="top: 80%; left: 70%; animation-delay: 9s;">while (i < n) {</div>
+
+<!-- Hero Content -->
+<div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
+<h2 class="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 text-gray-100">Turn Algorithms Into Action.</h2>
+<p class="text-xl sm:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">Write code. Run simulations. Compete in real-time. Watch your logic shape dynamic game worlds.</p>
+
+<!-- CTA Buttons -->
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+<button class="w-full sm:w-auto px-8 py-4 bg-cyan-500 hover:bg-cyan-600 text-gray-900 font-semibold rounded-small transition-all shadow-custom hover:shadow-custom-hover text-lg">Start 1 vs AI</button>
+<button class="w-full sm:w-auto px-8 py-4 bg-gray-800 hover:bg-gray-700 text-gray-100 font-semibold rounded-small transition-all border-2 border-cyan-500 text-lg">Challenge a Player</button>
+<button class="w-full sm:w-auto px-8 py-4 bg-transparent hover:bg-gray-800 text-gray-300 font-semibold rounded-small transition-all border border-gray-600 text-lg">View Demo</button>
+</div>
+
+<!-- Mini Preview Card -->
+<div class="max-w-2xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-large p-6 border border-gray-700 shadow-custom">
+<div class="grid md:grid-cols-2 gap-6">
+<!-- Code Snippet -->
+<div class="bg-gray-900 rounded-small p-4 text-left">
+<div class="flex items-center justify-between mb-3">
+<span class="text-xs text-gray-400 font-mono">solution.js</span>
+<span class="text-xs text-green-400">● Running</span>
+</div>
+<pre class="text-sm text-gray-300 font-mono overflow-x-auto"><code>function solve(grid) {
+  let score = 0;
+  for (let row of grid) {
+    score += row.reduce(
+      (a, b) => a + b, 0
+    );
+  }
+  return score;
+}</code></pre>
+</div>
+
+<!-- Game Board Preview -->
+<div class="bg-gray-900 rounded-small p-4">
+<div class="text-xs text-gray-400 mb-3">Game Simulation</div>
+<div class="grid grid-cols-4 gap-1 mb-4" id="heroGameGrid">
+<!-- Cubes will be added via JS -->
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs text-gray-400">
+<span>Progress</span>
+<span id="heroProgress">0%</span>
+</div>
+<div class="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+<div class="bg-cyan-500 h-full rounded-full progress-fill" id="heroProgressBar"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Interactive Game Preview Section -->
+<section id="games" class="py-20 bg-gray-800/30" style="max-height: 1000px;">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-16">
+<h2 class="font-heading text-4xl sm:text-5xl font-bold mb-4 text-gray-100">Your Code. Your Game.</h2>
+<p class="text-xl text-gray-300">Choose a game. Write the logic. Watch it evolve.</p>
+</div>
+
+<!-- Game Selector Tabs -->
+<div class="flex flex-wrap justify-center gap-3 mb-12">
+<button class="game-tab px-6 py-3 bg-cyan-500 text-gray-900 font-semibold rounded-small transition-all shadow-custom" data-game="tetris">
+<span class="text-xl mr-2">🎮</span> Tetris Logic
+</button>
+<button class="game-tab px-6 py-3 bg-gray-800 text-gray-300 hover:bg-gray-700 font-semibold rounded-small transition-all" data-game="maze">
+<span class="text-xl mr-2">🧩</span> Maze Solver
+</button>
+<button class="game-tab px-6 py-3 bg-gray-800 text-gray-300 hover:bg-gray-700 font-semibold rounded-small transition-all" data-game="tower">
+<span class="text-xl mr-2">🏰</span> Tower Defense
+</button>
+<button class="game-tab px-6 py-3 bg-gray-800 text-gray-300 hover:bg-gray-700 font-semibold rounded-small transition-all" data-game="puzzle">
+<span class="text-xl mr-2">🧠</span> Puzzle Grid
+</button>
+</div>
+
+<!-- Game Preview Layout -->
+<div class="grid lg:grid-cols-2 gap-12 items-center">
+<!-- Mock Monaco Editor -->
+<div class="bg-gray-900 rounded-large p-6 border border-gray-700 shadow-custom spotlight-card">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center space-x-2">
+<div class="w-3 h-3 rounded-full bg-red-500"></div>
+<div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+<div class="w-3 h-3 rounded-full bg-green-500"></div>
+</div>
+<select class="bg-gray-800 text-gray-300 px-3 py-1 rounded-small text-sm border border-gray-700">
+<option>JavaScript</option>
+<option>Python</option>
+</select>
+</div>
+<pre class="text-sm text-gray-300 font-mono mb-4 overflow-x-auto h-64" id="gameCode"><code>function movePiece(grid, direction) {
+  // Tetris-like logic
+  const piece = grid.activePiece;
+  
+  if (direction === 'down') {
+    piece.y += 1;
+    if (checkCollision(grid, piece)) {
+      piece.y -= 1;
+      lockPiece(grid, piece);
+      clearLines(grid);
+    }
+  }
+  
+  return grid;
+}</code></pre>
+<div class="flex space-x-3">
+<button class="flex-1 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-gray-900 font-semibold rounded-small transition-all" id="runGameBtn">Run Code</button>
+<button class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-small transition-all border border-gray-700">Reset</button>
+</div>
+</div>
+
+<!-- Game Simulation Panel -->
+<div class="bg-gray-900 rounded-large p-6 border border-gray-700 shadow-custom spotlight-card game-transition" id="gamePanel">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-heading text-lg font-semibold text-gray-100" id="gameTitle">Tetris Logic</h3>
+<span class="text-xs text-cyan-400 font-semibold">● LIVE</span>
+</div>
+
+<!-- Game Grid Container -->
+<div class="bg-gray-800 rounded-small p-4 mb-4">
+<div class="grid grid-cols-8 gap-1 mb-4" id="gameGrid">
+<!-- Game cubes will be dynamically added -->
+</div>
+</div>
+
+<!-- Stats -->
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-gray-800 rounded-small p-3 text-center">
+<div class="text-2xl font-bold text-cyan-400" id="gameScore">0</div>
+<div class="text-xs text-gray-400">Score</div>
+</div>
+<div class="bg-gray-800 rounded-small p-3 text-center">
+<div class="text-2xl font-bold text-green-400" id="gameLines">0</div>
+<div class="text-xs text-gray-400">Progress</div>
+</div>
+<div class="bg-gray-800 rounded-small p-3 text-center">
+<div class="text-2xl font-bold text-yellow-400" id="gameLevel">1</div>
+<div class="text-xs text-gray-400">Level</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Arena Interface Preview Section - MOVED HERE -->
+<section class="py-32 bg-gray-900 relative overflow-hidden" style="max-height: 1200px;">
+<!-- Spotlight Glow Background -->
+<div class="arena-spotlight-glow"></div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 arena-container">
+<div class="text-center mb-16">
+<h2 class="font-heading text-5xl sm:text-6xl font-bold mb-6 text-gray-100">This Is The Product.</h2>
+<p class="text-xl sm:text-2xl text-gray-300 mb-8">Experience the full competitive coding arena. Battle AI or real players in real-time.</p>
+
+<!-- Mode Toggle -->
+<div class="flex justify-center gap-4 mb-12">
+<button class="mode-toggle px-8 py-4 bg-cyan-500 text-gray-900 font-semibold rounded-small transition-all shadow-custom text-lg" data-mode="ai">
+1 vs AI
+</button>
+<button class="mode-toggle px-8 py-4 bg-gray-800 text-gray-300 hover:bg-gray-700 font-semibold rounded-small transition-all text-lg" data-mode="pvp">
+1 vs 1
+</button>
+</div>
+</div>
+
+<!-- Arena Layout -->
+<div class="bg-gray-800/50 backdrop-blur-sm rounded-large border-2 border-cyan-500/30 shadow-custom-hover overflow-hidden">
+<div class="grid lg:grid-cols-12 gap-0">
+<!-- Challenge Panel -->
+<div class="lg:col-span-3 bg-gray-900 border-r border-gray-700 p-6">
+<h3 class="font-heading text-lg font-semibold mb-4 text-gray-100">Challenge</h3>
+<div class="space-y-4">
+<div class="bg-gray-800 rounded-small p-4">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold text-cyan-400">Two Sum</span>
+<span class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">Easy</span>
+</div>
+<p class="text-xs text-gray-400 mb-3">Given an array of integers, return indices of two numbers that add up to target.</p>
+<div class="flex items-center justify-between text-xs text-gray-500">
+<span>⏱ 15 min</span>
+<span>🎯 100 pts</span>
+</div>
+</div>
+
+<div class="space-y-2">
+<h4 class="text-xs font-semibold text-gray-400 uppercase">Test Cases</h4>
+<div class="bg-gray-800 rounded-small p-3 text-xs font-mono">
+<div class="text-gray-400">Input: [2,7,11,15], 9</div>
+<div class="text-green-400">Output: [0,1]</div>
+</div>
+<div class="bg-gray-800 rounded-small p-3 text-xs font-mono">
+<div class="text-gray-400">Input: [3,2,4], 6</div>
+<div class="text-green-400">Output: [1,2]</div>
+</div>
+</div>
+
+<div class="space-y-2">
+<h4 class="text-xs font-semibold text-gray-400 uppercase">Constraints</h4>
+<ul class="text-xs text-gray-400 space-y-1">
+<li>• 2 ≤ nums.length ≤ 10⁴</li>
+<li>• -10⁹ ≤ nums[i] ≤ 10⁹</li>
+<li>• Only one valid answer</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- Coding Arena -->
+<div class="lg:col-span-6 bg-gray-900 p-6" id="arenaCenter">
+<!-- Single Terminal (1 vs AI) -->
+<div id="singleTerminal">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center space-x-3">
+<span class="text-sm font-semibold text-gray-100">Your Solution</span>
+<select class="bg-gray-800 text-gray-300 px-3 py-2 rounded-small text-sm border border-gray-700">
+<option>JavaScript</option>
+<option>Python</option>
+</select>
+</div>
+<div class="flex items-center space-x-2">
+<span class="text-xs text-gray-400">⏱ 12:34</span>
+</div>
+</div>
+
+<div class="bg-gray-800 rounded-small p-4 mb-4 h-80 overflow-auto">
+<pre class="text-sm text-gray-300 font-mono"><code>function twoSum(nums, target) {
+  const map = new Map();
+  
+  for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i];
+    
+    if (map.has(complement)) {
+      return [map.get(complement), i];
+    }
+    
+    map.set(nums[i], i);
+  }
+  
+  return [];
+}</code></pre>
+</div>
+
+<div class="flex space-x-3 mb-4">
+<button class="flex-1 px-4 py-3 bg-cyan-500 hover:bg-cyan-600 text-gray-900 font-semibold rounded-small transition-all">Run Code</button>
+<button class="flex-1 px-4 py-3 bg-green-500 hover:bg-green-600 text-gray-900 font-semibold rounded-small transition-all">Submit</button>
+</div>
+
+<div class="bg-gray-800 rounded-small p-4">
+<div class="text-xs font-semibold text-gray-400 mb-2">Console Output</div>
+<div class="text-xs font-mono text-green-400">✓ Test case 1 passed</div>
+<div class="text-xs font-mono text-green-400">✓ Test case 2 passed</div>
+<div class="text-xs font-mono text-gray-400 mt-2">Runtime: 52ms | Memory: 42.1MB</div>
+</div>
+</div>
+
+<!-- Dual Terminal (1 vs 1) - Hidden by default -->
+<div id="dualTerminal" class="hidden">
+<div class="grid grid-cols-2 gap-4">
+<!-- Your Terminal -->
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-sm font-semibold text-cyan-400">You</span>
+<span class="text-xs text-green-400">● Active</span>
+</div>
+<div class="bg-gray-800 rounded-small p-3 h-64 overflow-auto mb-3">
+<pre class="text-xs text-gray-300 font-mono"><code>function twoSum(nums, target) {
+  const map = new Map();
+  
+  for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i];
+    
+    if (map.has(complement)) {
+      return [map.get(complement), i];
+    }
+    
+    map.set(nums[i], i);
+  }
+  
+  return [];
+}</code></pre>
+</div>
+<div class="flex space-x-2">
+<button class="flex-1 px-3 py-2 bg-cyan-500 hover:bg-cyan-600 text-gray-900 text-sm font-semibold rounded-small transition-all">Run</button>
+<button class="flex-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-gray-900 text-sm font-semibold rounded-small transition-all">Submit</button>
+</div>
+</div>
+
+<!-- Opponent Terminal -->
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-sm font-semibold text-yellow-400">Opponent</span>
+<span class="text-xs text-yellow-400 typing-dots">Typing<span>.</span><span>.</span><span>.</span></span>
+</div>
+<div class="bg-gray-800 rounded-small p-3 h-64 overflow-auto mb-3 relative">
+<div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center rounded-small">
+<div class="text-center">
+<div class="w-12 h-12 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+<div class="text-xs text-gray-400">Opponent is coding...</div>
+</div>
+</div>
+<pre class="text-xs text-gray-300 font-mono blur-sm"><code>function twoSum(nums, target) {
+  // Hidden until submitted
+}</code></pre>
+</div>
+<div class="bg-gray-800 rounded-small p-3">
+<div class="flex items-center justify-between text-xs">
+<span class="text-gray-400">Progress</span>
+<span class="text-yellow-400">67%</span>
+</div>
+<div class="w-full bg-gray-700 rounded-full h-2 mt-2 overflow-hidden">
+<div class="bg-yellow-400 h-full rounded-full" style="width: 67%"></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Battle Status -->
+<div class="mt-4 bg-gray-800 rounded-small p-4">
+<div class="flex items-center justify-between">
+<div class="text-center flex-1">
+<div class="text-2xl font-bold text-cyan-400">2</div>
+<div class="text-xs text-gray-400">Your Tests Passed</div>
+</div>
+<div class="text-gray-600">VS</div>
+<div class="text-center flex-1">
+<div class="text-2xl font-bold text-yellow-400">1</div>
+<div class="text-xs text-gray-400">Opponent Tests Passed</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Leaderboard Sidebar -->
+<div class="lg:col-span-3 bg-gray-900 border-l border-gray-700 p-6">
+<h3 class="font-heading text-lg font-semibold mb-4 text-gray-100">Live Leaderboard</h3>
+<div class="space-y-3">
+<div class="flex items-center space-x-3 bg-yellow-500/10 border border-yellow-500/30 rounded-small p-3">
+<div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-gray-900 font-bold text-sm">1</div>
+<div class="flex-1">
+<div class="text-sm font-semibold text-gray-100">CodeMaster</div>
+<div class="text-xs text-gray-400">2,450 pts</div>
+</div>
+<div class="text-xs text-green-400">🔥 12</div>
+</div>
+
+<div class="flex items-center space-x-3 bg-gray-800 rounded-small p-3">
+<div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center text-gray-300 font-bold text-sm">2</div>
+<div class="flex-1">
+<div class="text-sm font-semibold text-gray-100">AlgoNinja</div>
+<div class="text-xs text-gray-400">2,180 pts</div>
+</div>
+<div class="text-xs text-green-400">🔥 8</div>
+</div>
+
+<div class="flex items-center space-x-3 bg-cyan-500/10 border border-cyan-500/30 rounded-small p-3">
+<div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-gray-900 font-bold text-sm">3</div>
+<div class="flex-1">
+<div class="text-sm font-semibold text-cyan-400">You</div>
+<div class="text-xs text-gray-400">1,920 pts</div>
+</div>
+<div class="text-xs text-green-400">🔥 5</div>
+</div>
+
+<div class="flex items-center space-x-3 bg-gray-800 rounded-small p-3">
+<div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center text-gray-300 font-bold text-sm">4</div>
+<div class="flex-1">
+<div class="text-sm font-semibold text-gray-100">DevQueen</div>
+<div class="text-xs text-gray-400">1,750 pts</div>
+</div>
+<div class="text-xs text-green-400">🔥 4</div>
+</div>
+
+<div class="flex items-center space-x-3 bg-gray-800 rounded-small p-3">
+<div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center text-gray-300 font-bold text-sm">5</div>
+<div class="flex-1">
+<div class="text-sm font-semibold text-gray-100">ByteHero</div>
+<div class="text-xs text-gray-400">1,620 pts</div>
+</div>
+<div class="text-xs text-green-400">🔥 3</div>
+</div>
+</div>
+
+<div class="mt-6 bg-gray-800 rounded-small p-4">
+<h4 class="text-xs font-semibold text-gray-400 uppercase mb-3">Your Stats</h4>
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="text-gray-400">Win Rate</span>
+<span class="text-green-400 font-semibold">68%</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-gray-400">Battles</span>
+<span class="text-gray-100 font-semibold">142</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-gray-400">Streak</span>
+<span class="text-yellow-400 font-semibold">🔥 5</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-20 bg-gray-800/30" style="max-height: 700px;">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-16">
+<h2 class="font-heading text-4xl sm:text-5xl font-bold mb-4 text-gray-100">How It Works</h2>
+<p class="text-xl text-gray-300">Three steps to competitive coding mastery</p>
+</div>
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Step 1 -->
+<div class="bg-gray-900 rounded-large p-8 text-center border border-gray-700 shadow-custom spotlight-card hover:transform hover:scale-105 transition-all">
+<div class="w-20 h-20 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+<div class="absolute inset-0 bg-cyan-500/10 rounded-full blur-xl"></div>
+<svg class="w-10 h-10 text-cyan-400 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+</svg>
+</div>
+<h3 class="font-heading text-2xl font-semibold mb-4 text-gray-100">Write Your Logic</h3>
+<p class="text-gray-300">Code your algorithm in JavaScript or Python. Use our Monaco-powered editor with syntax highlighting and intelligent autocomplete.</p>
+</div>
+
+<!-- Step 2 -->
+<div class="bg-gray-900 rounded-large p-8 text-center border border-gray-700 shadow-custom spotlight-card hover:transform hover:scale-105 transition-all">
+<div class="w-20 h-20 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+<div class="absolute inset-0 bg-cyan-500/10 rounded-full blur-xl"></div>
+<svg class="w-10 h-10 text-cyan-400 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+</svg>
+</div>
+<h3 class="font-heading text-2xl font-semibold mb-4 text-gray-100">Execute & Simulate</h3>
+<p class="text-gray-300">Run your code in a secure sandbox. Our engine validates logic, checks edge cases, and measures performance in real-time.</p>
+</div>
+
+<!-- Step 3 -->
+<div class="bg-gray-900 rounded-large p-8 text-center border border-gray-700 shadow-custom spotlight-card hover:transform hover:scale-105 transition-all sm:col-span-2 lg:col-span-1">
+<div class="w-20 h-20 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+<div class="absolute inset-0 bg-cyan-500/10 rounded-full blur-xl"></div>
+<svg class="w-10 h-10 text-cyan-400 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+</svg>
+</div>
+<h3 class="font-heading text-2xl font-semibold mb-4 text-gray-100">Compete & Climb</h3>
+<p class="text-gray-300">Battle AI or real players. Climb leaderboards. Earn achievements. Watch your ranking rise as you master algorithms.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Feature Section -->
+<section id="features" class="py-20 bg-gray-900" style="max-height: 800px;">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-16">
+<h2 class="font-heading text-4xl sm:text-5xl font-bold mb-4 text-gray-100">Built for Competitive Coders</h2>
+<p class="text-xl text-gray-300">Everything you need to master algorithms</p>
+</div>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="bg-gray-800 rounded-large p-6 border border-gray-700 shadow-custom spotlight-card">
+<div class="w-12 h-12 bg-cyan-500/20 rounded-small flex items-center justify-center mb-4">
+<svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+</svg>
+</div>
+<h3 class="font-heading text-xl font-semibold mb-3 text-gray-100">Real-Time Battles</h3>
+<p class="text-gray-300 text-sm">Compete against AI or real players in live coding challenges. See your opponent's progress in real-time.</p>
+</div>
+
+<div class="bg-gray-800 rounded-large p-6 border border-gray-700 shadow-custom spotlight-card">
+<div class="w-12 h-12 bg-cyan-500/20 rounded-small flex items-center justify-center mb-4">
+<svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+</svg>
+</div>
+<h3 class="font-heading text-xl font-semibold mb-3 text-gray-100">Visual Simulations</h3>
+<p class="text-gray-300 text-sm">Watch your algorithms come alive through interactive game simulations. See every step visualized.</p>
+</div>
+
+<div class="bg-gray-800 rounded-large p-6 border border-gray-700 shadow-custom spotlight-card">
+<div class="w-12 h-12 bg-cyan-500/20 rounded-small flex items-center justify-center mb-4">
+<svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+</svg>
+</div>
+<h3 class="font-heading text-xl font-semibold mb-3 text-gray-100">Performance Analytics</h3>
+<p class="text-gray-300 text-sm">Track your runtime, memory usage, and optimization metrics. Compare with top performers.</p>
+</div>
+
+<div class="bg-gray-800 rounded-large p-6 border border-gray-700 shadow-custom spotlight-card">
+<div class="w-12 h-12 bg-cyan-500/20 rounded-small flex items-center justify-center mb-4">
+<svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+</svg>
+</div>
+<h3 class="font-heading text-xl font-semibold mb-3 text-gray-100">Curated Challenges</h3>
+<p class="text-gray-300 text-sm">Access hundreds of algorithm challenges from easy to expert. New problems added weekly.</p>
+</div>
+
+<div class="bg-gray-800 rounded-large p-6 border border-gray-700 shadow-custom spotlight-card">
+<div class="w-12 h-12 bg-cyan-500/20 rounded-small flex items-center justify-center mb-4">
+<svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+</svg>
+</div>
+<h3 class="font-heading text-xl font-semibold mb-3 text-gray-100">Global Leaderboards</h3>
+<p class="text-gray-300 text-sm">Compete with developers worldwide. Track your ranking and climb to the top.</p>
+</div>
+
+<div class="bg-gray-800 rounded-large p-6 border border-gray-700 shadow-custom spotlight-card">
+<div class="w-12 h-12 bg-cyan-500/20 rounded-small flex items-center justify-center mb-4">
+<svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+</svg>
+</div>
+<h3 class="font-heading text-xl font-semibold mb-3 text-gray-100">Secure Sandbox</h3>
+<p class="text-gray-300 text-sm">Run code safely in isolated environments. Full support for JavaScript and Python.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Live Stats Section -->
+<section id="leaderboards" class="py-20 bg-gray-800/30" style="max-height: 600px;">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-16">
+<h2 class="font-heading text-4xl sm:text-5xl font-bold mb-4 text-gray-100">Join the Arena</h2>
+<p class="text-xl text-gray-300">Thousands of developers competing daily</p>
+</div>
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="stat-card bg-gray-900 rounded-large p-8 text-center border border-gray-700 shadow-custom spotlight-card relative overflow-hidden">
+<div class="absolute inset-0 bg-cyan-500/5 blur-3xl"></div>
+<div class="relative z-10">
+<div class="text-5xl font-bold text-cyan-400 mb-2">12,450</div>
+<div class="text-gray-300">Battles Completed</div>
+</div>
+</div>
+<div class="stat-card bg-gray-900 rounded-large p-8 text-center border border-gray-700 shadow-custom spotlight-card relative overflow-hidden">
+<div class="absolute inset-0 bg-green-500/5 blur-3xl"></div>
+<div class="relative z-10">
+<div class="text-5xl font-bold text-green-400 mb-2">3,200</div>
+<div class="text-gray-300">Active Coders</div>
+</div>
+</div>
+<div class="stat-card bg-gray-900 rounded-large p-8 text-center border border-gray-700 shadow-custom spotlight-card relative overflow-hidden">
+<div class="absolute inset-0 bg-yellow-500/5 blur-3xl"></div>
+<div class="relative z-10">
+<div class="text-5xl font-bold text-yellow-400 mb-2">1,050</div>
+<div class="text-gray-300">Daily AI Challenges</div>
+</div>
+</div>
+<div class="stat-card bg-gray-900 rounded-large p-8 text-center border border-gray-700 shadow-custom spotlight-card relative overflow-hidden">
+<div class="absolute inset-0 bg-purple-500/5 blur-3xl"></div>
+<div class="relative z-10">
+<div class="text-5xl font-bold text-purple-400 mb-2">98%</div>
+<div class="text-gray-300">Success Rate</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Final CTA Section -->
+<section id="community" class="py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-cyan-900 relative overflow-hidden" style="max-height: 600px;">
+<div class="absolute inset-0 opacity-20">
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500 rounded-full blur-3xl"></div>
+</div>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+<h2 class="font-heading text-5xl sm:text-6xl font-bold mb-6 text-gray-100">Enter the Arena.</h2>
+<p class="text-xl sm:text-2xl text-gray-300 mb-12">Master algorithms. Compete globally. Build elegant code.</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<button class="w-full sm:w-auto px-8 py-4 bg-cyan-500 hover:bg-cyan-600 text-gray-900 font-semibold rounded-small transition-all shadow-custom hover:shadow-custom-hover text-lg">Create Free Account</button>
+<button class="w-full sm:w-auto px-8 py-4 bg-gray-800 hover:bg-gray-700 text-gray-100 font-semibold rounded-small transition-all border-2 border-cyan-500 text-lg">View Leaderboard</button>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-800 border-t border-gray-700 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+<!-- Column 1 -->
+<div>
+<h3 class="font-heading text-xl font-bold text-cyan-400 mb-4">AlgoArena</h3>
+<p class="text-gray-300 text-sm">The ultimate AI-powered competitive coding platform. Battle, learn, and master algorithms through interactive simulations.</p>
+</div>
+
+<!-- Column 2 -->
+<div>
+<h4 class="font-heading font-semibold text-gray-100 mb-4">Product</h4>
+<ul class="space-y-2 text-sm">
+<li><a href="#" class="text-gray-300 hover:text-cyan-400 transition-colors">Game Modes</a></li>
+<li><a href="#" class="text-gray-300 hover:text-cyan-400 transition-colors">Arena</a></li>
+<li><a href="#" class="text-gray-300 hover:text-cyan-400 transition-colors">Leaderboards</a></li>
+<li><a href="#" class="text-gray-300 hover:text-cyan-400 transition-colors">Roadmap</a></li>
+</ul>
+</div>
+
+<!-- Column 3 -->
+<div>
+<h4 class="font-heading font-semibold text-gray-100 mb-4">Resources</h4>
+<ul class="space-y-2 text-sm">
+<li><a href="#" class="text-gray-300 hover:text-cyan-400 transition-colors">Docs</a></li>
+<li><a href="#" class="text-gray-300 hover:text-cyan-400 transition-colors">API</a></li>
+<li><a href="#" class="text-gray-300 hover:text-cyan-400 transition-colors">Blog</a></li>
+<li><a href="#" class="text-gray-300 hover:text-cyan-400 transition-colors">Support</a></li>
+</ul>
+</div>
+
+<!-- Column 4 -->
+<div>
+<h4 class="font-heading font-semibold text-gray-100 mb-4">Community</h4>
+<ul class="space-y-2 text-sm">
+<li><a href="#" class="text-gray-300 hover:text-cyan-400 transition-colors">Discord</a></li>
+<li><a href="#" class="text-gray-300 hover:text-cyan-400 transition-colors">GitHub</a></li>
+<li><a href="#" class="text-gray-300 hover:text-cyan-400 transition-colors">Twitter</a></li>
+</ul>
+</div>
+</div>
+
+<!-- Bottom -->
+<div class="border-t border-gray-700 pt-8 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400">
+<div class="mb-4 sm:mb-0">© 2024 AlgoArena. All rights reserved.</div>
+<div class="flex space-x-6">
+<a href="#" class="hover:text-cyan-400 transition-colors">Privacy Policy</a>
+<a href="#" class="hover:text-cyan-400 transition-colors">Terms</a>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+// Programming languages for pixel grid
+const languages = ['C', 'C++', 'Java', 'Python', 'JS', 'Go', 'Rust', 'Ruby', 'PHP', 'Swift', 'Kotlin', 'TypeScript', 'Scala', 'Perl', 'R'];
+
+// Create pixel grid with hidden languages
+const pixelGrid = document.getElementById('pixelGrid');
+const gridSize = 15;
+const pixels = [];
+
+for (let i = 0; i < gridSize * gridSize; i++) {
+const pixel = document.createElement('div');
+pixel.className = 'pixel';
+// Randomly assign languages to some pixels
+if (Math.random() > 0.7) {
+const lang = languages[Math.floor(Math.random() * languages.length)];
+pixel.textContent = lang;
+pixel.dataset.lang = lang;
+}
+pixelGrid.appendChild(pixel);
+pixels.push(pixel);
+}
+
+// Hero spotlight effect
+const heroSpotlight = document.getElementById('heroSpotlight');
+const heroSection = document.querySelector('#home');
+
+heroSection.addEventListener('mousemove', (e) => {
+const rect = heroSection.getBoundingClientRect();
+const x = e.clientX - rect.left;
+const y = e.clientY - rect.top;
+heroSpotlight.style.left = x + 'px';
+heroSpotlight.style.top = y + 'px';
+
+// Reveal languages in pixel grid based on mouse proximity
+pixels.forEach((pixel, index) => {
+if (!pixel.dataset.lang) return;
+
+const row = Math.floor(index / gridSize);
+const col = index % gridSize;
+const pixelX = (col / gridSize) * rect.width + rect.width / (gridSize * 2);
+const pixelY = (row / gridSize) * rect.height + rect.height / (gridSize * 2);
+
+const distance = Math.sqrt(
+Math.pow(x - pixelX, 2) + Math.pow(y - pixelY, 2)
+);
+
+const revealRadius = 150;
+if (distance < revealRadius) {
+pixel.classList.add('revealed');
+} else {
+pixel.classList.remove('revealed');
+}
+});
+});
+
+// Header spotlight effect
+const headerSpotlight = document.getElementById('headerSpotlight');
+const header = document.querySelector('header');
+
+header.addEventListener('mousemove', (e) => {
+const rect = header.getBoundingClientRect();
+const x = e.clientX - rect.left;
+headerSpotlight.style.left = (x - 150) + 'px';
+});
+
+// Hero game grid animation - cubes appear one by one
+const heroGameGrid = document.getElementById('heroGameGrid');
+const heroProgressBar = document.getElementById('heroProgressBar');
+const heroProgress = document.getElementById('heroProgress');
+
+function animateHeroGrid() {
+heroGameGrid.innerHTML = '';
+const cubes = 8;
+let progress = 0;
+
+for (let i = 0; i < cubes; i++) {
+setTimeout(() => {
+const cube = document.createElement('div');
+cube.className = 'aspect-square bg-cyan-500 rounded game-cube';
+cube.style.opacity = (i + 1) / cubes;
+cube.style.animationDelay = `${i * 0.1}s`;
+heroGameGrid.appendChild(cube);
+
+progress = Math.round(((i + 1) / cubes) * 100);
+heroProgress.textContent = progress + '%';
+heroProgressBar.style.width = progress + '%';
+}, i * 200);
+}
+}
+
+// Start hero animation
+animateHeroGrid();
+setInterval(animateHeroGrid, 5000);
+
+// Game data
+const games = {
+tetris: {
+title: 'Tetris Logic',
+code: `function movePiece(grid, direction) {
+  // Tetris-like logic
+  const piece = grid.activePiece;
+  
+  if (direction === 'down') {
+    piece.y += 1;
+    if (checkCollision(grid, piece)) {
+      piece.y -= 1;
+      lockPiece(grid, piece);
+      clearLines(grid);
+    }
+  }
+  
+  return grid;
+}`,
+cubes: 32,
+pattern: [3, 4, 11, 12, 19, 20, 27, 28]
+},
+maze: {
+title: 'Maze Solver',
+code: `function solveMaze(maze, start, end) {
+  const queue = [start];
+  const visited = new Set();
+  
+  while (queue.length > 0) {
+    const pos = queue.shift();
+    if (pos === end) return true;
+    
+    visited.add(pos);
+    const neighbors = getNeighbors(pos);
+    queue.push(...neighbors);
+  }
+  
+  return false;
+}`,
+cubes: 32,
+pattern: [0, 1, 2, 10, 18, 26, 27, 28]
+},
+tower: {
+title: 'Tower Defense',
+code: `function targetEnemy(towers, enemies) {
+  for (let tower of towers) {
+    let closest = null;
+    let minDist = Infinity;
+    
+    for (let enemy of enemies) {
+      const dist = distance(tower, enemy);
+      if (dist < minDist) {
+        minDist = dist;
+        closest = enemy;
+      }
+    }
+    
+    tower.target = closest;
+  }
+}`,
+cubes: 32,
+pattern: [4, 12, 13, 14, 20, 21, 22, 28]
+},
+puzzle: {
+title: 'Puzzle Grid',
+code: `function solvePuzzle(grid) {
+  const n = grid.length;
+  
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (canPlace(grid, i, j)) {
+        grid[i][j] = findBestPiece();
+        if (solvePuzzle(grid)) return true;
+        grid[i][j] = null;
+      }
+    }
+  }
+  
+  return false;
+}`,
+cubes: 32,
+pattern: [0, 7, 8, 15, 16, 23, 24, 31]
+}
+};
+
+let currentGame = 'tetris';
+
+// Game tab switching
+const gameTabs = document.querySelectorAll('.game-tab');
+const gamePanel = document.getElementById('gamePanel');
+const gameTitle = document.getElementById('gameTitle');
+const gameCode = document.getElementById('gameCode');
+const gameGrid = document.getElementById('gameGrid');
+const gameScore = document.getElementById('gameScore');
+const gameLines = document.getElementById('gameLines');
+const gameLevel = document.getElementById('gameLevel');
+
+gameTabs.forEach(tab => {
+tab.addEventListener('click', () => {
+const game = tab.dataset.game;
+if (game === currentGame) return;
+
+// Update active tab
+gameTabs.forEach(t => {
+t.classList.remove('bg-cyan-500', 'text-gray-900');
+t.classList.add('bg-gray-800', 'text-gray-300');
+});
+tab.classList.remove('bg-gray-800', 'text-gray-300');
+tab.classList.add('bg-cyan-500', 'text-gray-900');
+
+// Fade out current game
+gamePanel.style.opacity = '0';
+gamePanel.style.transform = 'translateX(-30px)';
+
+setTimeout(() => {
+currentGame = game;
+const gameData = games[game];
+
+// Update content
+gameTitle.textContent = gameData.title;
+gameCode.textContent = gameData.code;
+
+// Reset game panel
+gamePanel.style.opacity = '1';
+gamePanel.style.transform = 'translateX(0)';
+
+// Reset stats
+gameScore.textContent = '0';
+gameLines.textContent = '0';
+gameLevel.textContent = '1';
+}, 300);
+});
+});
+
+// Run game animation
+const runGameBtn = document.getElementById('runGameBtn');
+runGameBtn.addEventListener('click', () => {
+animateGame();
+});
+
+function animateGame() {
+const gameData = games[currentGame];
+gameGrid.innerHTML = '';
+
+// Create all cubes first (hidden)
+const allCubes = [];
+for (let i = 0; i < gameData.cubes; i++) {
+const cube = document.createElement('div');
+cube.className = 'aspect-square bg-gray-700 rounded';
+gameGrid.appendChild(cube);
+allCubes.push(cube);
+}
+
+// Animate pattern cubes one by one
+gameData.pattern.forEach((index, i) => {
+setTimeout(() => {
+const cube = allCubes[index];
+cube.className = 'aspect-square bg-cyan-500 rounded game-cube';
+cube.style.animationDelay = '0s';
+
+// Update stats
+gameScore.textContent = (i + 1) * 30;
+gameLines.textContent = i + 1;
+if (i > 3) gameLevel.textContent = '2';
+if (i > 6) gameLevel.textContent = '3';
+}, i * 300);
+});
+}
+
+// Initial game animation
+setTimeout(() => {
+animateGame();
+}, 1000);
+
+// Arena mode toggle
+const modeToggles = document.querySelectorAll('.mode-toggle');
+const singleTerminal = document.getElementById('singleTerminal');
+const dualTerminal = document.getElementById('dualTerminal');
+
+modeToggles.forEach(toggle => {
+toggle.addEventListener('click', () => {
+const mode = toggle.dataset.mode;
+
+// Update active toggle
+modeToggles.forEach(t => {
+t.classList.remove('bg-cyan-500', 'text-gray-900');
+t.classList.add('bg-gray-800', 'text-gray-300');
+});
+toggle.classList.remove('bg-gray-800', 'text-gray-300');
+toggle.classList.add('bg-cyan-500', 'text-gray-900');
+
+// Switch terminal view
+if (mode === 'ai') {
+singleTerminal.classList.remove('hidden');
+dualTerminal.classList.add('hidden');
+} else {
+singleTerminal.classList.add('hidden');
+dualTerminal.classList.remove('hidden');
+}
+});
+});
+
+// Smooth scroll for navigation
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function (e) {
+e.preventDefault();
+const target = document.querySelector(this.getAttribute('href'));
+if (target) {
+const headerOffset = 64;
+const elementPosition = target.getBoundingClientRect().top;
+const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+window.scrollTo({
+top: offsetPosition,
+behavior: 'smooth'
+});
+}
+});
+});
+</script>
+
+</body>
+</html>
