@@ -14,7 +14,8 @@ import {
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
-const MotionBox = motion(Box);
+// Fix for deprecated motion() usage
+const MotionBox = motion.create(Box);
 
 const languages = ['C', 'C++', 'Java', 'Python', 'JS', 'Go', 'Rust', 'Ruby', 'PHP', 'Swift', 'Kotlin', 'TypeScript', 'Scala', 'Perl', 'R'];
 
@@ -73,11 +74,6 @@ const PixelGrid = () => {
             });
         };
 
-        // Attach listener to the section (parent of pixel grid)
-        // We'll use a closer approach: find the parent section or attach to window but scoped
-        // To be safe and mimic the HTML 'heroSection.addEventListener', we'll attach to the container's parent
-        // or just the container itself if it covers the whole area.
-        // The PixelGrid covers 100% 100%, so attaching to it is fine.
         container.closest('section')?.addEventListener('mousemove', handleMouseMove);
 
         return () => {
@@ -136,14 +132,15 @@ const PixelGrid = () => {
 
 const Hero = () => {
     // We keep spotlight state only for the big radial gradient background
-    // If this causes lag, we can move it to a ref-based style update too.
     const spotlightRef = useRef(null);
     const [progress, setProgress] = useState(0);
     const [gridCubes, setGridCubes] = useState([]);
 
+    // Timer ref to clean up loops
+    const timeoutsRef = useRef([]);
+
     const handleMouseMove = (e) => {
         // Optimize: Update the spotlight DOM directly instead of State
-        // This removes the last source of React re-renders on mousemove
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -157,25 +154,37 @@ const Hero = () => {
     // Animate hero grid
     useEffect(() => {
         const animateGrid = () => {
-            const totalCubes = 8;
-            setGridCubes([]);
+            // Clear any existing timeouts for this cycle
+            timeoutsRef.current.forEach(clearTimeout);
+            timeoutsRef.current = [];
 
+            setGridCubes([]); // Reset state
+            const totalCubes = 8;
             const newCubes = Array(totalCubes).fill(0).map((_, i) => ({ id: i }));
 
             newCubes.forEach((cube, i) => {
-                setTimeout(() => {
-                    setGridCubes(prev => [...prev, {
-                        ...cube,
-                        opacity: (i + 1) / totalCubes
-                    }]);
+                const timeoutId = setTimeout(() => {
+                    setGridCubes(prev => {
+                        // Prevent duplicates strictly
+                        if (prev.some(c => c.id === cube.id)) return prev;
+                        return [...prev, {
+                            ...cube,
+                            opacity: (i + 1) / totalCubes
+                        }];
+                    });
                     setProgress(Math.round(((i + 1) / totalCubes) * 100));
                 }, i * 200);
+                timeoutsRef.current.push(timeoutId);
             });
         };
 
         animateGrid();
         const interval = setInterval(animateGrid, 5000);
-        return () => clearInterval(interval);
+
+        return () => {
+            clearInterval(interval);
+            timeoutsRef.current.forEach(clearTimeout);
+        };
     }, []);
 
     return (
