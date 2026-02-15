@@ -8,6 +8,10 @@ import AdminLayout from './layout/AdminLayout';
 // Public Pages
 import LandingPage from './pages/LandingPage/LandingPage';
 
+// Frontoffice Auth Pages
+import SignIn from './pages/Frontoffice/SignIn';
+import SignUp from './pages/Frontoffice/SignUp';
+
 // Backoffice Pages
 import Login from './pages/Backoffice/Login';
 import Dashboard from './pages/Backoffice/Dashboard';
@@ -45,6 +49,10 @@ function App() {
         </Route>
 
         <Route path="/login" element={<Login />} />
+
+        {/* Frontoffice Auth Routes */}
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
 
         {/* Backoffice Routes - Protected */}
         <Route path="/admin" element={

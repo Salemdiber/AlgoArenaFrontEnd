@@ -8,7 +8,10 @@ import {
     Link,
     useColorModeValue,
 } from '@chakra-ui/react';
+import { Link as RouterLink, NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import Logo from '../assets/logo_algoarena.png';
+import { Image } from '@chakra-ui/react';
 
 const Header = () => {
     const [headerSpotlight, setHeaderSpotlight] = useState({ left: 0 });
@@ -48,15 +51,9 @@ const Header = () => {
             <Container maxW="7xl" position="relative" zIndex={10}>
                 <Flex h={16} alignItems="center" justifyContent="space-between">
                     {/* Logo */}
-                    <Heading
-                        as="h1"
-                        size="lg"
-                        fontFamily="heading"
-                        color="brand.500"
-                        fontWeight="bold"
-                    >
-                        AlgoArena
-                    </Heading>
+                    <Box display="flex" alignItems="center">
+                        <Image src={Logo} alt="AlgoArena Logo" h="60px" objectFit="contain" />
+                    </Box>
 
                     {/* Navigation */}
                     <HStack
@@ -64,34 +61,45 @@ const Header = () => {
                         spacing={8}
                         display={{ base: 'none', md: 'flex' }}
                     >
-                        <Link href="#home" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
+                        <Link as={NavLink} to="/" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
                             Home
                         </Link>
-                        <Link href="#games" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
+                        <Link as={NavLink} to="/#games" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
                             Games
                         </Link>
-                        <Link href="#features" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
+                        <Link as={NavLink} to="/#features" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
                             Features
                         </Link>
-                        <Link href="#leaderboards" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
+                        <Link as={NavLink} to="/#leaderboards" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
                             Leaderboards
                         </Link>
-                        <Link href="#community" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
+                        <Link as={NavLink} to="/#community" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
                             Community
+                        </Link>
+                        <Link as={NavLink} to="/admin" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
+                            Dashboard
                         </Link>
                     </HStack>
 
                     {/* CTA Buttons */}
                     <HStack spacing={4}>
                         <Button
-                            display={{ base: 'none', sm: 'block' }}
+                            as={RouterLink}
+                            to="/signin"
+                            display={{ base: 'none', sm: 'inline-flex' }}
                             variant="ghost"
                             size="md"
                         >
                             Login
                         </Button>
-                        <Button variant="primary" size="md" boxShadow="custom">
-                            Start Coding
+                        <Button
+                            as={RouterLink}
+                            to="/signup"
+                            variant="primary"
+                            size="md"
+                            boxShadow="custom"
+                        >
+                            Create Account
                         </Button>
                     </HStack>
                 </Flex>

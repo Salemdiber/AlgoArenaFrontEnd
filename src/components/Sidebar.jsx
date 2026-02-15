@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import Logo from '../assets/logo_algoarena.png';
 
 const IconWrapper = ({ children }) => (
     <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -27,9 +28,8 @@ const Sidebar = () => {
     return (
         <aside className="w-64 bg-[#0b1220] border-r border-gray-800 flex flex-col fixed h-full z-30 transition-all duration-300 lg:relative hidden lg:flex">
             {/* Logo Section */}
-            <div className="p-6 border-b border-gray-800">
-                <h1 className="font-heading text-2xl font-bold text-cyan-400">AlgoArena</h1>
-                <p className="text-xs text-gray-400 mt-1">Admin Dashboard</p>
+            <div className="p-6 border-b border-gray-800 flex justify-center">
+                <img src={Logo} alt="AlgoArena" className="h-8 w-auto" />
             </div>
 
             {/* Navigation */}

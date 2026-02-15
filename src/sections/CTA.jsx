@@ -7,6 +7,7 @@ import {
     VStack,
     HStack,
 } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
 
 const CTA = () => {
     return (
@@ -50,7 +51,7 @@ const CTA = () => {
                     </Text>
 
                     <HStack spacing={4} flexWrap="wrap" justify="center">
-                        <Button variant="primary" size="lg" px={8} py={8} fontSize="lg">
+                        <Button as={RouterLink} to="/signup" variant="primary" size="lg" px={8} py={8} fontSize="lg">
                             Create Free Account
                         </Button>
                         <Button variant="secondary" size="lg" px={8} py={8} fontSize="lg">

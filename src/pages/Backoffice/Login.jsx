@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Logo from '../../assets/logo_algoarena.png';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -40,12 +41,9 @@ const Login = () => {
             <div className="relative z-10 w-full max-w-md px-6">
                 {/* Logo Section */}
                 <div className="text-center mb-8 animate-fade-in-up">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-2xl mb-4 shadow-[0_0_30px_rgba(34,211,238,0.4)]">
-                        <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
+                    <div className="flex justify-center mb-4">
+                        <img src={Logo} alt="AlgoArena" className="h-12 w-auto drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]" />
                     </div>
-                    <h1 className="font-heading text-4xl font-bold text-gray-100 mb-2">AlgoArena</h1>
                     <p className="text-gray-400">Admin Dashboard</p>
                 </div>
 
