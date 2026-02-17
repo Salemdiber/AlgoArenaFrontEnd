@@ -64,8 +64,8 @@ const Header = () => {
                         <Link as={NavLink} to="/" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
                             Home
                         </Link>
-                        <Link as={NavLink} to="/#games" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
-                            Games
+                        <Link as={NavLink} to="/battles" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
+                            Battles
                         </Link>
                         <Link as={NavLink} to="/#features" color="gray.300" _hover={{ color: 'brand.500' }} transition="colors 0.3s">
                             Features

@@ -12,6 +12,14 @@ import LandingPage from './pages/LandingPage/LandingPage';
 import SignIn from './pages/Frontoffice/SignIn';
 import SignUp from './pages/Frontoffice/SignUp';
 
+// Frontoffice Battle Pages
+import {
+  BattleListPage,
+  ActiveBattlePage,
+  BattleSummaryPage,
+  BattleProvider,
+} from './pages/Frontoffice/battles';
+
 // Backoffice Pages
 import Login from './pages/Backoffice/Login';
 import Dashboard from './pages/Backoffice/Dashboard';
@@ -42,41 +50,46 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   return (
     <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<LandingPage />} />
-        </Route>
+      <BattleProvider>
+        <Routes>
+          {/* Public Routes */}
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/battles" element={<BattleListPage />} />
+            <Route path="/battles/:id" element={<ActiveBattlePage />} />
+            <Route path="/battles/:id/summary" element={<BattleSummaryPage />} />
+          </Route>
 
-        <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
 
-        {/* Frontoffice Auth Routes */}
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
+          {/* Frontoffice Auth Routes */}
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
 
-        {/* Backoffice Routes - Protected */}
-        <Route path="/admin" element={
-          <ProtectedRoute>
-            <AdminLayout />
-          </ProtectedRoute>
-        }>
-          <Route index element={<Dashboard />} />
-          <Route path="users" element={<Users />} />
-          <Route path="battles" element={<Battles />} />
-          <Route path="challenges" element={<Challenges />} />
-          <Route path="ai-logs" element={<AILogs />} />
-          <Route path="leaderboards" element={<Leaderboards />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="system-health" element={<SystemHealth />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="add-admin" element={<AddAdmin />} />
-          <Route path="*" element={<PlaceholderPage />} />
-        </Route>
+          {/* Backoffice Routes - Protected */}
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }>
+            <Route index element={<Dashboard />} />
+            <Route path="users" element={<Users />} />
+            <Route path="battles" element={<Battles />} />
+            <Route path="challenges" element={<Challenges />} />
+            <Route path="ai-logs" element={<AILogs />} />
+            <Route path="leaderboards" element={<Leaderboards />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="system-health" element={<SystemHealth />} />
+            <Route path="settings" element={<Settings />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="add-admin" element={<AddAdmin />} />
+            <Route path="*" element={<PlaceholderPage />} />
+          </Route>
 
-        {/* Catch-all redirect to Landing Page */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          {/* Catch-all redirect to Landing Page */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BattleProvider>
     </Router>
   );
 }
