@@ -29,6 +29,11 @@ We believe code is universal. Our distinct **Accessibility Suite** ensures the a
 - **Sensory Control**: One-click "Reduced Motion" and "High Contrast" modes for a focused experience.
 - **Text-to-Speech**: Let the system read complex problem descriptions to you.
 
+### 🔐 Security & Access
+We take security seriously, ensuring a safe environment for your code and account.
+- **Role-Based Access Control (RBAC)**: Seamless redirection logic that routes Admins to the command center and Competitors to the arena.
+- **Secure Authentication Flow**: Complete forgot password system with email simulation, token validation, and password strength enforcement.
+
 ### 🎨 Cinematic Immersion
 We don't just load pages; we build atmosphere.
 - **System Boot Sequence**: A mesmerizing, animated startup sequence that initializes your session.
@@ -59,8 +64,8 @@ To deploy your own instance of the Arena locally:
 ### 1. Initialize
 Clone the repository and install the dependencies.
 ```bash
-git clone https://github.com/your-repo/algo-arena.git
-cd algo-arena
+git clone git@github.com:Salemdiber/AlgoArenaFrontEnd.git
+cd Next-Gen
 npm install
 ```
 
