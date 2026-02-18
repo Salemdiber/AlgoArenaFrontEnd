@@ -15,12 +15,20 @@ import {
     VStack,
     useDisclosure,
     Image,
+    Avatar,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    MenuDivider,
+    Text,
 } from '@chakra-ui/react';
-import { Link as RouterLink, NavLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import Logo from '../assets/logo_algoarena.png';
 import AccessibilityDrawer from '../accessibility/components/AccessibilityDrawer';
+import { useAuth } from '../pages/Frontoffice/auth/context/AuthContext';
 
 /* Inline accessibility icon (universal figure) */
 const AccessibilityIcon = (props) => (
@@ -29,6 +37,29 @@ const AccessibilityIcon = (props) => (
         <path d="M5 8l7 1 7-1" />
         <path d="M12 9v5" />
         <path d="M9 21l3-7 3 7" />
+    </Icon>
+);
+
+/* Inline icons for profile menu */
+const UserIcon = (props) => (
+    <Icon viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+    </Icon>
+);
+
+const SettingsIcon = (props) => (
+    <Icon viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+    </Icon>
+);
+
+const LogoutIcon = (props) => (
+    <Icon viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+        <polyline points="16 17 21 12 16 7" />
+        <line x1="21" y1="12" x2="9" y2="12" />
     </Icon>
 );
 
@@ -50,6 +81,8 @@ const Header = () => {
         onClose: onA11yClose,
     } = useDisclosure();
     const location = useLocation();
+    const navigate = useNavigate();
+    const { currentUser, isLoggedIn, logout } = useAuth();
 
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
@@ -127,29 +160,134 @@ const Header = () => {
                         ))}
                     </HStack>
 
-                    {/* CTA Buttons + A11y + Mobile Hamburger */}
+                    {/* CTA Buttons / Profile Avatar – conditional */}
                     <HStack spacing={3}>
 
+                        {!isLoggedIn ? (
+                            /* ─── Logged OUT: show Login + Create Account ─── */
+                            <>
+                                <Button
+                                    as={RouterLink}
+                                    to="/signin"
+                                    display={{ base: 'none', sm: 'inline-flex' }}
+                                    variant="ghost"
+                                    size="md"
+                                >
+                                    Login
+                                </Button>
+                                <Button
+                                    as={RouterLink}
+                                    to="/signup"
+                                    variant="primary"
+                                    size="md"
+                                    boxShadow="custom"
+                                    display={{ base: 'none', sm: 'inline-flex' }}
+                                >
+                                    Create Account
+                                </Button>
+                            </>
+                        ) : (
+                            /* ─── Logged IN: show username + avatar dropdown ─── */
+                            <HStack spacing={2} display={{ base: 'none', sm: 'flex' }}>
+                                <Text
+                                    fontSize="sm"
+                                    fontWeight="600"
+                                    color="gray.200"
+                                    display={{ base: 'none', md: 'block' }}
+                                >
+                                    {currentUser?.username}
+                                </Text>
 
-                        <Button
-                            as={RouterLink}
-                            to="/signin"
-                            display={{ base: 'none', sm: 'inline-flex' }}
-                            variant="ghost"
-                            size="md"
-                        >
-                            Login
-                        </Button>
-                        <Button
-                            as={RouterLink}
-                            to="/signup"
-                            variant="primary"
-                            size="md"
-                            boxShadow="custom"
-                            display={{ base: 'none', sm: 'inline-flex' }}
-                        >
-                            Create Account
-                        </Button>
+                                <Menu placement="bottom-end" isLazy>
+                                    <MenuButton
+                                        as={IconButton}
+                                        aria-label="User menu"
+                                        variant="unstyled"
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        minW="auto"
+                                        _focus={{ boxShadow: 'none' }}
+                                    >
+                                        <Avatar
+                                            size="sm"
+                                            name={currentUser?.username}
+                                            src={currentUser?.avatar}
+                                            border="2px solid"
+                                            borderColor="gray.700"
+                                            cursor="pointer"
+                                            _hover={{ borderColor: '#22d3ee', boxShadow: '0 0 12px rgba(34, 211, 238, 0.3)' }}
+                                            transition="all 0.2s"
+                                        />
+                                    </MenuButton>
+                                    <MenuList
+                                        bg="#1e293b"
+                                        borderColor="#334155"
+                                        boxShadow="0 8px 30px rgba(0,0,0,0.5)"
+                                        borderRadius="12px"
+                                        py={2}
+                                        minW="200px"
+                                    >
+                                        <MenuItem
+                                            bg="transparent"
+                                            color="gray.200"
+                                            _hover={{ bg: 'rgba(34, 211, 238, 0.08)', color: '#22d3ee' }}
+                                            icon={<UserIcon w={4} h={4} />}
+                                            fontSize="sm"
+                                            borderRadius="8px"
+                                            mx={2}
+                                            onClick={() => navigate('/profile')}
+                                        >
+                                            View Profile
+                                        </MenuItem>
+                                        <MenuItem
+                                            bg="transparent"
+                                            color="gray.200"
+                                            _hover={{ bg: 'rgba(34, 211, 238, 0.08)', color: '#22d3ee' }}
+                                            icon={<SettingsIcon w={4} h={4} />}
+                                            fontSize="sm"
+                                            borderRadius="8px"
+                                            mx={2}
+                                            onClick={() => navigate('/profile')}
+                                        >
+                                            Account Settings
+                                        </MenuItem>
+                                        <MenuDivider borderColor="#334155" mx={2} />
+                                        <MenuItem
+                                            bg="transparent"
+                                            color="#ef4444"
+                                            _hover={{ bg: 'rgba(239, 68, 68, 0.08)' }}
+                                            icon={<LogoutIcon w={4} h={4} />}
+                                            fontSize="sm"
+                                            borderRadius="8px"
+                                            mx={2}
+                                            onClick={() => {
+                                                logout();
+                                                navigate('/');
+                                            }}
+                                        >
+                                            Logout
+                                        </MenuItem>
+                                    </MenuList>
+                                </Menu>
+                            </HStack>
+                        )}
+
+                        {/* Mobile: show avatar if logged in */}
+                        {isLoggedIn && (
+                            <Avatar
+                                size="sm"
+                                name={currentUser?.username}
+                                src={currentUser?.avatar}
+                                display={{ base: 'flex', sm: 'none' }}
+                                border="2px solid"
+                                borderColor="gray.700"
+                                cursor="pointer"
+                                onClick={() => { navigate('/profile'); onClose(); }}
+                                _hover={{ borderColor: '#22d3ee' }}
+                                transition="all 0.2s"
+                            />
+                        )}
 
                         {/* Hamburger – mobile only */}
                         <IconButton
@@ -193,6 +331,30 @@ const Header = () => {
                                 </Link>
                             ))}
 
+                            {/* Profile link in mobile drawer (logged in only) */}
+                            {isLoggedIn && (
+                                <Link
+                                    as={NavLink}
+                                    to="/profile"
+                                    color={isActive('/profile') ? 'brand.500' : 'gray.300'}
+                                    fontWeight={isActive('/profile') ? 'bold' : 'medium'}
+                                    fontSize="lg"
+                                    fontFamily="heading"
+                                    _hover={{ color: 'brand.500' }}
+                                    onClick={onClose}
+                                    borderLeft={isActive('/profile') ? '3px solid' : '3px solid transparent'}
+                                    borderColor={isActive('/profile') ? 'brand.500' : 'transparent'}
+                                    pl={4}
+                                    transition="all 0.3s"
+                                    display="flex"
+                                    alignItems="center"
+                                    gap={3}
+                                >
+                                    <UserIcon w={5} h={5} />
+                                    My Profile
+                                </Link>
+                            )}
+
                             {/* Accessibility link in mobile drawer */}
                             <Box
                                 as="button"
@@ -214,29 +376,51 @@ const Header = () => {
                                 Accessibility
                             </Box>
 
-                            {/* Mobile CTA */}
+                            {/* Mobile CTA – conditional */}
                             <Box pt={4} borderTop="1px solid" borderColor="gray.800">
                                 <VStack spacing={3}>
-                                    <Button
-                                        as={RouterLink}
-                                        to="/signin"
-                                        variant="ghost"
-                                        size="md"
-                                        w="full"
-                                        onClick={onClose}
-                                    >
-                                        Login
-                                    </Button>
-                                    <Button
-                                        as={RouterLink}
-                                        to="/signup"
-                                        variant="primary"
-                                        size="md"
-                                        w="full"
-                                        onClick={onClose}
-                                    >
-                                        Create Account
-                                    </Button>
+                                    {!isLoggedIn ? (
+                                        <>
+                                            <Button
+                                                as={RouterLink}
+                                                to="/signin"
+                                                variant="ghost"
+                                                size="md"
+                                                w="full"
+                                                onClick={onClose}
+                                            >
+                                                Login
+                                            </Button>
+                                            <Button
+                                                as={RouterLink}
+                                                to="/signup"
+                                                variant="primary"
+                                                size="md"
+                                                w="full"
+                                                onClick={onClose}
+                                            >
+                                                Create Account
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <Button
+                                            variant="ghost"
+                                            size="md"
+                                            w="full"
+                                            color="#ef4444"
+                                            borderColor="rgba(239, 68, 68, 0.3)"
+                                            border="1px solid"
+                                            _hover={{ bg: 'rgba(239, 68, 68, 0.08)' }}
+                                            leftIcon={<LogoutIcon w={4} h={4} />}
+                                            onClick={() => {
+                                                logout();
+                                                onClose();
+                                                navigate('/');
+                                            }}
+                                        >
+                                            Logout
+                                        </Button>
+                                    )}
                                 </VStack>
                             </Box>
                         </VStack>

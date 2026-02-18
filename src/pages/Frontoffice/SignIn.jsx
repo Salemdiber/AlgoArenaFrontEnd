@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Box, Heading, Text, Button, VStack, HStack, Input, Checkbox, Link, Flex, InputGroup, InputLeftElement } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AuthLayout from '../../layout/AuthLayout';
+import { useAuth, redirectBasedOnRole } from './auth/context/AuthContext';
 
 const MotionBox = motion.create(Box);
 
@@ -11,11 +12,19 @@ const SignIn = () => {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsLoading(true);
-        setTimeout(() => setIsLoading(false), 1500);
+        // Simulate network delay then log in
+        setTimeout(() => {
+            const user = login(email, password);
+            setIsLoading(false);
+            const path = redirectBasedOnRole(user);
+            navigate(path);
+        }, 800);
     };
 
     const inputStyles = {
@@ -75,7 +84,7 @@ const SignIn = () => {
                                     <Checkbox colorScheme="cyan" size="sm" isChecked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)}>
                                         <Text fontSize="sm" color="gray.400">Remember me</Text>
                                     </Checkbox>
-                                    <Link fontSize="sm" fontWeight="medium" color="brand.500" _hover={{ color: 'brand.300' }}>Forgot password?</Link>
+                                    <Link as={RouterLink} to="/forgot-password" fontSize="sm" fontWeight="medium" color="brand.500" _hover={{ color: 'brand.300' }}>Forgot password?</Link>
                                 </Flex>
 
                                 {/* Submit */}

@@ -4,6 +4,7 @@ import Games from '../../sections/Games';
 import Arena from '../../sections/Arena';
 import Features from '../../sections/Features';
 import Stats from '../../sections/Stats';
+import TryChallenge from '../../sections/TryChallenge';
 import CTA from '../../sections/CTA';
 
 const LandingPage = () => {
@@ -14,9 +15,11 @@ const LandingPage = () => {
             <Arena />
             <Features />
             <Stats />
+            <TryChallenge />
             <CTA />
         </>
     );
 };
 
 export default LandingPage;
+

@@ -110,9 +110,11 @@ const ChallengePlayPage = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
             minH="100vh"
+            maxH="100vh"
             bg="#0f172a"
             display="flex"
             flexDirection="column"
+            overflow="hidden"
         >
             {/* Top nav bar */}
             <ChallengeHeader />
@@ -148,34 +150,41 @@ const ChallengePlayPage = () => {
                 </DrawerContent>
             </Drawer>
 
-            {/* Main split layout */}
-            <Flex flex={1} direction={{ base: 'column', lg: 'row' }} overflow="hidden">
-                {/* LEFT PANEL – Problem */}
+            {/* Main split layout – viewport-locked, independent scroll */}
+            <Flex flex={1} direction={{ base: 'column', lg: 'row' }} overflow="hidden" minH={0}>
+                {/* LEFT PANEL – Problem (scrolls independently) */}
                 <Box
-                    display={{ base: 'none', lg: 'block' }}
-                    w={{ lg: '45%' }}
+                    display={{ base: 'none', lg: 'flex' }}
+                    flexDirection="column"
+                    w={{ lg: '40%' }}
                     bg="#0f172a"
-                    overflowY="auto"
                     borderRight="1px solid"
                     borderColor="gray.700"
-                    sx={{
-                        '&::-webkit-scrollbar': { width: '6px' },
-                        '&::-webkit-scrollbar-track': { bg: '#0f172a' },
-                        '&::-webkit-scrollbar-thumb': { bg: '#334155', borderRadius: '3px' },
-                    }}
+                    overflow="hidden"
                 >
-                    <Box p={6}>
+                    <Box
+                        flex={1}
+                        overflowY="auto"
+                        p={5}
+                        sx={{
+                            '&::-webkit-scrollbar': { width: '5px' },
+                            '&::-webkit-scrollbar-track': { bg: '#0f172a' },
+                            '&::-webkit-scrollbar-thumb': { bg: '#334155', borderRadius: '3px' },
+                            overscrollBehavior: 'contain',
+                        }}
+                    >
                         <ProblemTabs />
                         <ProblemDescription />
                     </Box>
                 </Box>
 
-                {/* RIGHT PANEL – Editor */}
+                {/* RIGHT PANEL – Editor (fixed, no page scroll) */}
                 <Flex
-                    w={{ base: '100%', lg: '55%' }}
+                    w={{ base: '100%', lg: '60%' }}
                     direction="column"
-                    bg="#1a1a1a"
+                    bg="#0f172a"
                     overflow="hidden"
+                    minH={0}
                 >
                     <EditorToolbar />
 
@@ -183,7 +192,6 @@ const ChallengePlayPage = () => {
                         code={code}
                         setCode={setCode}
                         language={language}
-                        setLanguage={setLanguage}
                     />
 
                     <TerminalPanel />

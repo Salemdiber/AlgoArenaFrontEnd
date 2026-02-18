@@ -22,15 +22,22 @@ const LandingPage = lazy(() => import('./pages/LandingPage/LandingPage'));
 // Frontoffice Auth
 const SignIn = lazy(() => import('./pages/Frontoffice/SignIn'));
 const SignUp = lazy(() => import('./pages/Frontoffice/SignUp'));
+const ForgotPasswordPage = lazy(() => import('./pages/Frontoffice/auth/pages/ForgotPasswordPage'));
+const EmailSentPage = lazy(() => import('./pages/Frontoffice/auth/pages/EmailSentPage'));
+const ResetPasswordPage = lazy(() => import('./pages/Frontoffice/auth/pages/ResetPasswordPage'));
+const ResetSuccessPage = lazy(() => import('./pages/Frontoffice/auth/pages/ResetSuccessPage'));
+const ResetExpiredPage = lazy(() => import('./pages/Frontoffice/auth/pages/ResetExpiredPage'));
 
 // Frontoffice Battle Pages
 const BattleListPage = lazy(() => import('./pages/Frontoffice/battles/pages/BattleListPage'));
 const ActiveBattlePage = lazy(() => import('./pages/Frontoffice/battles/pages/ActiveBattlePage'));
 const BattleSummaryPage = lazy(() => import('./pages/Frontoffice/battles/pages/BattleSummaryPage'));
 
-// Battle & Challenge Providers (light, load eagerly)
+// Battle, Challenge & Profile Providers (light, load eagerly)
 import { BattleProvider } from './pages/Frontoffice/battles';
 import { ChallengeProvider } from './pages/Frontoffice/challenges';
+import { ProfileProvider } from './pages/Frontoffice/profile';
+import { AuthProvider } from './pages/Frontoffice/auth/context/AuthContext';
 
 // Frontoffice Challenge Pages
 const ChallengesListPage = lazy(() => import('./pages/Frontoffice/challenges/pages/ChallengesListPage'));
@@ -38,6 +45,10 @@ const ChallengePlayPage = lazy(() => import('./pages/Frontoffice/challenges/page
 
 // Frontoffice Leaderboard
 const LeaderboardPage = lazy(() => import('./pages/Frontoffice/leaderboard/pages/LeaderboardPage'));
+
+// Frontoffice Profile
+const ProfilePage = lazy(() => import('./pages/Frontoffice/profile/pages/ProfilePage'));
+const TwoFactorSetupPage = lazy(() => import('./pages/Frontoffice/profile/pages/TwoFactorSetupPage'));
 
 // Backoffice Pages
 const Login = lazy(() => import('./pages/Backoffice/Login'));
@@ -85,53 +96,64 @@ function App() {
         <Router>
           <NavigateRegistrar />
           <GlobalAccessibilityUI />
-          <BattleProvider>
-            <ChallengeProvider>
-              <Suspense fallback={<RouteLoader />}>
-                <Routes>
-                  {/* Public Routes */}
-                  <Route element={<PublicLayout />}>
-                    <Route path="/" element={<LandingPage />} />
-                    <Route path="/battles" element={<BattleListPage />} />
-                    <Route path="/battles/:id" element={<ActiveBattlePage />} />
-                    <Route path="/battles/:id/summary" element={<BattleSummaryPage />} />
-                    <Route path="/challenges" element={<ChallengesListPage />} />
-                    <Route path="/challenges/:id" element={<ChallengePlayPage />} />
-                    <Route path="/leaderboard" element={<LeaderboardPage />} />
-                  </Route>
+          <AuthProvider>
+            <BattleProvider>
+              <ChallengeProvider>
+                <ProfileProvider>
+                  <Suspense fallback={<RouteLoader />}>
+                    <Routes>
+                      {/* Public Routes */}
+                      <Route element={<PublicLayout />}>
+                        <Route path="/" element={<LandingPage />} />
+                        <Route path="/battles" element={<BattleListPage />} />
+                        <Route path="/battles/:id" element={<ActiveBattlePage />} />
+                        <Route path="/battles/:id/summary" element={<BattleSummaryPage />} />
+                        <Route path="/challenges" element={<ChallengesListPage />} />
+                        <Route path="/challenges/:id" element={<ChallengePlayPage />} />
+                        <Route path="/leaderboard" element={<LeaderboardPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/profile/2fa-setup" element={<TwoFactorSetupPage />} />
+                      </Route>
 
-                  <Route path="/login" element={<Login />} />
+                      <Route path="/login" element={<Login />} />
 
-                  {/* Frontoffice Auth Routes */}
-                  <Route path="/signin" element={<SignIn />} />
-                  <Route path="/signup" element={<SignUp />} />
+                      {/* Frontoffice Auth Routes */}
+                      <Route path="/signin" element={<SignIn />} />
+                      <Route path="/signup" element={<SignUp />} />
+                      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                      <Route path="/email-sent" element={<EmailSentPage />} />
+                      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+                      <Route path="/reset-success" element={<ResetSuccessPage />} />
+                      <Route path="/reset-expired" element={<ResetExpiredPage />} />
 
-                  {/* Backoffice Routes - Protected */}
-                  <Route path="/admin" element={
-                    <ProtectedRoute>
-                      <AdminLayout />
-                    </ProtectedRoute>
-                  }>
-                    <Route index element={<Dashboard />} />
-                    <Route path="users" element={<Users />} />
-                    <Route path="battles" element={<Battles />} />
-                    <Route path="challenges" element={<Challenges />} />
-                    <Route path="ai-logs" element={<AILogs />} />
-                    <Route path="leaderboards" element={<Leaderboards />} />
-                    <Route path="analytics" element={<Analytics />} />
-                    <Route path="system-health" element={<SystemHealth />} />
-                    <Route path="settings" element={<Settings />} />
-                    <Route path="profile" element={<Profile />} />
-                    <Route path="add-admin" element={<AddAdmin />} />
-                    <Route path="*" element={<PlaceholderPage />} />
-                  </Route>
+                      {/* Backoffice Routes - Protected */}
+                      <Route path="/admin" element={
+                        <ProtectedRoute>
+                          <AdminLayout />
+                        </ProtectedRoute>
+                      }>
+                        <Route index element={<Dashboard />} />
+                        <Route path="users" element={<Users />} />
+                        <Route path="battles" element={<Battles />} />
+                        <Route path="challenges" element={<Challenges />} />
+                        <Route path="ai-logs" element={<AILogs />} />
+                        <Route path="leaderboards" element={<Leaderboards />} />
+                        <Route path="analytics" element={<Analytics />} />
+                        <Route path="system-health" element={<SystemHealth />} />
+                        <Route path="settings" element={<Settings />} />
+                        <Route path="profile" element={<Profile />} />
+                        <Route path="add-admin" element={<AddAdmin />} />
+                        <Route path="*" element={<PlaceholderPage />} />
+                      </Route>
 
-                  {/* Catch-all redirect to Landing Page */}
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </Suspense>
-            </ChallengeProvider>
-          </BattleProvider>
+                      {/* Catch-all redirect to Landing Page */}
+                      <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                  </Suspense>
+                </ProfileProvider>
+              </ChallengeProvider>
+            </BattleProvider>
+          </AuthProvider>
         </Router>
       </LoadingProvider>
     </AccessibilityProvider>

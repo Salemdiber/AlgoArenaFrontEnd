@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Box, Heading, Text, Button, VStack, HStack, Input, Link, Flex, InputGroup, InputLeftElement, Grid, Image } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AuthLayout from '../../layout/AuthLayout';
+import { useAuth, redirectBasedOnRole } from './auth/context/AuthContext';
 
 const MotionBox = motion.create(Box);
 
@@ -10,13 +11,20 @@ const SignUp = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('competitor');
     const [isLoading, setIsLoading] = useState(false);
+    const { signup } = useAuth();
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsLoading(true);
-        setTimeout(() => setIsLoading(false), 1500);
+        // Simulate network delay then sign up
+        setTimeout(() => {
+            const user = signup(username, email, password);
+            setIsLoading(false);
+            const path = redirectBasedOnRole(user);
+            navigate(path);
+        }, 800);
     };
 
     const strength = password.length === 0 ? { w: '0%', l: '', c: 'gray.500' }
@@ -32,10 +40,7 @@ const SignUp = () => {
         _hover: { borderColor: 'gray.500' }, transition: 'all 0.3s',
     };
 
-    const roles = [
-        { id: 'competitor', label: 'Competitor', color: 'brand', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5" /><line x1="13" x2="19" y1="19" y2="13" /><line x1="16" x2="20" y1="16" y2="20" /><line x1="19" x2="21" y1="21" y2="19" /></svg> },
-        { id: 'organizer', label: 'Organizer', color: 'purple', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14" /></svg> },
-    ];
+
 
     return (
         <AuthLayout activeTab="signup">
@@ -153,28 +158,7 @@ const SignUp = () => {
                                         </Flex>
                                     </Box>
 
-                                    {/* Role Selection */}
-                                    <Box w="100%" pt={2}>
-                                        <Text fontSize="xs" fontWeight="semibold" color="gray.400" textTransform="uppercase" letterSpacing="wider" ml={1} mb={2}>Choose Your Path</Text>
-                                        <Grid templateColumns="repeat(2, 1fr)" gap={3}>
-                                            {roles.map(({ id, label, color, icon }) => {
-                                                const active = role === id;
-                                                const accent = color === 'purple' ? 'purple.500' : 'brand.500';
-                                                const accentRgba = color === 'purple' ? 'rgba(168,85,247,' : 'rgba(34,211,238,';
-                                                return (
-                                                    <Box key={id} as="label" cursor="pointer" onClick={() => setRole(id)}>
-                                                        <Box p={3} borderRadius="8px" border="1px solid" borderColor={active ? accent : 'gray.600'}
-                                                            bg={active ? `${accentRgba}0.1)` : '#0f172a'} boxShadow={active ? `0 0 20px -5px ${accentRgba}0.3)` : 'none'}
-                                                            _hover={{ bg: active ? undefined : 'gray.800' }} transition="all 0.2s"
-                                                            display="flex" flexDirection="column" alignItems="center" textAlign="center" gap={2}>
-                                                            <Box color={active ? (color === 'purple' ? 'purple.400' : 'brand.500') : 'gray.400'}>{icon}</Box>
-                                                            <Text fontSize="xs" fontWeight="bold" color={active ? 'white' : 'gray.300'}>{label}</Text>
-                                                        </Box>
-                                                    </Box>
-                                                );
-                                            })}
-                                        </Grid>
-                                    </Box>
+
 
                                     {/* Submit */}
                                     <Box pt={4} w="100%">
