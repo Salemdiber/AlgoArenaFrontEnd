@@ -129,18 +129,7 @@ const Header = () => {
 
                     {/* CTA Buttons + A11y + Mobile Hamburger */}
                     <HStack spacing={3}>
-                        {/* Accessibility icon */}
-                        <IconButton
-                            aria-label="Open accessibility settings"
-                            icon={<AccessibilityIcon w={5} h={5} />}
-                            variant="ghost"
-                            color="gray.400"
-                            fontSize="20px"
-                            size="sm"
-                            borderRadius="8px"
-                            onClick={onA11yOpen}
-                            _hover={{ color: 'brand.500', bg: 'rgba(34, 211, 238, 0.1)' }}
-                        />
+
 
                         <Button
                             as={RouterLink}
@@ -257,6 +246,8 @@ const Header = () => {
 
             {/* Accessibility Settings Drawer */}
             <AccessibilityDrawer isOpen={isA11yOpen} onClose={onA11yClose} />
+
+
         </Box>
     );
 };

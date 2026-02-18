@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavig
 // Accessibility
 import AccessibilityProvider from './accessibility/context/AccessibilityContext';
 import useAccessibility from './accessibility/hooks/useAccessibility';
+import GlobalAccessibilityUI from './accessibility/components/GlobalAccessibilityUI';
 
 // Loading System
 import { LoadingProvider } from './shared/context/LoadingContext';
@@ -83,6 +84,7 @@ function App() {
         <a href="#main-content" className="skip-to-content">Skip to content</a>
         <Router>
           <NavigateRegistrar />
+          <GlobalAccessibilityUI />
           <BattleProvider>
             <ChallengeProvider>
               <Suspense fallback={<RouteLoader />}>
