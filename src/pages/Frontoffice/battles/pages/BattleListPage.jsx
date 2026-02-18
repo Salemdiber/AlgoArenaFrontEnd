@@ -3,14 +3,16 @@
  *
  * Shows filters, battle grid, and create button.
  * Navigates to active battle or summary on card action.
+ * Loading skeleton state
  */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBattleState } from '../hooks/useBattleState';
 import { BattleStatus } from '../types/battle.types';
 import BattleCard from '../components/BattleCard';
 import BattleFilters from '../components/BattleFilters';
 import CreateBattleModal from '../components/CreateBattleModal';
+import BattlesListSkeleton from '../../../../shared/skeletons/BattlesListSkeleton';
 import '../battles.css';
 
 const BattleListPage = () => {
@@ -22,7 +24,18 @@ const BattleListPage = () => {
         cancelBattle,
     } = useBattleState();
 
+    // Loading state (simulated – will be replaced with real API call)
+    const [isLoading, setIsLoading] = useState(true);
     const [filters, setFilters] = useState({ modes: [], statuses: [], search: '' });
+
+    // Simulate data fetching
+    useEffect(() => {
+        // In production: replace with actual API call
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, [filters]);
 
     // Filter battles
     const filteredBattles = useMemo(() => {
@@ -65,6 +78,11 @@ const BattleListPage = () => {
     const handleCancel = (id) => {
         cancelBattle(id);
     };
+
+    // Show skeleton during loading
+    if (isLoading) {
+        return <BattlesListSkeleton />;
+    }
 
     return (
         <div className="battle-page">

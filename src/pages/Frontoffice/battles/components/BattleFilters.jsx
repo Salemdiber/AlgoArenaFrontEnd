@@ -1,7 +1,7 @@
 /**
  * BattleFilters – sidebar filter panel
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BattleMode, BattleStatus } from '../types/battle.types';
 
 const BattleFilters = ({ onFilterChange }) => {
@@ -11,22 +11,23 @@ const BattleFilters = ({ onFilterChange }) => {
         search: '',
     });
 
+    // Notify parent via useEffect (avoids setState-during-render)
+    useEffect(() => {
+        onFilterChange?.(filters);
+    }, [filters]);
+
     const toggleFilter = (key, value) => {
         setFilters(prev => {
             const arr = prev[key];
             const updated = arr.includes(value)
                 ? arr.filter(v => v !== value)
                 : [...arr, value];
-            const next = { ...prev, [key]: updated };
-            onFilterChange?.(next);
-            return next;
+            return { ...prev, [key]: updated };
         });
     };
 
     const handleSearch = (e) => {
-        const next = { ...filters, search: e.target.value };
-        setFilters(next);
-        onFilterChange?.(next);
+        setFilters(prev => ({ ...prev, search: e.target.value }));
     };
 
     return (

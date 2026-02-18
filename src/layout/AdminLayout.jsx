@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import TopNavbar from '../components/TopNavbar';
 import AIAgent from '../components/AIAgent';
 
 const AdminLayout = () => {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+    const closeSidebar = () => setIsSidebarOpen(false);
+
     return (
         <div className="flex h-screen bg-[#0f172a] font-body text-gray-100 overflow-hidden">
             {/* Background decorative gradients like original */}
@@ -23,11 +28,19 @@ const AdminLayout = () => {
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)]" />
             </div>
 
-            <Sidebar />
+            {/* Mobile overlay backdrop */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 lg:hidden"
+                    onClick={closeSidebar}
+                />
+            )}
+
+            <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
 
             {/* Main Content Wrapper - Fixes sidebar and allows independent scrolling */}
             <div className="flex-1 flex flex-col min-w-0 transition-all duration-300 relative z-10 h-full overflow-hidden">
-                <TopNavbar />
+                <TopNavbar onToggleSidebar={toggleSidebar} />
                 <main className="flex-1 p-6 overflow-y-auto custom-scrollbar scroll-smooth">
                     <Outlet />
                 </main>

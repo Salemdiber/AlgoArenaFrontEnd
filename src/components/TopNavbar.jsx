@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const TopNavbar = () => {
+const TopNavbar = ({ onToggleSidebar }) => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
@@ -29,7 +29,7 @@ const TopNavbar = () => {
             <div className="flex items-center justify-between px-6 py-4">
 
                 {/* Mobile Toggle */}
-                <button className="lg:hidden text-gray-300 hover:text-cyan-400 p-2 rounded-lg hover:bg-[#0f172a] transition-all spotlight-hover">
+                <button className="lg:hidden text-gray-300 hover:text-cyan-400 p-2 rounded-lg hover:bg-[#0f172a] transition-all spotlight-hover" onClick={onToggleSidebar}>
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>

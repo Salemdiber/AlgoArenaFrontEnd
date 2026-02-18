@@ -8,7 +8,7 @@ const PublicLayout = () => {
     return (
         <Box minH="100vh" bg="gray.900">
             <Header />
-            <Box as="main">
+            <Box as="main" id="main-content">
                 <Outlet />
             </Box>
             <Footer />

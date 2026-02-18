@@ -1,39 +1,59 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import React, { useEffect, Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 
-// Layouts
+// Accessibility
+import AccessibilityProvider from './accessibility/context/AccessibilityContext';
+import useAccessibility from './accessibility/hooks/useAccessibility';
+
+// Loading System
+import { LoadingProvider } from './shared/context/LoadingContext';
+import RouteLoader from './shared/components/RouteLoader';
+
+// Layouts (always loaded – they wrap everything)
 import PublicLayout from './layout/PublicLayout';
 import AdminLayout from './layout/AdminLayout';
 
-// Public Pages
-import LandingPage from './pages/LandingPage/LandingPage';
+// ─── Lazy-loaded pages (code-split per route) ───
 
-// Frontoffice Auth Pages
-import SignIn from './pages/Frontoffice/SignIn';
-import SignUp from './pages/Frontoffice/SignUp';
+// Public
+const LandingPage = lazy(() => import('./pages/LandingPage/LandingPage'));
+
+// Frontoffice Auth
+const SignIn = lazy(() => import('./pages/Frontoffice/SignIn'));
+const SignUp = lazy(() => import('./pages/Frontoffice/SignUp'));
 
 // Frontoffice Battle Pages
-import {
-  BattleListPage,
-  ActiveBattlePage,
-  BattleSummaryPage,
-  BattleProvider,
-} from './pages/Frontoffice/battles';
+const BattleListPage = lazy(() => import('./pages/Frontoffice/battles/pages/BattleListPage'));
+const ActiveBattlePage = lazy(() => import('./pages/Frontoffice/battles/pages/ActiveBattlePage'));
+const BattleSummaryPage = lazy(() => import('./pages/Frontoffice/battles/pages/BattleSummaryPage'));
+
+// Battle & Challenge Providers (light, load eagerly)
+import { BattleProvider } from './pages/Frontoffice/battles';
+import { ChallengeProvider } from './pages/Frontoffice/challenges';
+
+// Frontoffice Challenge Pages
+const ChallengesListPage = lazy(() => import('./pages/Frontoffice/challenges/pages/ChallengesListPage'));
+const ChallengePlayPage = lazy(() => import('./pages/Frontoffice/challenges/pages/ChallengePlayPage'));
+
+// Frontoffice Leaderboard
+const LeaderboardPage = lazy(() => import('./pages/Frontoffice/leaderboard/pages/LeaderboardPage'));
 
 // Backoffice Pages
-import Login from './pages/Backoffice/Login';
-import Dashboard from './pages/Backoffice/Dashboard';
-import Users from './pages/Backoffice/Users';
-import Battles from './pages/Backoffice/Battles';
-import Challenges from './pages/Backoffice/Challenges';
-import AILogs from './pages/Backoffice/AILogs';
-import Leaderboards from './pages/Backoffice/Leaderboards';
-import Analytics from './pages/Backoffice/Analytics';
-import SystemHealth from './pages/Backoffice/SystemHealth';
-import Settings from './pages/Backoffice/Settings';
-import Profile from './pages/Backoffice/Profile';
-import AddAdmin from './pages/Backoffice/AddAdmin';
-import PlaceholderPage from './pages/Backoffice/PlaceholderPage';
+const Login = lazy(() => import('./pages/Backoffice/Login'));
+const Dashboard = lazy(() => import('./pages/Backoffice/Dashboard'));
+const Users = lazy(() => import('./pages/Backoffice/Users'));
+const Battles = lazy(() => import('./pages/Backoffice/Battles'));
+const Challenges = lazy(() => import('./pages/Backoffice/Challenges'));
+const AILogs = lazy(() => import('./pages/Backoffice/AILogs'));
+const Leaderboards = lazy(() => import('./pages/Backoffice/Leaderboards'));
+const Analytics = lazy(() => import('./pages/Backoffice/Analytics'));
+const SystemHealth = lazy(() => import('./pages/Backoffice/SystemHealth'));
+const Settings = lazy(() => import('./pages/Backoffice/Settings'));
+const Profile = lazy(() => import('./pages/Backoffice/Profile'));
+const AddAdmin = lazy(() => import('./pages/Backoffice/AddAdmin'));
+const PlaceholderPage = lazy(() => import('./pages/Backoffice/PlaceholderPage'));
+
+
 
 // Simple Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -41,56 +61,78 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
 
   if (!isAuthenticated) {
-    // Redirect to login but save the attempted location
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
   return children;
 };
 
+// Registers React Router navigate for voice commands
+const NavigateRegistrar = () => {
+  const navigate = useNavigate();
+  const { registerNavigate } = useAccessibility();
+  useEffect(() => {
+    registerNavigate(navigate);
+  }, [navigate, registerNavigate]);
+  return null;
+};
+
 function App() {
   return (
-    <Router>
-      <BattleProvider>
-        <Routes>
-          {/* Public Routes */}
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/battles" element={<BattleListPage />} />
-            <Route path="/battles/:id" element={<ActiveBattlePage />} />
-            <Route path="/battles/:id/summary" element={<BattleSummaryPage />} />
-          </Route>
+    <AccessibilityProvider>
+      <LoadingProvider>
+        <a href="#main-content" className="skip-to-content">Skip to content</a>
+        <Router>
+          <NavigateRegistrar />
+          <BattleProvider>
+            <ChallengeProvider>
+              <Suspense fallback={<RouteLoader />}>
+                <Routes>
+                  {/* Public Routes */}
+                  <Route element={<PublicLayout />}>
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/battles" element={<BattleListPage />} />
+                    <Route path="/battles/:id" element={<ActiveBattlePage />} />
+                    <Route path="/battles/:id/summary" element={<BattleSummaryPage />} />
+                    <Route path="/challenges" element={<ChallengesListPage />} />
+                    <Route path="/challenges/:id" element={<ChallengePlayPage />} />
+                    <Route path="/leaderboard" element={<LeaderboardPage />} />
+                  </Route>
 
-          <Route path="/login" element={<Login />} />
+                  <Route path="/login" element={<Login />} />
 
-          {/* Frontoffice Auth Routes */}
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+                  {/* Frontoffice Auth Routes */}
+                  <Route path="/signin" element={<SignIn />} />
+                  <Route path="/signup" element={<SignUp />} />
 
-          {/* Backoffice Routes - Protected */}
-          <Route path="/admin" element={
-            <ProtectedRoute>
-              <AdminLayout />
-            </ProtectedRoute>
-          }>
-            <Route index element={<Dashboard />} />
-            <Route path="users" element={<Users />} />
-            <Route path="battles" element={<Battles />} />
-            <Route path="challenges" element={<Challenges />} />
-            <Route path="ai-logs" element={<AILogs />} />
-            <Route path="leaderboards" element={<Leaderboards />} />
-            <Route path="analytics" element={<Analytics />} />
-            <Route path="system-health" element={<SystemHealth />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="add-admin" element={<AddAdmin />} />
-            <Route path="*" element={<PlaceholderPage />} />
-          </Route>
+                  {/* Backoffice Routes - Protected */}
+                  <Route path="/admin" element={
+                    <ProtectedRoute>
+                      <AdminLayout />
+                    </ProtectedRoute>
+                  }>
+                    <Route index element={<Dashboard />} />
+                    <Route path="users" element={<Users />} />
+                    <Route path="battles" element={<Battles />} />
+                    <Route path="challenges" element={<Challenges />} />
+                    <Route path="ai-logs" element={<AILogs />} />
+                    <Route path="leaderboards" element={<Leaderboards />} />
+                    <Route path="analytics" element={<Analytics />} />
+                    <Route path="system-health" element={<SystemHealth />} />
+                    <Route path="settings" element={<Settings />} />
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="add-admin" element={<AddAdmin />} />
+                    <Route path="*" element={<PlaceholderPage />} />
+                  </Route>
 
-          {/* Catch-all redirect to Landing Page */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BattleProvider>
-    </Router>
+                  {/* Catch-all redirect to Landing Page */}
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </Suspense>
+            </ChallengeProvider>
+          </BattleProvider>
+        </Router>
+      </LoadingProvider>
+    </AccessibilityProvider>
   );
 }
 

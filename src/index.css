@@ -45,7 +45,6 @@
     --shadow-glow-cyan-lg: 0 0 30px rgba(34, 211, 238, 0.5);
 }
 
-/* Typography Classes */
 .font-heading {
     font-family: var(--font-heading);
 }
@@ -809,6 +808,33 @@
 }
 
 /* ==========================================
+   Custom Cursor (Resized via SVG)
+   ========================================== */
+
+/* Use the SVG wrapper which forces the PNG to 24px */
+body,
+html,
+a,
+button,
+[role="button"],
+label {
+    cursor: url('/assets/cursors/cursor.svg'), auto !important;
+}
+
+/* Ensure text inputs keep the text cursor */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+textarea,
+[contenteditable="true"],
+.monaco-editor,
+.monaco-editor-hover {
+    cursor: text !important;
+}
+
+/* ==========================================
    Action Buttons (Table/Card)
    ========================================== */
 .action-btn {
@@ -1088,4 +1114,79 @@
 
 .animate-blob {
     animation: blob 10s infinite;
+}
+
+/* ==========================================
+   ACCESSIBILITY OVERRIDES
+   ========================================== */
+
+/* ── Dyslexia-friendly font override ── */
+:root[style*="--a11y-font-body"] * {
+    font-family: var(--a11y-font-body) !important;
+}
+
+/* ── High Contrast Mode ── */
+[data-a11y-high-contrast="true"] .glass-panel {
+    background: rgba(30, 41, 59, 0.9) !important;
+    border: 1px solid rgba(34, 211, 238, 0.35) !important;
+}
+
+[data-a11y-high-contrast="true"] .glass-panel-solid {
+    background: rgba(30, 41, 59, 1) !important;
+    border: 1px solid rgba(34, 211, 238, 0.4) !important;
+}
+
+[data-a11y-high-contrast="true"] .card-hover,
+[data-a11y-high-contrast="true"] .metric-card {
+    border: 1px solid rgba(34, 211, 238, 0.3) !important;
+}
+
+[data-a11y-high-contrast="true"] .search-input {
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* ── Reduced Motion Mode ── */
+[data-a11y-reduced-motion="true"] *,
+[data-a11y-reduced-motion="true"] *::before,
+[data-a11y-reduced-motion="true"] *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+}
+
+/* ── Skip to Content Link ── */
+.skip-to-content {
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 0.75rem 1.5rem;
+    background: #22d3ee;
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 0.875rem;
+    border-radius: 0 0 8px 8px;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+    top: 0;
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+}
+
+/* ── Focus ring for keyboard navigation ── */
+*:focus-visible {
+    outline: 2px solid #22d3ee !important;
+    outline-offset: 2px !important;
+}
+
+/* ── Spinner for lazy-loading fallback ── */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
