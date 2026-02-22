@@ -47,21 +47,42 @@ const ProfileInfoSection = () => {
 
     // Local draft state for edit mode
     const [draft, setDraft] = useState({
-        username: user.username,
-        email: user.email,
-        bio: user.bio,
+        username: user.username || '',
+        email: user.email || '',
+        bio: user.bio || '',
     });
 
     // Sync draft when user changes externally
     useEffect(() => {
         if (!isEditing) {
-            setDraft({ username: user.username, email: user.email, bio: user.bio });
+            setDraft({
+                username: user.username || '',
+                email: user.email || '',
+                bio: user.bio || ''
+            });
         }
     }, [user, isEditing]);
 
-    const handleSave = () => updateUser(draft);
+    const handleSave = () => {
+        const patch = {};
+        if (draft.username && draft.username.trim() !== '' && draft.username !== user.username) patch.username = draft.username;
+        if (draft.email && draft.email.trim() !== '' && draft.email !== user.email) patch.email = draft.email;
+        if (draft.bio && draft.bio.trim() !== '' && draft.bio !== user.bio) patch.bio = draft.bio;
+
+        if (Object.keys(patch).length === 0) {
+            setIsEditing(false);
+            return;
+        }
+
+        updateUser(patch);
+    };
+
     const handleCancel = () => {
-        setDraft({ username: user.username, email: user.email, bio: user.bio });
+        setDraft({
+            username: user.username || '',
+            email: user.email || '',
+            bio: user.bio || ''
+        });
         setIsEditing(false);
     };
 

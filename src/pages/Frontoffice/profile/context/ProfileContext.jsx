@@ -12,8 +12,11 @@
  */
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useAuth } from '../../auth/context/AuthContext';
+import { userService } from '../../../../services/userService';
+import { useToast } from '@chakra-ui/react';
 
 const ProfileContext = createContext(null);
+
 
 /* ── fallback user seed data (used when not logged in) ── */
 const FALLBACK_USER = {
@@ -26,6 +29,7 @@ const FALLBACK_USER = {
 
 export const ProfileProvider = ({ children }) => {
     const { currentUser: authUser, isLoggedIn, updateCurrentUser } = useAuth();
+    const toast = useToast();
 
     const [user, setUser] = useState(() => {
         if (authUser) return { ...FALLBACK_USER, ...authUser };
@@ -49,29 +53,39 @@ export const ProfileProvider = ({ children }) => {
     const updateUser = useCallback(async (patch) => {
         setIsUpdating(true);
         try {
-            // Simulate network delay – replace with real API
-            await new Promise((r) => setTimeout(r, 600));
+            await userService.updateProfile(patch);
             setUser((prev) => ({ ...prev, ...patch }));
-            // Propagate to auth so the header picks up the change
             if (isLoggedIn) updateCurrentUser(patch);
+            toast({ title: 'Profile updated', status: 'success', duration: 3000, isClosable: true });
+        } catch (error) {
+            toast({ title: 'Failed to update profile', description: error.message, status: 'error', duration: 3000, isClosable: true });
+            throw error;
         } finally {
             setIsUpdating(false);
             setIsEditing(false);
         }
-    }, [isLoggedIn, updateCurrentUser]);
+    }, [isLoggedIn, updateCurrentUser, toast]);
 
     const updateAvatar = useCallback(async (file) => {
         setIsUpdating(true);
         try {
-            // Create local preview – replace with real upload
-            const url = URL.createObjectURL(file);
-            await new Promise((r) => setTimeout(r, 400));
-            setUser((prev) => ({ ...prev, avatar: url }));
-            if (isLoggedIn) updateCurrentUser({ avatar: url });
+            const formData = new FormData();
+            formData.append('avatar', file); // Adjust field name if necessary
+
+            const response = await userService.uploadAvatar(formData);
+
+            // Assume response returns the updated avatar URL, or create object URL temporarily
+            const newAvatarUrl = response?.avatarUrl || URL.createObjectURL(file);
+            setUser((prev) => ({ ...prev, avatar: newAvatarUrl }));
+            if (isLoggedIn) updateCurrentUser({ avatar: newAvatarUrl });
+
+            toast({ title: 'Avatar updated', status: 'success', duration: 3000, isClosable: true });
+        } catch (error) {
+            toast({ title: 'Failed to update avatar', description: error.message, status: 'error', duration: 3000, isClosable: true });
         } finally {
             setIsUpdating(false);
         }
-    }, [isLoggedIn, updateCurrentUser]);
+    }, [isLoggedIn, updateCurrentUser, toast]);
 
     const removeAvatar = useCallback(async () => {
         setIsUpdating(true);

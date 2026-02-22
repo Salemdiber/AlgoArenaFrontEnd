@@ -21,6 +21,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import usePasswordStrength from '../hooks/usePasswordStrength';
 import PasswordStrengthMeter from './PasswordStrengthMeter';
 import RequirementChecklist from './RequirementChecklist';
+import { userService } from '../../../../services/userService';
 
 const MotionBox = motion.create(Box);
 
@@ -43,6 +44,7 @@ const ChangePasswordSection = () => {
     const [currentPw, setCurrentPw] = useState('');
     const [newPw, setNewPw] = useState('');
     const [confirmPw, setConfirmPw] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [showCurrent, setShowCurrent] = useState(false);
     const [showNew, setShowNew] = useState(false);
@@ -53,20 +55,38 @@ const ChangePasswordSection = () => {
     const passwordsMatch = newPw.length > 0 && newPw === confirmPw;
     const canSubmit = score === 4 && passwordsMatch && currentPw.length > 0;
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!canSubmit) return;
-        // TODO: call API
-        toast({
-            title: 'Password updated',
-            description: 'Your password has been changed successfully.',
-            status: 'success',
-            duration: 3000,
-            isClosable: true,
-            position: 'top',
-        });
-        setCurrentPw('');
-        setNewPw('');
-        setConfirmPw('');
+        setIsSubmitting(true);
+        try {
+            await userService.changePassword({
+                currentPassword: currentPw,
+                newPassword: newPw,
+                confirmPassword: confirmPw,
+            });
+            toast({
+                title: 'Password updated',
+                description: 'Your password has been changed successfully.',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+                position: 'top',
+            });
+            setCurrentPw('');
+            setNewPw('');
+            setConfirmPw('');
+        } catch (error) {
+            toast({
+                title: 'Error updating password',
+                description: error.message,
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+                position: 'top',
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -205,7 +225,8 @@ const ChangePasswordSection = () => {
                         }}
                         _active={{ transform: 'translateY(0)' }}
                         transition="all 0.2s"
-                        isDisabled={!canSubmit}
+                        isDisabled={!canSubmit || isSubmitting}
+                        isLoading={isSubmitting}
                         onClick={handleSubmit}
                     >
                         Update Password

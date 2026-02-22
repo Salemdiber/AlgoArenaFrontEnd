@@ -11,8 +11,9 @@
  * Uses the same background system as Battles / Challenges / Leaderboard:
  *   bg: #0f172a, subtle cyan grid overlay.
  */
-import React from 'react';
-import { Box, Text, Button, VStack, Flex } from '@chakra-ui/react';
+import React, { useRef, useState } from 'react';
+import { Box, Text, Button, VStack, Flex, useDisclosure, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, Input, useToast } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 
 import AvatarSection from '../components/AvatarSection';
@@ -20,10 +21,37 @@ import ProfileInfoSection from '../components/ProfileInfoSection';
 import ChangePasswordSection from '../components/ChangePasswordSection';
 import TwoFactorSection from '../components/TwoFactorSection';
 
+import { userService } from '../../../../services/userService';
+import { useAuth } from '../../auth/context/AuthContext';
+
 const MotionBox = motion.create(Box);
 
 const ProfilePage = () => {
     const prefersReducedMotion = useReducedMotion();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const cancelRef = useRef();
+    const [deletePassword, setDeletePassword] = useState('');
+    const [isDeleting, setIsDeleting] = useState(false);
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+    const toast = useToast();
+
+    const handleDeleteAccount = async () => {
+        if (!deletePassword) return toast({ title: 'Password required', status: 'error', duration: 3000 });
+        setIsDeleting(true);
+        try {
+            await userService.deleteAccount(deletePassword);
+            logout(); // Clears context and cookies
+            toast({ title: 'Account deleted', status: 'success', duration: 3000 });
+            navigate('/');
+        } catch (error) {
+            toast({ title: 'Failed to delete account', description: error.message, status: 'error', duration: 3000 });
+        } finally {
+            setIsDeleting(false);
+            onClose();
+            setDeletePassword('');
+        }
+    };
 
     return (
         <MotionBox
@@ -91,12 +119,52 @@ const ProfilePage = () => {
                             fontSize="sm"
                             _hover={{ bg: '#ef4444', color: 'white' }}
                             transition="all 0.2s"
+                            onClick={onOpen}
                         >
                             Delete Account
                         </Button>
                     </MotionBox>
                 </VStack>
             </Box>
+
+            <AlertDialog
+                isOpen={isOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+                isCentered
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent bg="#1e293b" color="gray.100" border="1px solid" borderColor="gray.600">
+                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                            Delete Account
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                            Are you sure? You can't undo this action afterwards.
+                            Please enter your password to confirm.
+                            <Input
+                                type="password"
+                                mt={4}
+                                value={deletePassword}
+                                onChange={(e) => setDeletePassword(e.target.value)}
+                                placeholder="Enter password"
+                                bg="#0f172a"
+                                borderColor="#334155"
+                                _focus={{ borderColor: '#ef4444', boxShadow: '0 0 0 1px #ef4444' }}
+                            />
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={onClose} bg="gray.600" _hover={{ bg: 'gray.500' }}>
+                                Cancel
+                            </Button>
+                            <Button colorScheme="red" onClick={handleDeleteAccount} ml={3} isLoading={isDeleting}>
+                                Delete
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         </MotionBox>
     );
 };
