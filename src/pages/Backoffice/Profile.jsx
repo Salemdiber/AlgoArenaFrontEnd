@@ -1,152 +1,304 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import {
+    Box, Flex, Avatar, Button, Text, FormControl, FormLabel,
+    Input, Textarea, useToast, Spinner, AlertDialog,
+    AlertDialogBody, AlertDialogFooter, AlertDialogHeader,
+    AlertDialogContent, AlertDialogOverlay, useDisclosure
+} from '@chakra-ui/react';
+import { useAuth } from '../Frontoffice/auth/context/AuthContext';
+import { userService } from '../../services/userService';
+import TwoFactorSection from '../Frontoffice/profile/components/TwoFactorSection';
 
 const Profile = () => {
+    const { currentUser, updateCurrentUser, logout } = useAuth();
+    const toast = useToast();
+
+    // Profile Edit State
+    const [draft, setDraft] = useState({ username: '', email: '', bio: '' });
+    const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+
+    // Avatar State
+    const fileInputRef = useRef(null);
+    const [isUpdatingAvatar, setIsUpdatingAvatar] = useState(false);
+
+    // Password State
+    const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+
+    // Delete Account State
+    const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
+    const cancelRef = useRef();
+    const [deletePassword, setDeletePassword] = useState('');
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    // Initialize draft from currentUser
+    useEffect(() => {
+        if (currentUser) {
+            setDraft({
+                username: currentUser.username || '',
+                email: currentUser.email || '',
+                bio: currentUser.bio || ''
+            });
+        }
+    }, [currentUser]);
+
+    const handleAvatarChange = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUpdatingAvatar(true);
+        try {
+            const formData = new FormData();
+            formData.append('avatar', file);
+            const res = await userService.uploadAvatar(formData);
+            const newAvatarUrl = res?.avatarUrl || URL.createObjectURL(file);
+            updateCurrentUser({ avatar: newAvatarUrl });
+            toast({ title: 'Avatar updated correctly', status: 'success', duration: 3000 });
+        } catch (error) {
+            toast({ title: 'Failed to update avatar', description: error.message, status: 'error', duration: 3000 });
+        } finally {
+            setIsUpdatingAvatar(false);
+        }
+        e.target.value = '';
+    };
+
+    const handleProfileSave = async (e) => {
+        e.preventDefault();
+        setIsUpdatingProfile(true);
+        try {
+            const patch = {};
+            if (draft.username && draft.username !== currentUser.username) patch.username = draft.username;
+            if (draft.email && draft.email !== currentUser.email) patch.email = draft.email;
+            if (draft.bio !== currentUser.bio) patch.bio = draft.bio; // bio can be empty
+
+            if (Object.keys(patch).length > 0) {
+                await userService.updateProfile(patch);
+                updateCurrentUser(patch);
+                toast({ title: 'Profile updated successfully', status: 'success', duration: 3000 });
+            }
+        } catch (error) {
+            toast({ title: 'Failed to update profile', description: error.message, status: 'error', duration: 3000 });
+        } finally {
+            setIsUpdatingProfile(false);
+        }
+    };
+
+    const handlePasswordChange = async (e) => {
+        e.preventDefault();
+        if (passwords.newPassword !== passwords.confirmPassword) {
+            return toast({ title: 'Passwords do not match', status: 'error', duration: 3000 });
+        }
+        setIsUpdatingPassword(true);
+        try {
+            await userService.changePassword({
+                currentPassword: passwords.currentPassword,
+                newPassword: passwords.newPassword,
+                confirmPassword: passwords.confirmPassword
+            });
+            toast({ title: 'Password changed successfully', status: 'success', duration: 3000 });
+            setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });
+        } catch (error) {
+            toast({ title: 'Failed to change password', description: error.message, status: 'error', duration: 3000 });
+        } finally {
+            setIsUpdatingPassword(false);
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        if (!deletePassword) return toast({ title: 'Password required', status: 'error', duration: 3000 });
+        setIsDeleting(true);
+        try {
+            await userService.deleteAccount(deletePassword);
+            logout();
+            toast({ title: 'Account deleted', status: 'success', duration: 3000 });
+            window.location.href = '/signin';
+        } catch (error) {
+            toast({ title: 'Failed to delete account', description: error.message, status: 'error', duration: 3000 });
+        } finally {
+            setIsDeleting(false);
+            onDeleteClose();
+            setDeletePassword('');
+        }
+    };
+
+    if (!currentUser) {
+        return (
+            <Flex w="100%" h="50vh" align="center" justify="center" direction="column" gap={4}>
+                <Spinner size="xl" color="cyan.400" />
+                <Text color="gray.400">Loading admin profile...</Text>
+            </Flex>
+        );
+    }
+
     return (
         <div className="space-y-6 animate-fade-in-up">
             <div className="mb-6">
-                <h1 className="font-heading text-3xl font-bold text-gray-100 mb-2">Admin Profile</h1>
+                <h1 className="font-heading text-3xl font-bold text-gray-100 mb-2">My Profile</h1>
                 <p className="text-gray-400">Manage your account settings and preferences</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-                {/* Profile Card */}
+                {/* Left Column: Avatar & Summary */}
                 <div className="lg:col-span-1">
                     <div className="glass-panel rounded-2xl p-6 shadow-custom">
-                        <div className="text-center">
-                            <div className="relative inline-block mb-4">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop" alt="Admin" className="w-32 h-32 rounded-full border-4 border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)]" />
-                                <button className="absolute bottom-0 right-0 p-2 bg-cyan-500 hover:bg-cyan-600 rounded-full text-white shadow-lg transition-colors border border-white/10">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <Flex direction="column" align="center" textAlign="center">
+                            <Box position="relative" mb={4}>
+                                {isUpdatingAvatar ? (
+                                    <Flex w="128px" h="128px" align="center" justify="center" borderRadius="full" border="4px solid" borderColor="cyan.400" bg="#0f172a">
+                                        <Spinner color="cyan.400" />
+                                    </Flex>
+                                ) : (
+                                    <Avatar
+                                        src={currentUser.avatar?.startsWith('uploads/') ? `/${currentUser.avatar}` : currentUser.avatar}
+                                        name={currentUser.username}
+                                        w="128px" h="128px"
+                                        border="4px solid" borderColor="cyan.400"
+                                        boxShadow="0 0 20px rgba(34,211,238,0.3)"
+                                    />
+                                )}
+                                <Button
+                                    position="absolute"
+                                    bottom={0}
+                                    right={0}
+                                    size="sm"
+                                    borderRadius="full"
+                                    colorScheme="cyan"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    isLoading={isUpdatingAvatar}
+                                >
+                                    <svg className="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
-                                </button>
-                            </div>
-                            <h2 className="font-heading text-2xl font-bold text-gray-100 mb-1">Admin User</h2>
-                            <p className="text-sm text-gray-400 mb-2">admin@algoarena.com</p>
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Super Admin</span>
-                        </div>
-
-                        <div className="mt-6 space-y-4">
-                            <div className="flex items-center justify-between p-3 bg-[#0f172a] rounded-lg border border-gray-800">
-                                <span className="text-sm text-gray-400">Member Since</span>
-                                <span className="text-sm font-medium text-gray-200">Jan 2024</span>
-                            </div>
-                            <div className="flex items-center justify-between p-3 bg-[#0f172a] rounded-lg border border-gray-800">
-                                <span className="text-sm text-gray-400">Last Login</span>
-                                <span className="text-sm font-medium text-gray-200">2 hours ago</span>
-                            </div>
-                            <div className="flex items-center justify-between p-3 bg-[#0f172a] rounded-lg border border-gray-800">
-                                <span className="text-sm text-gray-400">Status</span>
-                                <span className="flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)] animate-pulse"></span>
-                                    <span className="text-sm font-medium text-green-400">Active</span>
-                                </span>
-                            </div>
-                        </div>
+                                </Button>
+                                <input type="file" ref={fileInputRef} accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} />
+                            </Box>
+                            <h2 className="font-heading text-2xl font-bold text-gray-100 mb-1">@{currentUser.username}</h2>
+                            <p className="text-sm text-gray-400 mb-2">{currentUser.email}</p>
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 uppercase">
+                                {currentUser.role}
+                            </span>
+                        </Flex>
                     </div>
                 </div>
 
-                {/* Account Settings */}
-                <div className="lg:col-span-2">
+                {/* Right Column: Settings */}
+                <div className="lg:col-span-2 space-y-6">
+
+                    {/* Profile Information */}
                     <div className="glass-panel rounded-2xl p-6 shadow-custom">
-                        <h2 className="font-heading text-xl font-bold text-gray-100 mb-6">Account Settings</h2>
-
-                        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-
-                            {/* Personal Info */}
-                            <div>
-                                <h3 className="font-heading text-lg font-semibold text-gray-100 mb-4">Personal Information</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">First Name</label>
-                                        <input type="text" defaultValue="Admin" className="form-input w-full" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">Last Name</label>
-                                        <input type="text" defaultValue="User" className="form-input w-full" />
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
-                                        <input type="email" defaultValue="admin@algoarena.com" className="form-input w-full" />
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">Phone Number</label>
-                                        <input type="tel" placeholder="+1 (555) 000-0000" className="form-input w-full" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Security */}
-                            <div className="pt-6 border-t border-gray-700/50">
-                                <h3 className="font-heading text-lg font-semibold text-gray-100 mb-4">Security</h3>
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">Current Password</label>
-                                        <input type="password" placeholder="••••••••" className="form-input w-full" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">New Password</label>
-                                        <input type="password" placeholder="••••••••" className="form-input w-full" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">Confirm New Password</label>
-                                        <input type="password" placeholder="••••••••" className="form-input w-full" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Preferences */}
-                            <div className="pt-6 border-t border-gray-700/50">
-                                <h3 className="font-heading text-lg font-semibold text-gray-100 mb-4">Preferences</h3>
-                                <div className="space-y-4">
-                                    <ToggleOption
-                                        title="Email Notifications"
-                                        description="Receive email updates about platform activity"
-                                        defaultChecked={true}
-                                    />
-                                    <ToggleOption
-                                        title="Two-Factor Authentication"
-                                        description="Add an extra layer of security to your account"
-                                        defaultChecked={false}
-                                    />
-                                    <ToggleOption
-                                        title="Activity Alerts"
-                                        description="Get notified about suspicious activity"
-                                        defaultChecked={true}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Buttons */}
-                            <div className="flex items-center gap-4 pt-6 mt-6 border-t border-gray-700/50">
-                                <button type="submit" className="btn-primary">Save Changes</button>
-                                <button type="button" className="btn-secondary">Cancel</button>
-                            </div>
-
+                        <h2 className="font-heading text-xl font-bold text-gray-100 mb-6">Profile Information</h2>
+                        <form onSubmit={handleProfileSave} className="space-y-4">
+                            <FormControl>
+                                <FormLabel color="gray.300">Username</FormLabel>
+                                <Input
+                                    bg="#0f172a" borderColor="gray.700" color="gray.100"
+                                    value={draft.username}
+                                    onChange={(e) => setDraft({ ...draft, username: e.target.value })}
+                                />
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel color="gray.300">Email Address</FormLabel>
+                                <Input
+                                    type="email"
+                                    bg="#0f172a" borderColor="gray.700" color="gray.100"
+                                    value={draft.email}
+                                    onChange={(e) => setDraft({ ...draft, email: e.target.value })}
+                                />
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel color="gray.300">Bio</FormLabel>
+                                <Textarea
+                                    bg="#0f172a" borderColor="gray.700" color="gray.100" rows={4}
+                                    value={draft.bio}
+                                    onChange={(e) => setDraft({ ...draft, bio: e.target.value })}
+                                />
+                            </FormControl>
+                            <Button type="submit" colorScheme="cyan" isLoading={isUpdatingProfile} mt={4} color="gray.900" fontWeight="bold">
+                                Save Profile
+                            </Button>
                         </form>
                     </div>
+
+                    {/* Change Password */}
+                    <div className="glass-panel rounded-2xl p-6 shadow-custom">
+                        <h2 className="font-heading text-xl font-bold text-gray-100 mb-6">Security (Change Password)</h2>
+                        <form onSubmit={handlePasswordChange} className="space-y-4">
+                            <FormControl isRequired>
+                                <FormLabel color="gray.300">Current Password</FormLabel>
+                                <Input
+                                    type="password" bg="#0f172a" borderColor="gray.700" color="gray.100"
+                                    value={passwords.currentPassword}
+                                    onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
+                                />
+                            </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel color="gray.300">New Password</FormLabel>
+                                <Input
+                                    type="password" bg="#0f172a" borderColor="gray.700" color="gray.100"
+                                    value={passwords.newPassword}
+                                    onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+                                />
+                            </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel color="gray.300">Confirm New Password</FormLabel>
+                                <Input
+                                    type="password" bg="#0f172a" borderColor="gray.700" color="gray.100"
+                                    value={passwords.confirmPassword}
+                                    onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
+                                />
+                            </FormControl>
+                            <Button type="submit" colorScheme="cyan" isLoading={isUpdatingPassword} mt={4} color="gray.900" fontWeight="bold">
+                                Update Password
+                            </Button>
+                        </form>
+                    </div>
+
+                    <TwoFactorSection />
+
+                    {/* Danger Zone */}
+                    <div className="glass-panel rounded-2xl p-6 shadow-custom border border-red-900/50">
+                        <h2 className="font-heading text-xl font-bold text-red-500 mb-2">Danger Zone</h2>
+                        <p className="text-sm text-gray-400 mb-4">Once you delete your account, there is no going back. Please be certain.</p>
+                        <Button colorScheme="red" variant="outline" onClick={onDeleteOpen} _hover={{ bg: 'red.500', color: 'white' }}>
+                            Delete Account
+                        </Button>
+                    </div>
                 </div>
 
             </div>
-        </div>
-    );
-};
 
-const ToggleOption = ({ title, description, defaultChecked }) => {
-    const [isChecked, setIsChecked] = useState(defaultChecked);
+            {/* Delete Account AlertDialog */}
+            <AlertDialog isOpen={isDeleteOpen} leastDestructiveRef={cancelRef} onClose={onDeleteClose} isCentered>
+                <AlertDialogOverlay>
+                    <AlertDialogContent bg="#1e293b" color="gray.100" border="1px solid" borderColor="gray.600">
+                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                            Delete Account
+                        </AlertDialogHeader>
 
-    return (
-        <div
-            className="flex items-center justify-between p-4 bg-[#0f172a] rounded-lg cursor-pointer hover:bg-[#152033] transition-colors border border-gray-800 hover:border-gray-700 group"
-            onClick={() => setIsChecked(!isChecked)}
-        >
-            <div>
-                <p className="font-medium text-gray-200 group-hover:text-cyan-400 transition-colors">{title}</p>
-                <p className="text-sm text-gray-400">{description}</p>
-            </div>
-            <div className={`toggle-switch ${isChecked ? 'active' : ''}`} />
+                        <AlertDialogBody>
+                            <Text mb={4}>Are you sure? You can't undo this action afterwards. Please enter your password to confirm.</Text>
+                            <Input
+                                type="password"
+                                placeholder="Enter your password"
+                                bg="#0f172a" borderColor="gray.600" color="gray.100"
+                                value={deletePassword}
+                                onChange={(e) => setDeletePassword(e.target.value)}
+                            />
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={onDeleteClose} variant="ghost" _hover={{ bg: 'gray.700' }}>
+                                Cancel
+                            </Button>
+                            <Button colorScheme="red" onClick={handleDeleteAccount} ml={3} isLoading={isDeleting}>
+                                Delete
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         </div>
     );
 };

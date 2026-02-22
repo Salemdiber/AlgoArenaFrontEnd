@@ -1,10 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../pages/Frontoffice/auth/context/AuthContext';
 
 const TopNavbar = ({ onToggleSidebar }) => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
+    const { currentUser, logout } = useAuth();
+
+    // Extract first letter of username for avatar fallback
+    const firstLetter = currentUser?.username ? currentUser.username.charAt(0).toUpperCase() : 'A';
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -19,9 +24,9 @@ const TopNavbar = ({ onToggleSidebar }) => {
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('isAuthenticated');
+        logout();
         setIsProfileOpen(false);
-        navigate('/login');
+        navigate('/signin');
     };
 
     return (
@@ -87,11 +92,17 @@ const TopNavbar = ({ onToggleSidebar }) => {
                             onClick={() => setIsProfileOpen(!isProfileOpen)}
                             className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#0f172a] transition-all spotlight-hover"
                         >
-                            <img
-                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop"
-                                alt="Admin"
-                                className="w-9 h-9 rounded-full border-2 border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.3)]"
-                            />
+                            {currentUser?.avatar ? (
+                                <img
+                                    src={currentUser.avatar.startsWith('uploads/') ? `/${currentUser.avatar}` : currentUser.avatar}
+                                    alt="Admin"
+                                    className="w-9 h-9 rounded-full border-2 border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.3)] object-cover"
+                                />
+                            ) : (
+                                <div className="w-9 h-9 rounded-full border-2 border-cyan-400 bg-cyan-900 text-cyan-400 flex items-center justify-center font-bold text-sm shadow-[0_0_10px_rgba(34,211,238,0.3)]">
+                                    {firstLetter}
+                                </div>
+                            )}
                             <svg
                                 className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isProfileOpen ? 'rotate-180' : ''}`}
                                 fill="none"
@@ -106,15 +117,21 @@ const TopNavbar = ({ onToggleSidebar }) => {
                         <div className={`profile-dropdown ${isProfileOpen ? 'active' : ''}`}>
                             {/* Header with Avatar */}
                             <div className="profile-dropdown-header">
-                                <div className="flex items-center gap-3">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop"
-                                        alt="Admin"
-                                        className="w-12 h-12 rounded-full border-2 border-cyan-400"
-                                    />
-                                    <div>
-                                        <p className="font-semibold text-gray-100">Admin User</p>
-                                        <p className="text-sm text-gray-400">admin@algoarena.com</p>
+                                <div className="flex items-center gap-3 overflow-hidden">
+                                    {currentUser?.avatar ? (
+                                        <img
+                                            src={currentUser.avatar.startsWith('uploads/') ? `/${currentUser.avatar}` : currentUser.avatar}
+                                            alt="Admin"
+                                            className="w-12 h-12 rounded-full border-2 border-cyan-400 object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-12 h-12 rounded-full border-2 border-cyan-400 bg-cyan-900 text-cyan-400 flex items-center justify-center font-bold text-lg">
+                                            {firstLetter}
+                                        </div>
+                                    )}
+                                    <div className="flex-1 overflow-hidden">
+                                        <p className="font-semibold text-gray-100 truncate">{currentUser?.username || 'Admin User'}</p>
+                                        <p className="text-sm text-gray-400 truncate">{currentUser?.email || 'admin@algoarena.com'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -142,6 +159,7 @@ const TopNavbar = ({ onToggleSidebar }) => {
                                     </svg>
                                     <span>Settings</span>
                                 </Link>
+
                                 <Link to="/admin/add-admin" className="profile-dropdown-item" onClick={() => setIsProfileOpen(false)}>
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />

@@ -15,16 +15,17 @@ const SignUp = () => {
     const { signup } = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        // Simulate network delay then sign up
-        setTimeout(() => {
-            const user = signup(username, email, password);
+        try {
+            await signup(username, email, password);
+            navigate('/signin');
+        } catch (err) {
+            // error handled by toast in AuthContext
+        } finally {
             setIsLoading(false);
-            const path = redirectBasedOnRole(user);
-            navigate(path);
-        }, 800);
+        }
     };
 
     const strength = password.length === 0 ? { w: '0%', l: '', c: 'gray.500' }

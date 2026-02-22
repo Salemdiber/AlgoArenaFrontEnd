@@ -51,7 +51,6 @@ const ProfilePage = lazy(() => import('./pages/Frontoffice/profile/pages/Profile
 const TwoFactorSetupPage = lazy(() => import('./pages/Frontoffice/profile/pages/TwoFactorSetupPage'));
 
 // Backoffice Pages
-const Login = lazy(() => import('./pages/Backoffice/Login'));
 const Dashboard = lazy(() => import('./pages/Backoffice/Dashboard'));
 const Users = lazy(() => import('./pages/Backoffice/Users'));
 const Battles = lazy(() => import('./pages/Backoffice/Battles'));
@@ -73,7 +72,7 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/signin" state={{ from: location }} replace />;
   }
   return children;
 };
@@ -115,7 +114,7 @@ function App() {
                         <Route path="/profile/2fa-setup" element={<TwoFactorSetupPage />} />
                       </Route>
 
-                      <Route path="/login" element={<Login />} />
+                      <Route path="/login" element={<Navigate to="/signin" replace />} />
 
                       {/* Frontoffice Auth Routes */}
                       <Route path="/signin" element={<SignIn />} />

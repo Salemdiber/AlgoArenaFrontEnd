@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../Frontoffice/auth/context/AuthContext';
 import Logo from '../../assets/logo_algoarena.png';
 
 const Login = () => {
@@ -9,18 +10,23 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const { login } = useAuth();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
 
-        // Simulate login
-        setTimeout(() => {
+        try {
+            // Re-route the 'email' input as the 'username' field for the NestJS native requirement 
+            await login(email, password);
             localStorage.setItem('isAuthenticated', 'true');
-            setIsLoading(false);
             const from = location.state?.from?.pathname || '/admin';
             navigate(from, { replace: true });
-        }, 1500);
+        } catch (error) {
+            console.error("Backoffice real login failed", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (

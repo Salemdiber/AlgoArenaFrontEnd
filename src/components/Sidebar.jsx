@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../pages/Frontoffice/auth/context/AuthContext';
 import Logo from '../assets/logo_algoarena.png';
 
 const IconWrapper = ({ children }) => (
@@ -26,6 +27,11 @@ const SidebarLink = ({ to, icon, label, onClick }) => (
 );
 
 const Sidebar = ({ isOpen = false, onClose }) => {
+    const { currentUser } = useAuth();
+
+    // Extract first letter of username for avatar fallback
+    const firstLetter = currentUser?.username ? currentUser.username.charAt(0).toUpperCase() : 'A';
+
     return (
         <aside
             className={`
@@ -149,14 +155,24 @@ const Sidebar = ({ isOpen = false, onClose }) => {
             {/* User Profile Section */}
             <div className="p-4 border-t border-gray-800">
                 <div className="flex items-center gap-3 px-4 py-3 rounded-lg glass-panel spotlight-hover cursor-pointer group">
-                    <img
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop"
-                        alt="Admin"
-                        className="w-10 h-10 rounded-full border-2 border-cyan-400"
-                    />
-                    <div className="flex-1 relative z-10">
-                        <p className="font-medium text-sm text-gray-100 group-hover:text-cyan-400 transition-colors">Admin User</p>
-                        <p className="text-xs text-gray-400">Super Admin</p>
+                    {currentUser?.avatar ? (
+                        <img
+                            src={currentUser.avatar.startsWith('uploads/') ? `/${currentUser.avatar}` : currentUser.avatar}
+                            alt="Admin"
+                            className="w-10 h-10 rounded-full border-2 border-cyan-400 object-cover"
+                        />
+                    ) : (
+                        <div className="w-10 h-10 rounded-full border-2 border-cyan-400 bg-cyan-900 text-cyan-400 flex items-center justify-center font-bold text-lg">
+                            {firstLetter}
+                        </div>
+                    )}
+                    <div className="flex-1 relative z-10 overflow-hidden">
+                        <p className="font-medium text-sm text-gray-100 group-hover:text-cyan-400 transition-colors truncate">
+                            {currentUser?.username || 'Admin User'}
+                        </p>
+                        <p className="text-xs text-gray-400 truncate">
+                            {currentUser?.email || 'System Admin'}
+                        </p>
                     </div>
                 </div>
             </div>

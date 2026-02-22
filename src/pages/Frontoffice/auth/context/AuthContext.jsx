@@ -9,12 +9,17 @@
  * Exposes login / signup / logout helpers.
  */
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { authService } from '../../../../services/authService';
+import { userService } from '../../../../services/userService';
+import { setToken, removeToken, getToken } from '../../../../services/cookieUtils';
+import { useToast } from '@chakra-ui/react';
 
 const AuthContext = createContext(null);
 
+
 const STORAGE_KEY = 'fo_auth';
 
-/* Read persisted auth state (or null) */
+/* Real user state persistence (for role UI logic offline etc.), token is in cookie */
 const readStorage = () => {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -25,17 +30,19 @@ const readStorage = () => {
     }
 };
 
-/* Persist auth state */
 const writeStorage = (data) => {
     if (data) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        // Bridge for backoffice ProtectedRoute
-        if (data.user?.role === 'ADMIN' || data.user?.role === 'ORGANIZER') {
+        const role = String(data.user?.role || '').toUpperCase();
+        if (role === 'ADMIN' || role === 'ORGANIZER') {
             localStorage.setItem('isAuthenticated', 'true');
+        } else {
+            localStorage.removeItem('isAuthenticated');
         }
     } else {
         localStorage.removeItem(STORAGE_KEY);
         localStorage.removeItem('isAuthenticated');
+        removeToken();
     }
 };
 
@@ -59,57 +66,75 @@ const DEFAULT_AVATAR =
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
+    const toast = useToast();
 
     /* Rehydrate on mount */
     useEffect(() => {
-        const stored = readStorage();
-        if (stored?.user) {
-            setCurrentUser(stored.user);
-        }
+        const initAuth = async () => {
+            const storedToken = getToken();
+            if (!storedToken) {
+                writeStorage(null);
+                setCurrentUser(null);
+                return;
+            }
+
+            try {
+                // Fetch fresh profile from backend
+                const profile = await userService.getProfile('me');
+                setCurrentUser(profile);
+                writeStorage({ user: profile });
+            } catch (err) {
+                // If it fails (e.g. 401), apiClient clears token already
+                const stored = readStorage();
+                if (stored?.user) {
+                    setCurrentUser(stored.user);
+                }
+            }
+        };
+        initAuth();
     }, []);
 
     const isLoggedIn = !!currentUser;
 
     /**
-     * login – simulates authentication.
-     * In production, replace with a real API call.
-     *
-     * DEMO LOGIC:
-     * If email contains 'admin', role = 'ADMIN'.
-     * Else role = 'USER'.
+     * login – authenticates user via API
      */
-    const login = useCallback((email, _password) => {
-        const isMockAdmin = email.toLowerCase().includes('admin');
-        const user = {
-            username: email.split('@')[0],
-            email,
-            avatar: DEFAULT_AVATAR,
-            emailVerified: true,
-            bio: '',
-            role: isMockAdmin ? 'ADMIN' : 'USER',
-        };
-        setCurrentUser(user);
-        writeStorage({ user });
-        return user;
-    }, []);
+    const login = useCallback(async (username, password) => {
+        try {
+            const data = await authService.login({ username, password });
+            if (data.access_token) {
+                setToken(data.access_token);
+
+                // Fetch complete profile details
+                const profile = await userService.getProfile('me', data.access_token);
+                // Fallback safely just in case /me fails or returned user has properties nested
+                const user = { ...profile, ...data.user, role: data.role || profile?.role || 'USER' };
+
+                setCurrentUser(user);
+                writeStorage({ user });
+
+                toast({ title: 'Welcome Back!', status: 'success', duration: 3000, isClosable: true });
+                return user;
+            }
+        } catch (error) {
+            toast({ title: 'Login failed', description: error.message, status: 'error', duration: 4000, isClosable: true });
+            throw error;
+        }
+    }, [toast]);
 
     /**
-     * signup – simulates account creation.
-     * Always defaults to 'USER' role for now.
+     * signup – creates new account
      */
-    const signup = useCallback((username, email, _password) => {
-        const user = {
-            username,
-            email,
-            avatar: DEFAULT_AVATAR,
-            emailVerified: false,
-            bio: '',
-            role: 'USER',
-        };
-        setCurrentUser(user);
-        writeStorage({ user });
-        return user;
-    }, []);
+    const signup = useCallback(async (username, email, password) => {
+        try {
+            const data = await authService.register({ username, email, password });
+            toast({ title: 'Account created successfully', description: 'You can now sign in.', status: 'success', duration: 4000, isClosable: true });
+            return data;
+        } catch (error) {
+            toast({ title: 'Registration failed', description: error.message, status: 'error', duration: 4000, isClosable: true });
+            throw error;
+        }
+    }, [toast]);
 
     /**
      * logout – clears session.
