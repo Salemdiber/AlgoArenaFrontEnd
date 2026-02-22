@@ -99,9 +99,9 @@ export const AuthProvider = ({ children }) => {
     /**
      * login – authenticates user via API
      */
-    const login = useCallback(async (username, password) => {
+    const login = useCallback(async (username, password, recaptchaToken) => {
         try {
-            const data = await authService.login({ username, password });
+            const data = await authService.login({ username, password, recaptchaToken });
             if (data.access_token) {
                 setToken(data.access_token);
 
@@ -125,9 +125,9 @@ export const AuthProvider = ({ children }) => {
     /**
      * signup – creates new account
      */
-    const signup = useCallback(async (username, email, password) => {
+    const signup = useCallback(async (username, email, password, recaptchaToken) => {
         try {
-            const data = await authService.register({ username, email, password });
+            const data = await authService.register({ username, email, password, recaptchaToken });
             toast({ title: 'Account created successfully', description: 'You can now sign in.', status: 'success', duration: 4000, isClosable: true });
             return data;
         } catch (error) {

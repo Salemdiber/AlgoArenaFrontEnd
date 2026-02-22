@@ -18,6 +18,27 @@ export const authService = {
         });
     },
 
+    checkAvailability: async (field, value) => {
+        return apiClient('/auth/check-availability', {
+            method: 'POST',
+            body: JSON.stringify({ [field]: value }),
+        });
+    },
+
     // logout is handled on UI level by removing cookies, but if a backend route exists, we could use it.
     // For now we will support logout utility function in cookieUtils.
+
+    forgotPassword: async (email, recaptchaToken) => {
+        return apiClient('/auth/forgot-password', {
+            method: 'POST',
+            body: JSON.stringify({ email, recaptchaToken }),
+        });
+    },
+
+    resetPassword: async (token, newPassword, confirmPassword, recaptchaToken) => {
+        return apiClient('/auth/reset-password', {
+            method: 'POST',
+            body: JSON.stringify({ token, newPassword, confirmPassword, recaptchaToken }),
+        });
+    },
 };
