@@ -91,7 +91,7 @@ const Dashboard = () => {
                 <div className="space-y-4">
                     {/* Success Item */}
                     <div className="flex items-center gap-4 p-4 bg-[#0f172a] rounded-lg border border-gray-800 spotlight-hover table-row-hover group">
-                        <div className="flex-shrink-0 relative z-10">
+                        <div className="shrink-0 relative z-10">
                             <span className="badge badge-success">
                                 Success
                             </span>
@@ -124,7 +124,7 @@ const Dashboard = () => {
 
                     {/* Failed Item */}
                     <div className="flex items-center gap-4 p-4 bg-[#0f172a] rounded-lg border border-gray-800 spotlight-hover table-row-hover group">
-                        <div className="flex-shrink-0 relative z-10">
+                        <div className="shrink-0 relative z-10">
                             <span className="badge badge-error">
                                 Failed
                             </span>
@@ -157,7 +157,7 @@ const Dashboard = () => {
 
                     {/* Warning Item */}
                     <div className="flex items-center gap-4 p-4 bg-[#0f172a] rounded-lg border border-gray-800 spotlight-hover table-row-hover group">
-                        <div className="flex-shrink-0 relative z-10">
+                        <div className="shrink-0 relative z-10">
                             <span className="badge badge-warning">
                                 Warning
                             </span>
