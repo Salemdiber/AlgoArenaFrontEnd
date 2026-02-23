@@ -80,6 +80,20 @@ export const userService = {
         });
     },
 
+    uploadAvatarByAdmin: async (id, formData) => {
+        return apiClient(`/user/${id}/avatar`, {
+            method: 'PATCH',
+            body: formData,
+        });
+    },
+
+    updateStatusByAdmin: async (id, status) => {
+        return apiClient(`/user/${id}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status }),
+        });
+    },
+
     deleteUserByAdmin: async (id) => {
         return apiClient(`/user/${id}`, {
             method: 'DELETE',

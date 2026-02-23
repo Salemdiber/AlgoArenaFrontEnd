@@ -27,25 +27,9 @@ export const authService = {
         });
     },
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     // logout is handled on UI level by removing cookies, but if a backend route exists, we could use it.
     // For now we will support logout utility function in cookieUtils.
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
     logout: async () => {
         try {
             await apiClient('/auth/logout', { method: 'POST', credentials: 'include' });
@@ -53,20 +37,30 @@ export const authService = {
             // ignore
         }
     }
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
+
+    checkAvailability: async (field, value) => {
+        return apiClient('/auth/check-availability', {
+            method: 'POST',
+            body: JSON.stringify({ [field]: value }),
+        });
+    },
+
+    // logout is handled on UI level by removing cookies, but if a backend route exists, we could use it.
+    // For now we will support logout utility function in cookieUtils.
+
+    forgotPassword: async (email, recaptchaToken) => {
+        return apiClient('/auth/forgot-password', {
+            method: 'POST',
+            body: JSON.stringify({ email, recaptchaToken }),
+        });
+    },
+
+    resetPassword: async (token, newPassword, confirmPassword, recaptchaToken) => {
+        return apiClient('/auth/reset-password', {
+            method: 'POST',
+            body: JSON.stringify({ token, newPassword, confirmPassword, recaptchaToken }),
+        });
+    },
+
 };
