@@ -28,9 +28,12 @@ export const authService = {
     },
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     // logout is handled on UI level by removing cookies, but if a backend route exists, we could use it.
     // For now we will support logout utility function in cookieUtils.
 =======
+=======
+>>>>>>> Stashed changes
     logout: async () => {
         try {
             await apiClient('/auth/logout', { method: 'POST', credentials: 'include' });
@@ -38,5 +41,8 @@ export const authService = {
             // ignore
         }
     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 };
