@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { getDiceBearUrl } from '../../services/dicebear';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { Box, Heading, Text, Button, VStack, HStack, Input, Link, Flex, InputGroup, InputLeftElement, InputRightElement, IconButton, Icon, Grid, Image, Spinner } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -28,6 +29,15 @@ const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [avatarUrl, setAvatarUrl] = useState('');
+        // Génère un avatar DiceBear à chaque changement de pseudo (si vide)
+        useEffect(() => {
+            if (username && username.length >= 3) {
+                setAvatarUrl(getDiceBearUrl(username, 'adventurer'));
+            } else {
+                setAvatarUrl('');
+            }
+        }, [username]);
     const [isLoading, setIsLoading] = useState(false);
     const [recaptchaToken, setRecaptchaToken] = useState(null);
     const [errorMsg, setErrorMsg] = useState('');
@@ -103,7 +113,8 @@ const SignUp = () => {
         }
         setIsLoading(true);
         try {
-            await signup(username, email, password, recaptchaToken);
+            // Ajoute avatar DiceBear à la création du compte
+            await signup(username, email, password, recaptchaToken, avatarUrl);
             navigate('/signin');
         } catch (err) {
             // error handled by toast in AuthContext
@@ -197,7 +208,7 @@ const SignUp = () => {
 
                             <form onSubmit={handleSubmit}>
                                 <VStack spacing={5}>
-                                    {/* Username */}
+                                    {/* Username + Avatar DiceBear */}
                                     <Box w="100%">
                                         <Flex justify="space-between" align="center" ml={1} mb={1}>
                                             <Text fontSize="xs" fontWeight="semibold" color="gray.400" textTransform="uppercase" letterSpacing="wider">Username</Text>
@@ -221,6 +232,11 @@ const SignUp = () => {
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" /></svg>
                                             </InputLeftElement>
                                             <Input type="text" placeholder="AlgoMaster99" value={username} onChange={(e) => setUsername(e.target.value)} {...inputStyles} />
+                                            {avatarUrl && (
+                                                <InputRightElement width="3.5rem" h="100%">
+                                                    <img src={avatarUrl} alt="avatar preview" style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff' }} />
+                                                </InputRightElement>
+                                            )}
                                         </InputGroup>
                                         <Text fontSize="10px" color="gray.500" ml={1} mt={1}>Your rank starts as: <Text as="span" color="yellow.500" fontWeight="bold">Rookie 🥉</Text></Text>
                                     </Box>
