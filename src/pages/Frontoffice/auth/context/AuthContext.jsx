@@ -157,6 +157,30 @@ export const AuthProvider = ({ children }) => {
         });
     }, []);
 
+    /**
+     * reload – refresh user auth from token and server
+     * Used after OAuth redirect to re-fetch user data
+     */
+    const reload = useCallback(async () => {
+        const storedToken = getToken();
+        if (!storedToken) {
+            writeStorage(null);
+            setCurrentUser(null);
+            return;
+        }
+
+        try {
+            const profile = await userService.getProfile('me');
+            setCurrentUser(profile);
+            writeStorage({ user: profile });
+        } catch (err) {
+            const stored = readStorage();
+            if (stored?.user) {
+                setCurrentUser(stored.user);
+            }
+        }
+    }, []);
+
     return (
         <AuthContext.Provider
             value={{
@@ -166,6 +190,7 @@ export const AuthProvider = ({ children }) => {
                 signup,
                 logout,
                 updateCurrentUser,
+                reload,
             }}
         >
             {children}

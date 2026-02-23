@@ -36,8 +36,7 @@ export const authService = {
         } catch (e) {
             // ignore
         }
-    }
-
+    },
 
     checkAvailability: async (field, value) => {
         return apiClient('/auth/check-availability', {
@@ -45,9 +44,6 @@ export const authService = {
             body: JSON.stringify({ [field]: value }),
         });
     },
-
-    // logout is handled on UI level by removing cookies, but if a backend route exists, we could use it.
-    // For now we will support logout utility function in cookieUtils.
 
     forgotPassword: async (email, recaptchaToken) => {
         return apiClient('/auth/forgot-password', {

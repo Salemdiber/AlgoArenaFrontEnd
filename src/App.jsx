@@ -9,6 +9,7 @@ import GlobalAccessibilityUI from './accessibility/components/GlobalAccessibilit
 // Loading System
 import { LoadingProvider } from './shared/context/LoadingContext';
 import RouteLoader from './shared/components/RouteLoader';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Layouts (always loaded – they wrap everything)
 import PublicLayout from './layout/PublicLayout';
@@ -22,6 +23,7 @@ const LandingPage = lazy(() => import('./pages/LandingPage/LandingPage'));
 // Frontoffice Auth
 const SignIn = lazy(() => import('./pages/Frontoffice/SignIn'));
 const SignUp = lazy(() => import('./pages/Frontoffice/SignUp'));
+const OAuthCallbackPage = lazy(() => import('./pages/Frontoffice/auth/pages/OAuthCallbackPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/Frontoffice/auth/pages/ForgotPasswordPage'));
 const EmailSentPage = lazy(() => import('./pages/Frontoffice/auth/pages/EmailSentPage'));
 const ResetPasswordPage = lazy(() => import('./pages/Frontoffice/auth/pages/ResetPasswordPage'));
@@ -37,7 +39,7 @@ const BattleSummaryPage = lazy(() => import('./pages/Frontoffice/battles/pages/B
 import { BattleProvider } from './pages/Frontoffice/battles';
 import { ChallengeProvider } from './pages/Frontoffice/challenges';
 import { ProfileProvider } from './pages/Frontoffice/profile';
-import { AuthProvider } from './pages/Frontoffice/auth/context/AuthContext';
+import { AuthProvider, useAuth } from './pages/Frontoffice/auth/context/AuthContext';
 
 // Frontoffice Challenge Pages
 const ChallengesListPage = lazy(() => import('./pages/Frontoffice/challenges/pages/ChallengesListPage'));
@@ -66,14 +68,21 @@ const PlaceholderPage = lazy(() => import('./pages/Backoffice/PlaceholderPage'))
 
 
 
-// Simple Protected Route Component
+// Protected Route Component - uses AuthContext
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const { currentUser, isLoggedIn } = useAuth();
   const location = useLocation();
 
-  if (!isAuthenticated) {
+  // Check if user is logged in and has admin/organizer role
+  if (!isLoggedIn || !currentUser) {
     return <Navigate to="/signin" state={{ from: location }} replace />;
   }
+
+  const role = String(currentUser.role || '').toUpperCase();
+  if (role !== 'ADMIN' && role !== 'ORGANIZER') {
+    return <Navigate to="/" replace />;
+  }
+
   return children;
 };
 
@@ -89,66 +98,57 @@ const NavigateRegistrar = () => {
 
 function App() {
   return (
-    <AccessibilityProvider>
-      <LoadingProvider>
-        <a href="#main-content" className="skip-to-content">Skip to content</a>
-        <Router>
-          <NavigateRegistrar />
-          <GlobalAccessibilityUI />
-          <AuthProvider>
-            <BattleProvider>
-              <ChallengeProvider>
-                <ProfileProvider>
-                  <Suspense fallback={<RouteLoader />}>
-                    <Routes>
-                      {/* Public Routes */}
-                      <Route element={<PublicLayout />}>
-                        <Route path="/" element={<LandingPage />} />
-                        <Route path="/battles" element={<BattleListPage />} />
-                        <Route path="/battles/:id" element={<ActiveBattlePage />} />
-                        <Route path="/battles/:id/summary" element={<BattleSummaryPage />} />
-                        <Route path="/challenges" element={<ChallengesListPage />} />
-                        <Route path="/challenges/:id" element={<ChallengePlayPage />} />
-                        <Route path="/leaderboard" element={<LeaderboardPage />} />
-                        <Route path="/profile" element={<ProfilePage />} />
-                        <Route path="/profile/2fa-setup" element={<TwoFactorSetupPage />} />
-                      </Route>
-
-                      <Route path="/login" element={<Navigate to="/signin" replace />} />
-
-                      {/* Frontoffice Auth Routes */}
-                      <Route path="/signin" element={<SignIn />} />
-                      <Route path="/signup" element={<SignUp />} />
-                      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                      <Route path="/email-sent" element={<EmailSentPage />} />
-                      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-                      <Route path="/reset-success" element={<ResetSuccessPage />} />
-                      <Route path="/reset-expired" element={<ResetExpiredPage />} />
-
-                      {/* Backoffice Routes - Protected */}
-                      <Route path="/admin" element={
-                        <ProtectedRoute>
-                          <AdminLayout />
-                        </ProtectedRoute>
-                      }>
-                        <Route index element={<Dashboard />} />
-                        <Route path="users" element={<Users />} />
-                        <Route path="battles" element={<Battles />} />
-                        <Route path="challenges" element={<Challenges />} />
-                        <Route path="ai-logs" element={<AILogs />} />
-                        <Route path="leaderboards" element={<Leaderboards />} />
-                        <Route path="analytics" element={<Analytics />} />
-                        <Route path="system-health" element={<SystemHealth />} />
-                        <Route path="settings" element={<Settings />} />
-                        <Route path="profile" element={<Profile />} />
-                        <Route path="add-admin" element={<AddAdmin />} />
-                        <Route path="*" element={<PlaceholderPage />} />
-                      </Route>
-
-                      {/* Catch-all redirect to Landing Page */}
-                      <Route path="*" element={<Navigate to="/" replace />} />
-                    </Routes>
-                  </Suspense>
+    <ErrorBoundary>
+      <AccessibilityProvider>
+        <LoadingProvider>
+          <a href="#main-content" className="skip-to-content">Skip to content</a>
+          <Router>
+            <NavigateRegistrar />
+            <GlobalAccessibilityUI />
+            <AuthProvider>
+              <BattleProvider>
+                <ChallengeProvider>
+                  <ProfileProvider>
+                    <Suspense fallback={<RouteLoader />}>
+                      <Routes>
+                        {/* Public Routes */}
+                        <Route element={<PublicLayout />}>
+                          <Route path="/" element={<LandingPage />} />
+                          <Route path="/battles" element={<BattleListPage />} />
+                          <Route path="/battles/:id" element={<ActiveBattlePage />} />
+                          <Route path="/battles/:id/summary" element={<BattleSummaryPage />} />
+                          <Route path="/challenges" element={<ChallengesListPage />} />
+                          <Route path="/challenges/:id" element={<ChallengePlayPage />} />
+                          <Route path="/leaderboard" element={<LeaderboardPage />} />
+                          <Route path="/profile" element={<ProfilePage />} />
+                          <Route path="/profile/2fa-setup" element={<TwoFactorSetupPage />} />
+                        </Route>
+                        <Route path="/login" element={<Navigate to="/signin" replace />} />
+                        <Route path="/signin" element={<SignIn />} />
+                        <Route path="/signup" element={<SignUp />} />
+                        <Route path="/auth/callback" element={<OAuthCallbackPage />} />
+                        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                        <Route path="/email-sent" element={<EmailSentPage />} />
+                        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+                        <Route path="/reset-success" element={<ResetSuccessPage />} />
+                        <Route path="/reset-expired" element={<ResetExpiredPage />} />
+                        <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+                          <Route index element={<Dashboard />} />
+                          <Route path="users" element={<Users />} />
+                          <Route path="battles" element={<Battles />} />
+                          <Route path="challenges" element={<Challenges />} />
+                          <Route path="ai-logs" element={<AILogs />} />
+                          <Route path="leaderboards" element={<Leaderboards />} />
+                          <Route path="analytics" element={<Analytics />} />
+                          <Route path="system-health" element={<SystemHealth />} />
+                          <Route path="settings" element={<Settings />} />
+                          <Route path="profile" element={<Profile />} />
+                          <Route path="add-admin" element={<AddAdmin />} />
+                          <Route path="*" element={<PlaceholderPage />} />
+                        </Route>
+                        <Route path="*" element={<Navigate to="/" replace />} />
+                      </Routes>
+                    </Suspense>
                 </ProfileProvider>
               </ChallengeProvider>
             </BattleProvider>
@@ -156,6 +156,7 @@ function App() {
         </Router>
       </LoadingProvider>
     </AccessibilityProvider>
+    </ErrorBoundary>
   );
 }
 
