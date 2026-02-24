@@ -1,65 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import UserGrowthChart from '../../components/Charts/UserGrowthChart';
 import BattleActivityChart from '../../components/Charts/BattleActivityChart';
 import DifficultyChart from '../../components/Charts/DifficultyChart';
-import { apiClient } from '../../services/apiClient';
 
 const Analytics = () => {
-    const [analyticsData, setAnalyticsData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchAnalytics = async () => {
-            try {
-                const response = await apiClient('/analytics/insights');
-                setAnalyticsData(response);
-                setLoading(false);
-            } catch (err) {
-                console.error("Failed to fetch analytics", err);
-                setError("Failed to load platform insights");
-                setLoading(false);
-            }
-        };
-
-        fetchAnalytics();
-    }, []);
-
-    if (loading) return <div className="text-gray-100 p-6">Loading Platform Analytics...</div>;
-    if (error) return <div className="text-red-500 p-6">{error}</div>;
-    if (!analyticsData) return null;
-
     return (
         <div className="space-y-6 animate-fade-in-up">
-            <div className="mb-6 flex justify-between items-end">
-                <div>
-                    <h1 className="font-heading text-3xl font-bold text-gray-100 mb-2">Platform Analytics</h1>
-                    <p className="text-gray-400">Comprehensive insights and performance metrics</p>
-                </div>
-                <div className="text-right">
-                    <p className="text-gray-400 text-sm">Total Platform Users</p>
-                    <p className="font-heading text-3xl font-bold text-cyan-400">{analyticsData.users.total}</p>
-                </div>
-            </div>
-
-            {/* Top Metrics Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div className="glass-panel rounded-xl p-4 shadow-custom border border-gray-700/50">
-                    <p className="text-gray-400 text-sm mb-1">New Users (30 Days)</p>
-                    <p className="text-2xl font-bold text-gray-100">{analyticsData.users.newUsers30Days}</p>
-                </div>
-                <div className="glass-panel rounded-xl p-4 shadow-custom border border-gray-700/50">
-                    <p className="text-gray-400 text-sm mb-1">Daily Active Users</p>
-                    <p className="text-2xl font-bold text-gray-100">{analyticsData.users.dailyActiveUsers}</p>
-                </div>
-                <div className="glass-panel rounded-xl p-4 shadow-custom border border-gray-700/50">
-                    <p className="text-gray-400 text-sm mb-1">Avg Session Time</p>
-                    <p className="text-2xl font-bold text-gray-100">{analyticsData.engagement.averageTimeSpent}</p>
-                </div>
-                <div className="glass-panel rounded-xl p-4 shadow-custom border border-gray-700/50">
-                    <p className="text-gray-400 text-sm mb-1">Peak Hours</p>
-                    <p className="text-2xl font-bold text-gray-100">{analyticsData.engagement.peakUsageTimes[0] || '18:00'}</p>
-                </div>
+            <div className="mb-6">
+                <h1 className="font-heading text-3xl font-bold text-gray-100 mb-2">Platform Analytics</h1>
+                <p className="text-gray-400">Comprehensive insights and performance metrics</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -90,16 +39,12 @@ const Analytics = () => {
 
                 {/* User Engagement (Custom Bars) */}
                 <div className="glass-panel rounded-xl p-6 shadow-custom border border-gray-700/50 bg-[#1e293b]/60 backdrop-blur-md">
-                    <h2 className="font-heading text-xl font-bold text-gray-100 mb-4">Most Accessed Sections</h2>
+                    <h2 className="font-heading text-xl font-bold text-gray-100 mb-4">User Engagement</h2>
                     <div className="space-y-4">
-                        {analyticsData.engagement.mostFrequentlyAccessed.map((item, idx) => {
-                            // Calculate a relative percentage to highest accesses for UI purposes
-                            const max = analyticsData.engagement.mostFrequentlyAccessed[0]?.accesses || 1;
-                            const pct = Math.round((item.accesses / max) * 100);
-                            return (
-                                <EngagementBar key={idx} label={item.section} value={item.accesses.toString() + ' hits'} percentage={pct} />
-                            );
-                        })}
+                        <EngagementBar label="Daily Active Users" value="87%" percentage={87} />
+                        <EngagementBar label="Weekly Active Users" value="92%" percentage={92} />
+                        <EngagementBar label="Monthly Active Users" value="95%" percentage={95} />
+                        <EngagementBar label="Avg Session Duration" value="24m 32s" percentage={78} />
                     </div>
                 </div>
 

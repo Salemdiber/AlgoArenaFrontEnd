@@ -28,7 +28,7 @@ const GlobalAccessibilityUI = () => {
                 whileTap={{ scale: 0.95 }}
                 style={{
                     position: 'fixed',
-                    bottom: '110px',
+                    bottom: '30px',
                     right: '30px',
                     zIndex: 9999,
                     cursor: 'grab',

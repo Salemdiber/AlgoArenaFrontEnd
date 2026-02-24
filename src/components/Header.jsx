@@ -84,11 +84,6 @@ const Header = () => {
     const navigate = useNavigate();
     const { currentUser, isLoggedIn, logout } = useAuth();
 
-    // Filter out Dashboard for Player role or when not authenticated
-    const filteredNavItems = navItems.filter(
-        item => !(item.label === 'Dashboard' && (!isLoggedIn || currentUser?.role === 'Player'))
-    );
-
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -139,7 +134,7 @@ const Header = () => {
                         spacing={8}
                         display={{ base: 'none', md: 'flex' }}
                     >
-                        {filteredNavItems.map((item) => (
+                        {navItems.map((item) => (
                             <Link
                                 key={item.to}
                                 as={NavLink}
@@ -245,7 +240,7 @@ const Header = () => {
                                         >
                                             View Profile
                                         </MenuItem>
-                                        {/* <MenuItem
+                                        <MenuItem
                                             bg="transparent"
                                             color="gray.200"
                                             _hover={{ bg: 'rgba(34, 211, 238, 0.08)', color: '#22d3ee' }}
@@ -256,7 +251,7 @@ const Header = () => {
                                             onClick={() => navigate('/profile')}
                                         >
                                             Account Settings
-                                        </MenuItem> */}
+                                        </MenuItem>
                                         <MenuDivider borderColor="#334155" mx={2} />
                                         <MenuItem
                                             bg="transparent"
@@ -316,7 +311,7 @@ const Header = () => {
                     <DrawerCloseButton color="gray.400" _hover={{ color: 'brand.500' }} mt={2} />
                     <DrawerBody pt={16}>
                         <VStack spacing={6} align="stretch">
-                            {filteredNavItems.map((item) => (
+                            {navItems.map((item) => (
                                 <Link
                                     key={item.to}
                                     as={NavLink}

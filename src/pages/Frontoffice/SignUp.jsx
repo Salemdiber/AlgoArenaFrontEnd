@@ -1,118 +1,25 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { getDiceBearUrl } from '../../services/dicebear';
-import { getReCaptchaV3Token } from '../../services/recaptchaV3';
-import { Box, Heading, Text, Button, VStack, HStack, Input, Link, Flex, InputGroup, InputLeftElement, InputRightElement, IconButton, Icon, Grid, Image, Spinner } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Heading, Text, Button, VStack, HStack, Input, Link, Flex, InputGroup, InputLeftElement, Grid, Image } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AuthLayout from '../../layout/AuthLayout';
 import { useAuth, redirectBasedOnRole } from './auth/context/AuthContext';
-import { authService } from '../../services/authService';
 
 const MotionBox = motion.create(Box);
-
-const EyeIcon = (props) => (
-    <Icon viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-        <circle cx="12" cy="12" r="3" />
-    </Icon>
-);
-
-const EyeOffIcon = (props) => (
-    <Icon viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-        <line x1="1" y1="1" x2="23" y2="23" />
-    </Icon>
-);
 
 const SignUp = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [avatarUrl, setAvatarUrl] = useState('');
-        // Génère un avatar DiceBear à chaque changement de pseudo (si vide)
-        useEffect(() => {
-            if (username && username.length >= 3) {
-                setAvatarUrl(getDiceBearUrl(username, 'adventurer'));
-            } else {
-                setAvatarUrl('');
-            }
-        }, [username]);
     const [isLoading, setIsLoading] = useState(false);
-    const [recaptchaToken, setRecaptchaToken] = useState(null);
-    const [errorMsg, setErrorMsg] = useState('');
-    const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
     const { signup } = useAuth();
     const navigate = useNavigate();
 
-    const [usernameStatus, setUsernameStatus] = useState({ state: 'idle', message: '' }); // 'idle', 'loading', 'available', 'taken'
-    const [emailStatus, setEmailStatus] = useState({ state: 'idle', message: '' });
-
-    useEffect(() => {
-        if (!username || username.length < 3) {
-            setUsernameStatus({ state: 'idle', message: '' });
-            return;
-        }
-
-        const timeoutId = setTimeout(async () => {
-            setUsernameStatus({ state: 'loading', message: '' });
-            try {
-                const res = await authService.checkAvailability('username', username);
-                if (res.available) setUsernameStatus({ state: 'available', message: 'Available' });
-                else setUsernameStatus({ state: 'taken', message: res.message || 'Taken' });
-            } catch (err) {
-                setUsernameStatus({ state: 'idle', message: '' });
-            }
-        }, 500);
-
-        return () => clearTimeout(timeoutId);
-    }, [username]);
-
-    useEffect(() => {
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setEmailStatus({ state: 'idle', message: '' });
-            return;
-        }
-
-        const timeoutId = setTimeout(async () => {
-            setEmailStatus({ state: 'loading', message: '' });
-            try {
-                const res = await authService.checkAvailability('email', email);
-                if (res.available) setEmailStatus({ state: 'available', message: 'Available' });
-                else setEmailStatus({ state: 'taken', message: res.message || 'Taken' });
-            } catch (err) {
-                setEmailStatus({ state: 'idle', message: '' });
-            }
-        }, 500);
-
-        return () => clearTimeout(timeoutId);
-    }, [email]);
-
-    const isFormInvalid = usernameStatus.state === 'taken' || emailStatus.state === 'taken' || password.length < 6;
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrorMsg('');
-
-        if (usernameStatus.state === 'taken') {
-            setErrorMsg('Username is already taken.');
-            return;
-        }
-        if (emailStatus.state === 'taken') {
-            setErrorMsg('Email is already taken.');
-            return;
-        }
-        if (password.length < 6) {
-            setErrorMsg('Password must be at least 6 characters long.');
-            return;
-        }
-
         setIsLoading(true);
         try {
-            // Obtenir le token reCAPTCHA v3 dynamiquement
-            const token = await getReCaptchaV3Token(RECAPTCHA_SITE_KEY, 'signup');
-            setRecaptchaToken(token);
-            await signup(username, email, password, token, avatarUrl);
+            await signup(username, email, password);
             navigate('/signin');
         } catch (err) {
             // error handled by toast in AuthContext
@@ -206,58 +113,27 @@ const SignUp = () => {
 
                             <form onSubmit={handleSubmit}>
                                 <VStack spacing={5}>
-                                    {/* Username + Avatar DiceBear */}
+                                    {/* Username */}
                                     <Box w="100%">
                                         <Flex justify="space-between" align="center" ml={1} mb={1}>
                                             <Text fontSize="xs" fontWeight="semibold" color="gray.400" textTransform="uppercase" letterSpacing="wider">Username</Text>
-
-                                            {usernameStatus.state === 'loading' && <Spinner size="xs" color="brand.500" />}
-                                            {usernameStatus.state === 'available' && (
-                                                <HStack spacing={1}>
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
-                                                    <Text fontSize="10px" fontFamily="mono" color="brand.500">Available</Text>
-                                                </HStack>
-                                            )}
-                                            {usernameStatus.state === 'taken' && (
-                                                <HStack spacing={1}>
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>
-                                                    <Text fontSize="10px" fontFamily="mono" color="red.400">Taken</Text>
-                                                </HStack>
-                                            )}
+                                            <HStack spacing={1} opacity={username.length > 3 ? 1 : 0} transition="opacity 0.3s">
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                                                <Text fontSize="10px" fontFamily="mono" color="brand.500">Available</Text>
+                                            </HStack>
                                         </Flex>
                                         <InputGroup>
                                             <InputLeftElement pointerEvents="none" h="100%">
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" /></svg>
                                             </InputLeftElement>
                                             <Input type="text" placeholder="AlgoMaster99" value={username} onChange={(e) => setUsername(e.target.value)} {...inputStyles} />
-                                            {avatarUrl && (
-                                                <InputRightElement width="3.5rem" h="100%">
-                                                    <img src={avatarUrl} alt="avatar preview" style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff' }} />
-                                                </InputRightElement>
-                                            )}
                                         </InputGroup>
                                         <Text fontSize="10px" color="gray.500" ml={1} mt={1}>Your rank starts as: <Text as="span" color="yellow.500" fontWeight="bold">Rookie 🥉</Text></Text>
                                     </Box>
 
                                     {/* Email */}
                                     <Box w="100%">
-                                        <Flex justify="space-between" align="center" ml={1} mb={1}>
-                                            <Text fontSize="xs" fontWeight="semibold" color="gray.400" textTransform="uppercase" letterSpacing="wider">Email Address</Text>
-
-                                            {emailStatus.state === 'loading' && <Spinner size="xs" color="brand.500" />}
-                                            {emailStatus.state === 'available' && (
-                                                <HStack spacing={1}>
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
-                                                    <Text fontSize="10px" fontFamily="mono" color="brand.500">Available</Text>
-                                                </HStack>
-                                            )}
-                                            {emailStatus.state === 'taken' && (
-                                                <HStack spacing={1}>
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>
-                                                    <Text fontSize="10px" fontFamily="mono" color="red.400">In Use</Text>
-                                                </HStack>
-                                            )}
-                                        </Flex>
+                                        <Text fontSize="xs" fontWeight="semibold" color="gray.400" textTransform="uppercase" letterSpacing="wider" ml={1} mb={1}>Email Address</Text>
                                         <InputGroup>
                                             <InputLeftElement pointerEvents="none" h="100%">
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
@@ -273,21 +149,7 @@ const SignUp = () => {
                                             <InputLeftElement pointerEvents="none" h="100%">
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
                                             </InputLeftElement>
-                                            <Input type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} {...inputStyles} pr="2.5rem" />
-                                            <InputRightElement h="100%" right="1" display="flex" alignItems="center" justifyContent="center">
-                                                <IconButton
-                                                    variant="unstyled"
-                                                    size="sm"
-                                                    display="flex"
-                                                    alignItems="center"
-                                                    justifyContent="center"
-                                                    onClick={() => setShowPassword(!showPassword)}
-                                                    icon={showPassword ? <EyeOffIcon w={4} h={4} /> : <EyeIcon w={4} h={4} />}
-                                                    color="gray.500"
-                                                    _hover={{ color: 'gray.300' }}
-                                                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                                                />
-                                            </InputRightElement>
+                                            <Input type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} {...inputStyles} />
                                         </InputGroup>
                                         <Flex mt={2} align="center" gap={2}>
                                             <Box flex={1} h="4px" bg="gray.600" borderRadius="full" overflow="hidden">
@@ -299,13 +161,9 @@ const SignUp = () => {
 
 
 
-                                    {/* reCAPTCHA v3 : token généré automatiquement lors du submit */}
-                                    {errorMsg && <Text fontSize="xs" color="red.400" mt={2}>{errorMsg}</Text>}
-
                                     {/* Submit */}
                                     <Box pt={4} w="100%">
                                         <Button type="submit" w="100%" h="48px" bgGradient="linear(to-r, brand.500, cyan.400)" color="#0f172a" fontSize="sm" fontWeight="bold" borderRadius="8px"
-                                            isDisabled={isFormInvalid}
                                             isLoading={isLoading} loadingText="Creating Profile..." boxShadow="0 0 30px -5px rgba(34,211,238,0.5)" position="relative" overflow="hidden" role="group"
                                             _hover={{ bgGradient: 'linear(to-r, brand.500, cyan.300)', transform: 'translateY(-2px)' }} _active={{ transform: 'translateY(0)' }} transition="all 0.3s">
                                             <Box position="absolute" inset={0} bg="whiteAlpha.200" transform="translateX(-100%) skewX(-12deg)" _groupHover={{ transform: 'translateX(100%) skewX(-12deg)' }} transition="transform 0.5s" />

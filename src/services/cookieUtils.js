@@ -1,7 +1,5 @@
 export const setToken = (token) => {
-    // Access token is short-lived (15 minutes)
-    const maxAge = 15 * 60; // 15 minutes in seconds
-    document.cookie = `access_token=${token}; path=/; max-age=${maxAge}; SameSite=Lax`;
+    document.cookie = `access_token=${token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
 };
 
 export const getToken = () => {

@@ -5,10 +5,9 @@
  * Step 2 → Configure settings (rounds, difficulty, time)
  * Step 3 → Confirm & create
  */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useBattleState } from '../hooks/useBattleState';
 import { BattleMode, Difficulty } from '../types/battle.types';
-import { settingsService } from '../../../../services/settingsService';
 
 const CreateBattleModal = () => {
     const {
@@ -19,16 +18,6 @@ const CreateBattleModal = () => {
         setCreateConfig,
         confirmCreateBattle,
     } = useBattleState();
-
-    const [aiBattlesEnabled, setAiBattlesEnabled] = useState(true);
-
-    useEffect(() => {
-        if (createModal.isOpen) {
-            settingsService.getSettings()
-                .then((data) => setAiBattlesEnabled(data?.aiBattles ?? true))
-                .catch(() => setAiBattlesEnabled(true));
-        }
-    }, [createModal.isOpen]);
 
     if (!createModal.isOpen) return null;
 
@@ -103,7 +92,7 @@ const CreateBattleModal = () => {
                 </div>
 
                 {/* Step Content */}
-                {step === 1 && <StepMode mode={mode} setCreateMode={setCreateMode} aiBattlesEnabled={aiBattlesEnabled} />}
+                {step === 1 && <StepMode mode={mode} setCreateMode={setCreateMode} />}
                 {step === 2 && (
                     <StepConfigure
                         totalRounds={totalRounds}
@@ -146,7 +135,7 @@ const CreateBattleModal = () => {
 
 /* ── Step 1: Choose Mode ────────────────────────────── */
 
-const StepMode = ({ mode, setCreateMode, aiBattlesEnabled }) => (
+const StepMode = ({ mode, setCreateMode }) => (
     <div>
         <h3 className="battle-text-lg battle-font-semibold battle-mb-md">Choose Battle Mode</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
@@ -160,32 +149,12 @@ const StepMode = ({ mode, setCreateMode, aiBattlesEnabled }) => (
             </div>
 
             <div
-                className={`battle-mode-card ${mode === BattleMode.ONE_VS_AI ? 'battle-mode-card--selected' : ''} ${!aiBattlesEnabled ? 'battle-mode-card--disabled' : ''}`}
-                onClick={() => aiBattlesEnabled && setCreateMode(BattleMode.ONE_VS_AI)}
-                style={!aiBattlesEnabled ? { opacity: 0.45, cursor: 'not-allowed', position: 'relative' } : {}}
+                className={`battle-mode-card ${mode === BattleMode.ONE_VS_AI ? 'battle-mode-card--selected' : ''}`}
+                onClick={() => setCreateMode(BattleMode.ONE_VS_AI)}
             >
                 <div className="battle-mode-icon battle-mode-icon--ai">🤖</div>
                 <h4 className="battle-font-bold battle-mb-sm" style={{ fontSize: '1.1rem' }}>1vsAI Battle</h4>
-                <p className="battle-text-sm battle-text-muted">
-                    {aiBattlesEnabled
-                        ? 'Challenge our AI opponent at various difficulty levels'
-                        : 'AI Battles are currently disabled by admin'}
-                </p>
-                {!aiBattlesEnabled && (
-                    <span style={{
-                        display: 'inline-block',
-                        marginTop: '0.5rem',
-                        padding: '0.2rem 0.6rem',
-                        fontSize: '0.7rem',
-                        fontWeight: 600,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        borderRadius: '9999px',
-                        background: 'rgba(239,68,68,0.15)',
-                        color: '#f87171',
-                        border: '1px solid rgba(239,68,68,0.3)',
-                    }}>Disabled</span>
-                )}
+                <p className="battle-text-sm battle-text-muted">Challenge our AI opponent at various difficulty levels</p>
             </div>
         </div>
     </div>

@@ -27,8 +27,6 @@ import AuthHeader from '../components/AuthHeader';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 import RequirementChecklist from '../components/RequirementChecklist';
 import usePasswordStrength from '../hooks/usePasswordStrength';
-import ReCAPTCHA from 'react-google-recaptcha';
-import { authService } from '../../../../services/authService';
 
 /* Icons */
 const LockIcon = (props) => (
@@ -80,7 +78,6 @@ const ResetPasswordPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    const [recaptchaToken, setRecaptchaToken] = useState(null);
 
     const { score, label, color, glowColor, percent, requirements } = usePasswordStrength(password);
 
@@ -100,34 +97,20 @@ const ResetPasswordPage = () => {
             return;
         }
 
+        // Strength requirement (at least score 2 = fair/medium)
         if (score < 2) {
             setError('Password is too weak');
-            return;
-        }
-
-        if (!recaptchaToken) {
-            setError('Please complete reCAPTCHA');
             return;
         }
 
         setError('');
         setIsLoading(true);
 
-        const doReset = async () => {
-            try {
-                await authService.resetPassword(token, password, confirmPassword, recaptchaToken);
-                navigate('/reset-success');
-            } catch (err) {
-                if (err.message && err.message.toLowerCase().includes('expired')) {
-                    navigate('/reset-expired');
-                } else {
-                    setError(err.message || 'Failed to reset password');
-                }
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        doReset();
+        // Simulate API update
+        setTimeout(() => {
+            setIsLoading(false);
+            navigate('/reset-success');
+        }, 1500);
     };
 
     const inputStyles = {
@@ -204,14 +187,6 @@ const ResetPasswordPage = () => {
                     />
                     <FormErrorMessage fontSize="xs" mt={2}>{error}</FormErrorMessage>
                 </FormControl>
-
-                <Box w="100%" display="flex" flexDirection="column" alignItems="center" mb={6}>
-                    <ReCAPTCHA
-                        sitekey="6LdKIHMsAAAAACo6AkNg2KChjBhGcVCj2Rwj-rey"
-                        onChange={(val) => { setRecaptchaToken(val); setError(''); }}
-                        theme="dark"
-                    />
-                </Box>
 
                 {/* Submit Button */}
                 <Button

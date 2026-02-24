@@ -12,7 +12,7 @@ import {
     getProgressPercent,
 } from '../types/battle.types';
 
-const BattleCard = ({ battle, onEnter, onViewSummary, onCancel, aiBattlesEnabled = true }) => {
+const BattleCard = ({ battle, onEnter, onViewSummary, onCancel }) => {
     const isLive = battle.status === BattleStatus.LIVE;
     const isActive = battle.status === BattleStatus.ACTIVE;
     const isWaiting = battle.status === BattleStatus.WAITING;
@@ -25,7 +25,6 @@ const BattleCard = ({ battle, onEnter, onViewSummary, onCancel, aiBattlesEnabled
     const playerScore = getTotalPlayerScore(battle);
     const opponentScore = getTotalOpponentScore(battle);
     const isAI = battle.mode === BattleMode.ONE_VS_AI;
-    const isAIDisabled = isAI && !aiBattlesEnabled;
 
     const cardClass = [
         'battle-card',
@@ -50,19 +49,7 @@ const BattleCard = ({ battle, onEnter, onViewSummary, onCancel, aiBattlesEnabled
         : null;
 
     return (
-        <div className={cardClass} id={`battle-card-${battle.id}`} style={isAIDisabled ? { opacity: 0.5, pointerEvents: 'none', position: 'relative' } : {}}>
-            {/* AI Disabled Overlay Badge */}
-            {isAIDisabled && (
-                <div style={{
-                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    zIndex: 10, background: 'rgba(15,23,42,0.85)', borderRadius: '12px',
-                    padding: '0.75rem 1.25rem', textAlign: 'center', border: '1px solid rgba(239,68,68,0.3)',
-                    pointerEvents: 'auto',
-                }}>
-                    <p style={{ color: '#f87171', fontWeight: 700, fontSize: '0.85rem', marginBottom: '0.25rem' }}>AI Battles Disabled</p>
-                    <p style={{ color: '#94a3b8', fontSize: '0.75rem' }}>Maintenance</p>
-                </div>
-            )}
+        <div className={cardClass} id={`battle-card-${battle.id}`}>
             {/* Header: Mode + Status */}
             <div className="battle-flex-between battle-mb-md">
                 <span className={`battle-badge battle-badge--${modeBadge.color}`}>

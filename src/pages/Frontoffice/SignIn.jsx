@@ -1,6 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { getReCaptchaV3Token } from '../../services/recaptchaV3';
-import { Box, Heading, Text, Button, VStack, HStack, Input, Checkbox, Link, Flex, InputGroup, InputLeftElement, InputRightElement, IconButton, Icon } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Heading, Text, Button, VStack, HStack, Input, Checkbox, Link, Flex, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AuthLayout from '../../layout/AuthLayout';
@@ -8,29 +7,11 @@ import { useAuth, redirectBasedOnRole } from './auth/context/AuthContext';
 
 const MotionBox = motion.create(Box);
 
-const EyeIcon = (props) => (
-    <Icon viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-        <circle cx="12" cy="12" r="3" />
-    </Icon>
-);
-
-const EyeOffIcon = (props) => (
-    <Icon viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-        <line x1="1" y1="1" x2="23" y2="23" />
-    </Icon>
-);
-
 const SignIn = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [recaptchaToken, setRecaptchaToken] = useState(null);
-    const [errorMsg, setErrorMsg] = useState('');
-    const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
     const { login } = useAuth();
     const navigate = useNavigate();
 
@@ -38,16 +19,12 @@ const SignIn = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrorMsg('');
         setIsLoading(true);
         try {
-            // Obtenir le token reCAPTCHA v3 dynamiquement
-            const token = await getReCaptchaV3Token(RECAPTCHA_SITE_KEY, 'signin');
-            setRecaptchaToken(token);
-            const user = await login(username, password, token);
+            const user = await login(username, password);
             const fallbackPath = redirectBasedOnRole(user);
             let from = location.state?.from?.pathname || fallbackPath;
-            if (["/signin", "/signup", "/login"].includes(from)) {
+            if (['/signin', '/signup', '/login'].includes(from)) {
                 from = fallbackPath;
             }
             navigate(from, { replace: true });
@@ -97,26 +74,16 @@ const SignIn = () => {
                                 <Box w="100%">
                                     <Flex justify="space-between" align="center" ml={1} mb={1}>
                                         <Text fontSize="xs" fontWeight="semibold" color="gray.400" textTransform="uppercase" letterSpacing="wider">Password</Text>
+                                        <HStack spacing={1} bg="rgba(16,185,129,0.1)" px={2} py={0.5} borderRadius="full" border="1px solid" borderColor="rgba(16,185,129,0.2)">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>
+                                            <Text fontSize="10px" fontFamily="mono" color="green.400">Streak: 4 days</Text>
+                                        </HStack>
                                     </Flex>
                                     <InputGroup>
                                         <InputLeftElement pointerEvents="none" h="100%">
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
                                         </InputLeftElement>
-                                        <Input type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} {...inputStyles} pr="2.5rem" />
-                                        <InputRightElement h="100%" right="1" display="flex" alignItems="center" justifyContent="center">
-                                            <IconButton
-                                                variant="unstyled"
-                                                size="sm"
-                                                display="flex"
-                                                alignItems="center"
-                                                justifyContent="center"
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                icon={showPassword ? <EyeOffIcon w={4} h={4} /> : <EyeIcon w={4} h={4} />}
-                                                color="gray.500"
-                                                _hover={{ color: 'gray.300' }}
-                                                aria-label={showPassword ? 'Hide password' : 'Show password'}
-                                            />
-                                        </InputRightElement>
+                                        <Input type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} {...inputStyles} />
                                     </InputGroup>
                                 </Box>
 
@@ -127,9 +94,6 @@ const SignIn = () => {
                                     </Checkbox>
                                     <Link as={RouterLink} to="/forgot-password" fontSize="sm" fontWeight="medium" color="brand.500" _hover={{ color: 'brand.300' }}>Forgot password?</Link>
                                 </Flex>
-
-                                {/* reCAPTCHA v3 : token généré automatiquement lors du submit */}
-                                {errorMsg && <Text fontSize="xs" color="red.400" mt={2}>{errorMsg}</Text>}
 
                                 {/* Submit */}
                                 <Button type="submit" w="100%" h="48px" bgGradient="linear(to-r, brand.500, cyan.400)" color="#0f172a" fontSize="sm" fontWeight="bold" borderRadius="8px"
