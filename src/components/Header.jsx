@@ -245,7 +245,7 @@ const Header = () => {
                                         >
                                             View Profile
                                         </MenuItem>
-                                        <MenuItem
+                                        {/* <MenuItem
                                             bg="transparent"
                                             color="gray.200"
                                             _hover={{ bg: 'rgba(34, 211, 238, 0.08)', color: '#22d3ee' }}
@@ -256,7 +256,7 @@ const Header = () => {
                                             onClick={() => navigate('/profile')}
                                         >
                                             Account Settings
-                                        </MenuItem>
+                                        </MenuItem> */}
                                         <MenuDivider borderColor="#334155" mx={2} />
                                         <MenuItem
                                             bg="transparent"
