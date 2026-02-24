@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { getReCaptchaV3Token } from '../../services/recaptchaV3';
 import { Box, Heading, Text, Button, VStack, HStack, Input, Checkbox, Link, Flex, InputGroup, InputLeftElement, InputRightElement, IconButton, Icon } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -30,7 +30,7 @@ const SignIn = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [recaptchaToken, setRecaptchaToken] = useState(null);
     const [errorMsg, setErrorMsg] = useState('');
-    const recaptchaRef = useRef(null);
+    const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
     const { login } = useAuth();
     const navigate = useNavigate();
 
@@ -39,16 +39,15 @@ const SignIn = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMsg('');
-        if (!recaptchaToken) {
-            setErrorMsg('Please complete reCAPTCHA to sign in.');
-            return;
-        }
         setIsLoading(true);
         try {
-            const user = await login(username, password, recaptchaToken);
+            // Obtenir le token reCAPTCHA v3 dynamiquement
+            const token = await getReCaptchaV3Token(RECAPTCHA_SITE_KEY, 'signin');
+            setRecaptchaToken(token);
+            const user = await login(username, password, token);
             const fallbackPath = redirectBasedOnRole(user);
             let from = location.state?.from?.pathname || fallbackPath;
-            if (['/signin', '/signup', '/login'].includes(from)) {
+            if (["/signin", "/signup", "/login"].includes(from)) {
                 from = fallbackPath;
             }
             navigate(from, { replace: true });
@@ -129,16 +128,8 @@ const SignIn = () => {
                                     <Link as={RouterLink} to="/forgot-password" fontSize="sm" fontWeight="medium" color="brand.500" _hover={{ color: 'brand.300' }}>Forgot password?</Link>
                                 </Flex>
 
-                                {/* reCAPTCHA Widget */}
-                                <Box w="100%" display="flex" flexDirection="column" alignItems="center" mt={2} mb={2}>
-                                    <ReCAPTCHA
-                                        ref={recaptchaRef}
-                                        sitekey="6LdKIHMsAAAAACo6AkNg2KChjBhGcVCj2Rwj-rey"
-                                        onChange={(token) => { setRecaptchaToken(token); setErrorMsg(''); }}
-                                        theme="dark"
-                                    />
-                                    {errorMsg && <Text fontSize="xs" color="red.400" mt={2}>{errorMsg}</Text>}
-                                </Box>
+                                {/* reCAPTCHA v3 : token généré automatiquement lors du submit */}
+                                {errorMsg && <Text fontSize="xs" color="red.400" mt={2}>{errorMsg}</Text>}
 
                                 {/* Submit */}
                                 <Button type="submit" w="100%" h="48px" bgGradient="linear(to-r, brand.500, cyan.400)" color="#0f172a" fontSize="sm" fontWeight="bold" borderRadius="8px"

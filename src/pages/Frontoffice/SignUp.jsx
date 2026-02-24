@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { getDiceBearUrl } from '../../services/dicebear';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { getReCaptchaV3Token } from '../../services/recaptchaV3';
 import { Box, Heading, Text, Button, VStack, HStack, Input, Link, Flex, InputGroup, InputLeftElement, InputRightElement, IconButton, Icon, Grid, Image, Spinner } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -41,7 +41,7 @@ const SignUp = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [recaptchaToken, setRecaptchaToken] = useState(null);
     const [errorMsg, setErrorMsg] = useState('');
-    const recaptchaRef = useRef(null);
+    const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
     const { signup } = useAuth();
     const navigate = useNavigate();
 
@@ -107,14 +107,12 @@ const SignUp = () => {
             return;
         }
 
-        if (!recaptchaToken) {
-            setErrorMsg('Please complete reCAPTCHA to sign up.');
-            return;
-        }
         setIsLoading(true);
         try {
-            // Ajoute avatar DiceBear à la création du compte
-            await signup(username, email, password, recaptchaToken, avatarUrl);
+            // Obtenir le token reCAPTCHA v3 dynamiquement
+            const token = await getReCaptchaV3Token(RECAPTCHA_SITE_KEY, 'signup');
+            setRecaptchaToken(token);
+            await signup(username, email, password, token, avatarUrl);
             navigate('/signin');
         } catch (err) {
             // error handled by toast in AuthContext
@@ -301,16 +299,8 @@ const SignUp = () => {
 
 
 
-                                    {/* reCAPTCHA Widget */}
-                                    <Box w="100%" display="flex" flexDirection="column" alignItems="center" mt={2} mb={2}>
-                                        <ReCAPTCHA
-                                            ref={recaptchaRef}
-                                            sitekey="6LdKIHMsAAAAACo6AkNg2KChjBhGcVCj2Rwj-rey"
-                                            onChange={(token) => { setRecaptchaToken(token); setErrorMsg(''); }}
-                                            theme="dark"
-                                        />
-                                        {errorMsg && <Text fontSize="xs" color="red.400" mt={2}>{errorMsg}</Text>}
-                                    </Box>
+                                    {/* reCAPTCHA v3 : token généré automatiquement lors du submit */}
+                                    {errorMsg && <Text fontSize="xs" color="red.400" mt={2}>{errorMsg}</Text>}
 
                                     {/* Submit */}
                                     <Box pt={4} w="100%">
