@@ -64,7 +64,9 @@ const SystemHealth = lazy(() => import('./pages/Backoffice/SystemHealth'));
 const Settings = lazy(() => import('./pages/Backoffice/Settings'));
 const Profile = lazy(() => import('./pages/Backoffice/Profile'));
 const AddAdmin = lazy(() => import('./pages/Backoffice/AddAdmin'));
+const Sessions = lazy(() => import('./pages/Backoffice/Sessions'));
 const PlaceholderPage = lazy(() => import('./pages/Backoffice/PlaceholderPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 
 
@@ -142,20 +144,21 @@ function App() {
                           <Route path="analytics" element={<Analytics />} />
                           <Route path="system-health" element={<SystemHealth />} />
                           <Route path="settings" element={<Settings />} />
+                          <Route path="sessions" element={<Sessions />} />
                           <Route path="profile" element={<Profile />} />
                           <Route path="add-admin" element={<AddAdmin />} />
-                          <Route path="*" element={<PlaceholderPage />} />
+                          <Route path="*" element={<NotFoundPage />} />
                         </Route>
-                        <Route path="*" element={<Navigate to="/" replace />} />
+                        <Route path="*" element={<NotFoundPage />} />
                       </Routes>
                     </Suspense>
-                </ProfileProvider>
-              </ChallengeProvider>
-            </BattleProvider>
-          </AuthProvider>
-        </Router>
-      </LoadingProvider>
-    </AccessibilityProvider>
+                  </ProfileProvider>
+                </ChallengeProvider>
+              </BattleProvider>
+            </AuthProvider>
+          </Router>
+        </LoadingProvider>
+      </AccessibilityProvider>
     </ErrorBoundary>
   );
 }

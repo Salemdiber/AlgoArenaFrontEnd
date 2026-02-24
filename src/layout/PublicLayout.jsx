@@ -3,6 +3,7 @@ import { Box } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import AIAgent from '../components/AIAgent';
 
 const PublicLayout = () => {
     return (
@@ -12,6 +13,7 @@ const PublicLayout = () => {
                 <Outlet />
             </Box>
             <Footer />
+            <AIAgent />
         </Box>
     );
 };
