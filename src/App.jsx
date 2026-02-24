@@ -40,6 +40,7 @@ import { BattleProvider } from './pages/Frontoffice/battles';
 import { ChallengeProvider } from './pages/Frontoffice/challenges';
 import { ProfileProvider } from './pages/Frontoffice/profile';
 import { AuthProvider, useAuth } from './pages/Frontoffice/auth/context/AuthContext';
+import { settingsService } from './services/settingsService';
 
 // Frontoffice Challenge Pages
 const ChallengesListPage = lazy(() => import('./pages/Frontoffice/challenges/pages/ChallengesListPage'));
@@ -67,6 +68,7 @@ const AddAdmin = lazy(() => import('./pages/Backoffice/AddAdmin'));
 const Sessions = lazy(() => import('./pages/Backoffice/Sessions'));
 const PlaceholderPage = lazy(() => import('./pages/Backoffice/PlaceholderPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const MaintenancePage = lazy(() => import('./pages/MaintenancePage'));
 
 
 
@@ -83,6 +85,52 @@ const ProtectedRoute = ({ children }) => {
   const role = String(currentUser.role || '').toUpperCase();
   if (role !== 'ADMIN' && role !== 'ORGANIZER') {
     return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
+// Maintenance Gate - only applies AFTER login
+// Admin → bypass, Player → show maintenance page, Not logged in → let through (auth routes handle themselves)
+const MaintenanceGate = ({ children }) => {
+  const { currentUser, isLoggedIn } = useAuth();
+  const location = useLocation();
+  const [maintenanceMode, setMaintenanceMode] = React.useState(false);
+  const [checked, setChecked] = React.useState(false);
+
+  // Auth-related paths that should never be blocked
+  const authPaths = ['/signin', '/signup', '/login', '/auth/callback', '/forgot-password', '/email-sent', '/reset-password', '/reset-success', '/reset-expired'];
+  const isAuthRoute = authPaths.some((p) => location.pathname === p || location.pathname.startsWith(p + '/'));
+
+  useEffect(() => {
+    let cancelled = false;
+    settingsService.getSettings()
+      .then((data) => {
+        if (!cancelled) {
+          setMaintenanceMode(!!data?.maintenanceMode);
+          setChecked(true);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setChecked(true); // on error, let app through
+      });
+    return () => { cancelled = true; };
+  }, [isLoggedIn]); // re-check after login/logout
+
+  // Always allow auth routes
+  if (isAuthRoute) return children;
+
+  if (!checked) return null; // wait for settings check
+
+  // Not logged in → let through (they'll hit signin anyway)
+  if (!isLoggedIn) return children;
+
+  const role = String(currentUser?.role || '').toUpperCase();
+  const isAdmin = role === 'ADMIN';
+
+  // Admin bypasses maintenance
+  if (maintenanceMode && !isAdmin) {
+    return <MaintenancePage />;
   }
 
   return children;
@@ -112,6 +160,7 @@ function App() {
                 <ChallengeProvider>
                   <ProfileProvider>
                     <Suspense fallback={<RouteLoader />}>
+                      <MaintenanceGate>
                       <Routes>
                         {/* Public Routes */}
                         <Route element={<PublicLayout />}>
@@ -151,6 +200,7 @@ function App() {
                         </Route>
                         <Route path="*" element={<NotFoundPage />} />
                       </Routes>
+                      </MaintenanceGate>
                     </Suspense>
                   </ProfileProvider>
                 </ChallengeProvider>

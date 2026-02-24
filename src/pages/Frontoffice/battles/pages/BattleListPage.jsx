@@ -13,6 +13,7 @@ import BattleCard from '../components/BattleCard';
 import BattleFilters from '../components/BattleFilters';
 import CreateBattleModal from '../components/CreateBattleModal';
 import BattlesListSkeleton from '../../../../shared/skeletons/BattlesListSkeleton';
+import { settingsService } from '../../../../services/settingsService';
 import '../battles.css';
 
 const BattleListPage = () => {
@@ -27,6 +28,14 @@ const BattleListPage = () => {
     // Loading state (simulated – will be replaced with real API call)
     const [isLoading, setIsLoading] = useState(true);
     const [filters, setFilters] = useState({ modes: [], statuses: [], search: '' });
+    const [aiBattlesEnabled, setAiBattlesEnabled] = useState(true);
+
+    // Fetch AI battles setting
+    useEffect(() => {
+        settingsService.getSettings()
+            .then((data) => setAiBattlesEnabled(data?.aiBattles ?? true))
+            .catch(() => setAiBattlesEnabled(true));
+    }, []);
 
     // Simulate data fetching
     useEffect(() => {
@@ -135,6 +144,7 @@ const BattleListPage = () => {
                                         onEnter={handleEnterBattle}
                                         onViewSummary={handleViewSummary}
                                         onCancel={handleCancel}
+                                        aiBattlesEnabled={aiBattlesEnabled}
                                     />
                                 ))}
                             </div>
