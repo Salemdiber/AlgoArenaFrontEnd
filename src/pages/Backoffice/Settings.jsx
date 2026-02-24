@@ -1,12 +1,126 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { settingsService } from '../../services/settingsService';
 
 const Settings = () => {
+    const [settings, setSettings] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
+
+    // Draft values for rate-limit inputs (editable before save)
+    const [apiRateLimit, setApiRateLimit] = useState(1000);
+    const [codeExecutionLimit, setCodeExecutionLimit] = useState(100);
+
+    const fetchSettings = useCallback(async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const data = await settingsService.getSettings();
+            setSettings(data);
+            setApiRateLimit(data.apiRateLimit ?? 1000);
+            setCodeExecutionLimit(data.codeExecutionLimit ?? 100);
+        } catch (err) {
+            setError(err.message || 'Failed to load settings');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchSettings();
+    }, [fetchSettings]);
+
+    const showSuccess = (msg) => {
+        setSuccess(msg);
+        setTimeout(() => setSuccess(null), 3000);
+    };
+
+    // Toggle handlers — instant PATCH per field
+    const handleToggle = async (field, currentValue) => {
+        try {
+            setError(null);
+            let data;
+            if (field === 'userRegistration') data = await settingsService.toggleUserRegistration(!currentValue);
+            else if (field === 'aiBattles') data = await settingsService.toggleAiBattles(!currentValue);
+            else if (field === 'maintenanceMode') data = await settingsService.toggleMaintenanceMode(!currentValue);
+            setSettings(data);
+            showSuccess(`${field} updated successfully`);
+        } catch (err) {
+            setError(err.message || `Failed to update ${field}`);
+        }
+    };
+
+    // Save all (rate limits + toggles)
+    const handleSaveAll = async () => {
+        try {
+            setSaving(true);
+            setError(null);
+            const data = await settingsService.updateSettings({
+                userRegistration: settings.userRegistration,
+                aiBattles: settings.aiBattles,
+                maintenanceMode: settings.maintenanceMode,
+                apiRateLimit: Number(apiRateLimit),
+                codeExecutionLimit: Number(codeExecutionLimit),
+            });
+            setSettings(data);
+            showSuccess('All settings saved successfully');
+        } catch (err) {
+            setError(err.message || 'Failed to save settings');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    // Reset to defaults
+    const handleReset = async () => {
+        try {
+            setSaving(true);
+            setError(null);
+            const data = await settingsService.updateSettings({
+                userRegistration: true,
+                aiBattles: true,
+                maintenanceMode: false,
+                apiRateLimit: 1000,
+                codeExecutionLimit: 100,
+            });
+            setSettings(data);
+            setApiRateLimit(1000);
+            setCodeExecutionLimit(100);
+            showSuccess('Settings reset to defaults');
+        } catch (err) {
+            setError(err.message || 'Failed to reset settings');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-cyan-400"></div>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-6 animate-fade-in-up">
             <div className="mb-6">
                 <h1 className="font-heading text-3xl font-bold text-gray-100 mb-2">Platform Settings</h1>
                 <p className="text-gray-400">Configure system preferences and platform behavior</p>
             </div>
+
+            {/* Feedback banners */}
+            {error && (
+                <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl">
+                    {error}
+                </div>
+            )}
+            {success && (
+                <div className="bg-green-500/10 border border-green-500/30 text-green-400 px-4 py-3 rounded-xl">
+                    {success}
+                </div>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -50,10 +164,24 @@ const Settings = () => {
                             <div className="pt-6 border-t border-gray-700/50">
                                 <h3 className="font-heading text-lg font-semibold text-gray-100 mb-4">Feature Toggles</h3>
                                 <div className="space-y-4">
-                                    <ToggleItem title="User Registration" description="Allow new users to create accounts" defaultChecked />
-                                    <ToggleItem title="AI Battles" description="Enable AI-powered coding battles" defaultChecked />
-                                    <ToggleItem title="Leaderboards" description="Display public leaderboards" defaultChecked />
-                                    <ToggleItem title="Maintenance Mode" description="Put platform in maintenance mode" />
+                                    <ToggleItem
+                                        title="User Registration"
+                                        description="Allow new users to create accounts"
+                                        checked={settings?.userRegistration ?? true}
+                                        onChange={() => handleToggle('userRegistration', settings?.userRegistration)}
+                                    />
+                                    <ToggleItem
+                                        title="AI Battles"
+                                        description="Enable AI-powered coding battles"
+                                        checked={settings?.aiBattles ?? true}
+                                        onChange={() => handleToggle('aiBattles', settings?.aiBattles)}
+                                    />
+                                    <ToggleItem
+                                        title="Maintenance Mode"
+                                        description="Put platform in maintenance mode"
+                                        checked={settings?.maintenanceMode ?? false}
+                                        onChange={() => handleToggle('maintenanceMode', settings?.maintenanceMode)}
+                                    />
                                 </div>
                             </div>
 
@@ -63,19 +191,35 @@ const Settings = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-300 mb-2">API Requests per Hour</label>
-                                        <input type="number" defaultValue="1000" className="form-input w-full" />
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            value={apiRateLimit}
+                                            onChange={(e) => setApiRateLimit(e.target.value)}
+                                            className="form-input w-full"
+                                        />
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-300 mb-2">Code Executions per Day</label>
-                                        <input type="number" defaultValue="100" className="form-input w-full" />
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            value={codeExecutionLimit}
+                                            onChange={(e) => setCodeExecutionLimit(e.target.value)}
+                                            className="form-input w-full"
+                                        />
                                     </div>
                                 </div>
                             </div>
 
                             {/* Actions */}
                             <div className="flex items-center gap-4 pt-6 mt-6 border-t border-gray-700/50">
-                                <button className="btn-primary">Save Changes</button>
-                                <button className="btn-secondary">Reset to Defaults</button>
+                                <button className="btn-primary" onClick={handleSaveAll} disabled={saving}>
+                                    {saving ? 'Saving...' : 'Save Changes'}
+                                </button>
+                                <button className="btn-secondary" onClick={handleReset} disabled={saving}>
+                                    Reset to Defaults
+                                </button>
                             </div>
 
                         </div>
@@ -106,19 +250,17 @@ const NavButton = ({ active, icon, children }) => {
     );
 };
 
-const ToggleItem = ({ title, description, defaultChecked }) => {
-    const [isChecked, setIsChecked] = useState(defaultChecked);
-
+const ToggleItem = ({ title, description, checked, onChange }) => {
     return (
         <div
             className="flex items-center justify-between p-4 bg-[#0f172a] rounded-lg cursor-pointer hover:bg-[#152033] transition-colors border border-gray-800 hover:border-gray-700 group"
-            onClick={() => setIsChecked(!isChecked)}
+            onClick={onChange}
         >
             <div>
                 <p className="font-medium text-gray-200 group-hover:text-cyan-400 transition-colors">{title}</p>
                 <p className="text-sm text-gray-400">{description}</p>
             </div>
-            <div className={`toggle-switch ${isChecked ? 'active' : ''}`} />
+            <div className={`toggle-switch ${checked ? 'active' : ''}`} />
         </div>
     );
 };

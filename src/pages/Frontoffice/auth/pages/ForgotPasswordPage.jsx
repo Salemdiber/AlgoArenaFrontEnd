@@ -22,6 +22,9 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 import AuthCard from '../components/AuthCard';
 import AuthHeader from '../components/AuthHeader';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { authService } from '../../../../services/authService';
+import { useToast } from '@chakra-ui/react';
 
 /* Icons */
 const ShieldIcon = (props) => (
@@ -49,22 +52,32 @@ const ForgotPasswordPage = () => {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
+    const [recaptchaToken, setRecaptchaToken] = useState(null);
+    const toast = useToast();
+
     const validateEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateEmail(email)) {
             setError('Please enter a valid email address');
             return;
         }
+        if (!recaptchaToken) {
+            setError('Please complete reCAPTCHA');
+            return;
+        }
         setError('');
         setIsLoading(true);
 
-        // Simulate API call
-        setTimeout(() => {
-            setIsLoading(false);
+        try {
+            await authService.forgotPassword(email, recaptchaToken);
             navigate('/email-sent', { state: { email } });
-        }, 1000);
+        } catch (err) {
+            setError(err.message || 'Failed to send reset link');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -104,6 +117,14 @@ const ForgotPasswordPage = () => {
                     />
                     <FormErrorMessage fontSize="xs" mt={2}>{error}</FormErrorMessage>
                 </FormControl>
+
+                <Box w="100%" display="flex" flexDirection="column" alignItems="center" mb={6}>
+                    <ReCAPTCHA
+                        sitekey="6LdKIHMsAAAAACo6AkNg2KChjBhGcVCj2Rwj-rey"
+                        onChange={(token) => { setRecaptchaToken(token); setError(''); }}
+                        theme="dark"
+                    />
+                </Box>
 
                 {/* Submit */}
                 <Button
