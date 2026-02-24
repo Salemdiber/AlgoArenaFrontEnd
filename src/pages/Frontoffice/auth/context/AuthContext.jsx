@@ -65,7 +65,10 @@ const DEFAULT_AVATAR =
     'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80';
 
 export const AuthProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(() => {
+        const stored = readStorage();
+        return stored ? stored.user : null;
+    });
     const toast = useToast();
 
     /* Rehydrate on mount */
@@ -94,14 +97,37 @@ export const AuthProvider = ({ children }) => {
         initAuth();
     }, []);
 
+    /* Proactive Background Token Refresh Loop */
+    useEffect(() => {
+        // Runs every 10 minutes (600,000 ms) while the browser tab is open
+        const refreshInterval = setInterval(async () => {
+            const token = getToken();
+            if (!token) return; // Not signed in, ignore
+
+            try {
+                const refreshResp = await fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' });
+                if (refreshResp.ok) {
+                    const data = await refreshResp.json();
+                    if (data?.access_token) {
+                        setToken(data.access_token);
+                    }
+                }
+            } catch (error) {
+                console.error("Proactive background refresh failed:", error);
+            }
+        }, 10 * 60 * 1000);
+
+        return () => clearInterval(refreshInterval);
+    }, []);
+
     const isLoggedIn = !!currentUser;
 
     /**
      * login – authenticates user via API
      */
-    const login = useCallback(async (username, password) => {
+    const login = useCallback(async (username, password, recaptchaToken) => {
         try {
-            const data = await authService.login({ username, password });
+            const data = await authService.login({ username, password, recaptchaToken });
             if (data.access_token) {
                 setToken(data.access_token);
 
@@ -125,9 +151,9 @@ export const AuthProvider = ({ children }) => {
     /**
      * signup – creates new account
      */
-    const signup = useCallback(async (username, email, password) => {
+    const signup = useCallback(async (username, email, password, recaptchaToken, avatar) => {
         try {
-            const data = await authService.register({ username, email, password });
+            const data = await authService.register({ username, email, password, recaptchaToken, avatar });
             toast({ title: 'Account created successfully', description: 'You can now sign in.', status: 'success', duration: 4000, isClosable: true });
             return data;
         } catch (error) {
@@ -157,6 +183,30 @@ export const AuthProvider = ({ children }) => {
         });
     }, []);
 
+    /**
+     * reload – refresh user auth from token and server
+     * Used after OAuth redirect to re-fetch user data
+     */
+    const reload = useCallback(async () => {
+        const storedToken = getToken();
+        if (!storedToken) {
+            writeStorage(null);
+            setCurrentUser(null);
+            return;
+        }
+
+        try {
+            const profile = await userService.getProfile('me');
+            setCurrentUser(profile);
+            writeStorage({ user: profile });
+        } catch (err) {
+            const stored = readStorage();
+            if (stored?.user) {
+                setCurrentUser(stored.user);
+            }
+        }
+    }, []);
+
     return (
         <AuthContext.Provider
             value={{
@@ -166,6 +216,7 @@ export const AuthProvider = ({ children }) => {
                 signup,
                 logout,
                 updateCurrentUser,
+                reload,
             }}
         >
             {children}
