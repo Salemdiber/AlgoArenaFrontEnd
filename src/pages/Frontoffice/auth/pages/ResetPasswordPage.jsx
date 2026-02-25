@@ -27,7 +27,7 @@ import AuthHeader from '../components/AuthHeader';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 import RequirementChecklist from '../components/RequirementChecklist';
 import usePasswordStrength from '../hooks/usePasswordStrength';
-import ReCAPTCHA from 'react-google-recaptcha';
+// reCAPTCHA removed for reset flow
 import { authService } from '../../../../services/authService';
 
 /* Icons */
@@ -80,7 +80,7 @@ const ResetPasswordPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    const [recaptchaToken, setRecaptchaToken] = useState(null);
+    
 
     const { score, label, color, glowColor, percent, requirements } = usePasswordStrength(password);
 
@@ -105,17 +105,14 @@ const ResetPasswordPage = () => {
             return;
         }
 
-        if (!recaptchaToken) {
-            setError('Please complete reCAPTCHA');
-            return;
-        }
+        // no reCAPTCHA required for reset
 
         setError('');
         setIsLoading(true);
 
-        const doReset = async () => {
+                const doReset = async () => {
             try {
-                await authService.resetPassword(token, password, confirmPassword, recaptchaToken);
+                await authService.resetPassword(token, password, confirmPassword);
                 navigate('/reset-success');
             } catch (err) {
                 if (err.message && err.message.toLowerCase().includes('expired')) {
@@ -205,13 +202,7 @@ const ResetPasswordPage = () => {
                     <FormErrorMessage fontSize="xs" mt={2}>{error}</FormErrorMessage>
                 </FormControl>
 
-                <Box w="100%" display="flex" flexDirection="column" alignItems="center" mb={6}>
-                    <ReCAPTCHA
-                        sitekey="6LdKIHMsAAAAACo6AkNg2KChjBhGcVCj2Rwj-rey"
-                        onChange={(val) => { setRecaptchaToken(val); setError(''); }}
-                        theme="dark"
-                    />
-                </Box>
+                
 
                 {/* Submit Button */}
                 <Button

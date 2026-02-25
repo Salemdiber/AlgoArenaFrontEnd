@@ -45,17 +45,17 @@ export const authService = {
         });
     },
 
-    forgotPassword: async (email, recaptchaToken) => {
+    forgotPassword: async (email) => {
         return apiClient('/auth/forgot-password', {
             method: 'POST',
-            body: JSON.stringify({ email, recaptchaToken }),
+            body: JSON.stringify({ email }),
         });
     },
 
-    resetPassword: async (token, newPassword, confirmPassword, recaptchaToken) => {
+    resetPassword: async (token, newPassword, confirmPassword) => {
         return apiClient('/auth/reset-password', {
             method: 'POST',
-            body: JSON.stringify({ token, newPassword, confirmPassword, recaptchaToken }),
+            body: JSON.stringify({ token, newPassword, confirmPassword }),
         });
     },
 

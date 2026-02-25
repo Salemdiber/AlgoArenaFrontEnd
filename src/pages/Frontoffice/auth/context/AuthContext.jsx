@@ -65,7 +65,10 @@ const DEFAULT_AVATAR =
     'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80';
 
 export const AuthProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(() => {
+        const stored = readStorage();
+        return stored ? stored.user : null;
+    });
     const toast = useToast();
 
     /* Rehydrate on mount */
@@ -92,6 +95,29 @@ export const AuthProvider = ({ children }) => {
             }
         };
         initAuth();
+    }, []);
+
+    /* Proactive Background Token Refresh Loop */
+    useEffect(() => {
+        // Runs every 10 minutes (600,000 ms) while the browser tab is open
+        const refreshInterval = setInterval(async () => {
+            const token = getToken();
+            if (!token) return; // Not signed in, ignore
+
+            try {
+                const refreshResp = await fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' });
+                if (refreshResp.ok) {
+                    const data = await refreshResp.json();
+                    if (data?.access_token) {
+                        setToken(data.access_token);
+                    }
+                }
+            } catch (error) {
+                console.error("Proactive background refresh failed:", error);
+            }
+        }, 10 * 60 * 1000);
+
+        return () => clearInterval(refreshInterval);
     }, []);
 
     const isLoggedIn = !!currentUser;
