@@ -5,6 +5,7 @@ import {
     Text,
     Grid,
     VStack,
+    useColorModeValue,
 } from '@chakra-ui/react';
 
 const statsData = [
@@ -15,15 +16,22 @@ const statsData = [
 ];
 
 const Stats = () => {
+    const sectionBg = useColorModeValue('rgba(241,245,249,0.6)', 'rgba(31,41,55,0.3)');
+    const headingColor = useColorModeValue('gray.800', 'gray.100');
+    const textColor = useColorModeValue('gray.600', 'gray.300');
+    const cardBg = useColorModeValue('white', 'gray.900');
+    const cardBorder = useColorModeValue('gray.200', 'gray.700');
+    const labelColor = useColorModeValue('gray.600', 'gray.300');
+
     return (
-        <Box id="leaderboards" as="section" py={20} bg="rgba(31, 41, 55, 0.3)">
+        <Box id="leaderboards" as="section" py={20} bg={sectionBg}>
             <Container maxW="7xl">
                 <VStack spacing={16}>
                     <VStack spacing={4} textAlign="center">
-                        <Heading as="h2" size="2xl" color="gray.100" fontFamily="heading">
+                        <Heading as="h2" size="2xl" color={headingColor} fontFamily="heading">
                             Join the Arena
                         </Heading>
-                        <Text fontSize="xl" color="gray.300">
+                        <Text fontSize="xl" color={textColor}>
                             Thousands of developers competing daily
                         </Text>
                     </VStack>
@@ -32,22 +40,23 @@ const Stats = () => {
                         {statsData.map((stat, index) => (
                             <Box
                                 key={index}
-                                bg="gray.900"
+                                bg={cardBg}
                                 borderRadius="16px"
                                 p={8}
                                 textAlign="center"
                                 border="1px solid"
-                                borderColor="gray.700"
+                                borderColor={cardBorder}
                                 boxShadow="custom"
                                 position="relative"
                                 overflow="hidden"
+                                transition="background-color 0.3s ease, border-color 0.3s ease"
                             >
                                 <Box position="absolute" inset={0} bg={stat.bg} filter="blur(30px)" />
                                 <Box position="relative" zIndex={10}>
                                     <Text fontSize="5xl" fontWeight="bold" color={stat.color} mb={2}>
                                         {stat.value}
                                     </Text>
-                                    <Text color="gray.300">
+                                    <Text color={labelColor}>
                                         {stat.label}
                                     </Text>
                                 </Box>

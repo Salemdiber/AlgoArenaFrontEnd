@@ -128,7 +128,7 @@ const ResetPasswordPage = () => {
     };
 
     const inputStyles = {
-        bg: '#0f172a',
+        bg: 'var(--color-bg-primary)',
         border: '1px solid',
         borderColor: 'gray.600',
         borderRadius: '8px',
@@ -230,7 +230,7 @@ const ResetPasswordPage = () => {
                 </Button>
             </form>
 
-            <Divider borderColor="gray.600" my={6} />
+            <Divider borderColor="var(--color-border)" my={6} />
 
             {/* Back to Login */}
             <Box textAlign="center">

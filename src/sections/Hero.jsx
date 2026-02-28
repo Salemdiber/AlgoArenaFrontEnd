@@ -11,6 +11,7 @@ import {
     GridItem,
     Code,
     Progress,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
@@ -131,13 +132,19 @@ const PixelGrid = () => {
 };
 
 const Hero = () => {
-    // We keep spotlight state only for the big radial gradient background
     const spotlightRef = useRef(null);
     const [progress, setProgress] = useState(0);
     const [gridCubes, setGridCubes] = useState([]);
-
-    // Timer ref to clean up loops
     const timeoutsRef = useRef([]);
+
+    /* Theme-aware colors */
+    const headingColor = useColorModeValue('gray.800', 'gray.100');
+    const subTextColor = useColorModeValue('gray.600', 'gray.300');
+    const cardBg = useColorModeValue('rgba(255,255,255,0.7)', 'rgba(31,41,55,0.5)');
+    const cardBorder = useColorModeValue('gray.200', 'gray.700');
+    const codeBg = useColorModeValue('gray.100', 'gray.900');
+    const codeColor = useColorModeValue('gray.700', 'gray.300');
+    const mutedColor = useColorModeValue('gray.500', 'gray.400');
 
     const handleMouseMove = (e) => {
         // Optimize: Update the spotlight DOM directly instead of State
@@ -256,12 +263,12 @@ const Hero = () => {
                         fontSize={{ base: '4xl', sm: '5xl', lg: '6xl' }}
                         fontFamily="heading"
                         fontWeight="bold"
-                        color="gray.100"
+                        color={headingColor}
                     >
                         Turn Algorithms Into Action.
                     </Heading>
 
-                    <Text fontSize={{ base: 'lg', sm: 'xl' }} color="gray.300" maxW="3xl">
+                    <Text fontSize={{ base: 'lg', sm: 'xl' }} color={subTextColor} maxW="3xl">
                         Write code. Run simulations. Compete in real-time. Watch your logic shape dynamic game worlds.
                     </Text>
 
@@ -281,21 +288,21 @@ const Hero = () => {
                     {/* Mini Preview Card */}
                     <Box
                         maxW="2xl"
-                        bg="rgba(31, 41, 55, 0.5)"
-                        backdropFilter="blur(4px)"
+                        bg={cardBg}
+                        backdropFilter="blur(8px)"
                         borderRadius="16px"
                         p={6}
                         border="1px solid"
-                        borderColor="gray.700"
+                        borderColor={cardBorder}
                         boxShadow="custom"
                         mt={8}
                     >
                         <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={6}>
                             {/* Code Snippet */}
                             <GridItem>
-                                <Box bg="gray.900" borderRadius="8px" p={4}>
+                                <Box bg={codeBg} borderRadius="8px" p={4}>
                                     <HStack justify="space-between" mb={3}>
-                                        <Text fontSize="xs" color="gray.400" fontFamily="mono">
+                                        <Text fontSize="xs" color={mutedColor} fontFamily="mono">
                                             solution.js
                                         </Text>
                                         <Text fontSize="xs" color="green.400">
@@ -306,7 +313,7 @@ const Hero = () => {
                                         display="block"
                                         whiteSpace="pre"
                                         fontSize="sm"
-                                        color="gray.300"
+                                        color={codeColor}
                                         bg="transparent"
                                         p={0}
                                     >
@@ -325,8 +332,8 @@ const Hero = () => {
 
                             {/* Game Board Preview */}
                             <GridItem>
-                                <Box bg="gray.900" borderRadius="8px" p={4}>
-                                    <Text fontSize="xs" color="gray.400" mb={3}>
+                                <Box bg={codeBg} borderRadius="8px" p={4}>
+                                    <Text fontSize="xs" color={mutedColor} mb={3}>
                                         Game Simulation
                                     </Text>
                                     <Grid templateColumns="repeat(4, 1fr)" gap={1} mb={4}>
@@ -343,7 +350,7 @@ const Hero = () => {
                                         ))}
                                     </Grid>
                                     <VStack spacing={2}>
-                                        <HStack justify="space-between" width="100%" fontSize="xs" color="gray.400">
+                                        <HStack justify="space-between" width="100%" fontSize="xs" color={mutedColor}>
                                             <Text>Progress</Text>
                                             <Text>{progress}%</Text>
                                         </HStack>

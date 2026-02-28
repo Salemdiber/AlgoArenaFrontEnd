@@ -18,7 +18,7 @@ const BattleSummarySkeleton = () => {
     return (
         <Box
             minH="100vh"
-            bg="#0f172a"
+            bg="var(--color-bg-primary)"
             pt={24}
             pb={10}
             px={{ base: 4, md: 6, lg: 8 }}
@@ -28,14 +28,14 @@ const BattleSummarySkeleton = () => {
                 <Box
                     mb={8}
                     p={8}
-                    bg="rgba(30,41,59,0.6)"
+                    bg="var(--color-bg-card)"
                     borderRadius="16px"
                     border="1px solid rgba(34,211,238,0.3)"
                     textAlign="center"
                 >
-                    <Skeleton height="64px" width="200px" mx="auto" mb={4} speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
-                    <Skeleton height="32px" width="300px" mx="auto" mb={3} speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
-                    <Skeleton height="20px" width="250px" mx="auto" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
+                    <Skeleton height="64px" width="200px" mx="auto" mb={4} speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
+                    <Skeleton height="32px" width="300px" mx="auto" mb={3} speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
+                    <Skeleton height="20px" width="250px" mx="auto" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
                 </Box>
 
                 {/* Performance Stats */}
@@ -48,14 +48,14 @@ const BattleSummarySkeleton = () => {
                         <Box
                             key={i}
                             p={5}
-                            bg="rgba(30,41,59,0.6)"
+                            bg="var(--color-bg-card)"
                             borderRadius="12px"
-                            border="1px solid rgba(100,116,139,0.3)"
+                            border="1px solid var(--color-border)"
                             textAlign="center"
                         >
-                            <Skeleton height="16px" width="120px" mx="auto" mb={3} speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
-                            <Skeleton height="40px" width="100px" mx="auto" mb={2} speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
-                            <Skeleton height="14px" width="80px" mx="auto" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
+                            <Skeleton height="16px" width="120px" mx="auto" mb={3} speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
+                            <Skeleton height="40px" width="100px" mx="auto" mb={2} speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
+                            <Skeleton height="14px" width="80px" mx="auto" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
                         </Box>
                     ))}
                 </Grid>
@@ -66,16 +66,16 @@ const BattleSummarySkeleton = () => {
                         <Box
                             key={player}
                             p={5}
-                            bg="rgba(30,41,59,0.6)"
+                            bg="var(--color-bg-card)"
                             borderRadius="12px"
-                            border="1px solid rgba(100,116,139,0.3)"
+                            border="1px solid var(--color-border)"
                         >
                             {/* Player header */}
                             <Flex align="center" gap={3} mb={4} pb={4} borderBottom="1px solid rgba(100,116,139,0.2)">
-                                <SkeletonCircle size="48px" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
+                                <SkeletonCircle size="48px" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
                                 <Box flex="1">
-                                    <Skeleton height="20px" width="140px" mb={2} speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
-                                    <Skeleton height="16px" width="100px" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
+                                    <Skeleton height="20px" width="140px" mb={2} speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
+                                    <Skeleton height="16px" width="100px" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
                                 </Box>
                             </Flex>
 
@@ -95,14 +95,14 @@ const BattleSummarySkeleton = () => {
                             </Box>
 
                             {/* Metrics */}
-                            <Flex justify="space-between" mt={4} pt={4} borderTop="1px solid rgba(100,116,139,0.2)">
+                            <Flex justify="space-between" mt={4} pt={4} borderTop="1px solid var(--color-border-subtle)">
                                 <Box>
-                                    <Skeleton height="14px" width="80px" mb={2} speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
-                                    <Skeleton height="18px" width="60px" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
+                                    <Skeleton height="14px" width="80px" mb={2} speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
+                                    <Skeleton height="18px" width="60px" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
                                 </Box>
                                 <Box>
-                                    <Skeleton height="14px" width="80px" mb={2} speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
-                                    <Skeleton height="18px" width="60px" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
+                                    <Skeleton height="14px" width="80px" mb={2} speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
+                                    <Skeleton height="18px" width="60px" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
                                 </Box>
                             </Flex>
                         </Box>
@@ -111,8 +111,8 @@ const BattleSummarySkeleton = () => {
 
                 {/* Action Buttons */}
                 <Flex gap={4} justify="center">
-                    <Skeleton height="48px" width="180px" borderRadius="8px" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
-                    <Skeleton height="48px" width="160px" borderRadius="8px" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
+                    <Skeleton height="48px" width="180px" borderRadius="8px" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
+                    <Skeleton height="48px" width="160px" borderRadius="8px" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
                 </Flex>
             </Box>
         </Box>

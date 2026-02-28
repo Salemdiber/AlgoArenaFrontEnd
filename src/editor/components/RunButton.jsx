@@ -17,7 +17,7 @@ const PlayIcon = (props) => (
 const RunButton = ({ isRunning, onClick }) => (
     <Button
         onClick={onClick}
-        bg={isRunning ? '#334155' : 'linear-gradient(135deg, #22d3ee, #06b6d4)'}
+        bg={isRunning ? 'var(--color-border)' : 'linear-gradient(135deg, #22d3ee, #06b6d4)'}
         bgGradient={isRunning ? undefined : 'linear(135deg, #22d3ee, #06b6d4)'}
         color={isRunning ? '#94a3b8' : '#0f172a'}
         fontWeight="bold"

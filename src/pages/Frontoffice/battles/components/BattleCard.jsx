@@ -55,12 +55,12 @@ const BattleCard = ({ battle, onEnter, onViewSummary, onCancel, aiBattlesEnabled
             {isAIDisabled && (
                 <div style={{
                     position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    zIndex: 10, background: 'rgba(15,23,42,0.85)', borderRadius: '12px',
-                    padding: '0.75rem 1.25rem', textAlign: 'center', border: '1px solid rgba(239,68,68,0.3)',
+                    zIndex: 10, background: 'var(--color-bg-card)', borderRadius: '12px',
+                    padding: '0.75rem 1.25rem', textAlign: 'center', border: '1px solid var(--color-error-bg)',
                     pointerEvents: 'auto',
                 }}>
-                    <p style={{ color: '#f87171', fontWeight: 700, fontSize: '0.85rem', marginBottom: '0.25rem' }}>AI Battles Disabled</p>
-                    <p style={{ color: '#94a3b8', fontSize: '0.75rem' }}>Maintenance</p>
+                    <p style={{ color: 'var(--color-red-500)', fontWeight: 700, fontSize: '0.85rem', marginBottom: '0.25rem' }}>AI Battles Disabled</p>
+                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>Maintenance</p>
                 </div>
             )}
             {/* Header: Mode + Status */}
@@ -85,7 +85,7 @@ const BattleCard = ({ battle, onEnter, onViewSummary, onCancel, aiBattlesEnabled
                         alt={battle.opponent?.name || 'Opponent'}
                         style={{
                             width: '3rem', height: '3rem', borderRadius: '50%',
-                            border: isLive ? '2px solid #22d3ee' : '2px solid #475569',
+                            border: isLive ? '2px solid var(--color-cyan-400)' : '2px solid var(--color-border-hover)',
                             objectFit: 'cover',
                         }}
                     />
@@ -108,7 +108,7 @@ const BattleCard = ({ battle, onEnter, onViewSummary, onCancel, aiBattlesEnabled
                     <div className="battle-mb-md">
                         <div className="battle-flex-between battle-text-sm battle-text-muted battle-mb-sm">
                             <span>{isCompleted ? 'Final Score' : 'Progress'}</span>
-                            <span style={{ color: resultText === 'Victory' ? '#22c55e' : resultText === 'Defeat' ? '#ef4444' : '#22d3ee', fontWeight: 600 }}>
+                            <span style={{ color: resultText === 'Victory' ? 'var(--color-green-500)' : resultText === 'Defeat' ? 'var(--color-red-500)' : 'var(--color-cyan-400)', fontWeight: 600 }}>
                                 {resultText || `${progress}%`}
                             </span>
                         </div>
@@ -128,7 +128,7 @@ const BattleCard = ({ battle, onEnter, onViewSummary, onCancel, aiBattlesEnabled
                             </p>
                             <p className="battle-score-label">Your Score</p>
                         </div>
-                        <div style={{ fontSize: '1.5rem', color: '#64748b' }}>:</div>
+                        <div style={{ fontSize: '1.5rem', color: 'var(--color-text-muted)' }}>:</div>
                         <div className="battle-text-center">
                             <p className="battle-score-value battle-score-value--opponent">{opponentScore}</p>
                             <p className="battle-score-label">{isAI ? 'AI Score' : 'Opponent'}</p>

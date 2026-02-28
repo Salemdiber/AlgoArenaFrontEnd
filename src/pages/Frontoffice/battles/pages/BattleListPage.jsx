@@ -98,10 +98,10 @@ const BattleListPage = () => {
             <div className="battle-container">
                 {/* Header */}
                 <div className="battle-mb-xl">
-                    <h1 style={{ fontSize: '3rem', fontWeight: 700, marginBottom: '0.75rem' }}>
+                    <h1 style={{ fontSize: '3rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--color-text-heading)' }}>
                         Battle Arena
                     </h1>
-                    <p style={{ fontSize: '1.25rem' }} className="battle-text-muted">
+                    <p style={{ fontSize: '1.25rem', color: 'var(--color-text-secondary)' }}>
                         Compete. Strategize. Dominate.
                     </p>
                 </div>

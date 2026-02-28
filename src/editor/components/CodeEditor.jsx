@@ -37,12 +37,12 @@ const EditorLoader = () => (
         w="100%"
         align="center"
         justify="center"
-        bg="#0f172a"
+        bg="var(--color-bg-primary)"
         direction="column"
         gap={3}
     >
         <Spinner size="lg" color="#22d3ee" thickness="3px" speed="0.8s" />
-        <Text color="#64748b" fontSize="sm" fontFamily="mono">
+        <Text color="var(--color-text-muted)" fontSize="sm" fontFamily="mono">
             Loading editor…
         </Text>
     </Flex>
@@ -118,7 +118,7 @@ const CodeEditor = ({
             w="100%"
             overflow="hidden"
             position="relative"
-            bg="#0f172a"
+            bg="var(--color-bg-primary)"
             isolation="isolate"
             onWheel={handleWheel}
             sx={{

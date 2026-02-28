@@ -21,7 +21,7 @@ const FilterGroup = ({ options, activeOption, onSelect }) => (
         isAttached
         borderRadius="12px"
         overflow="hidden"
-        bg="#1e293b"
+        bg="var(--color-bg-secondary)"
         boxShadow="0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)"
     >
         {options.map((option) => {

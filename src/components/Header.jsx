@@ -14,6 +14,7 @@ import {
     DrawerBody,
     VStack,
     useDisclosure,
+    useColorModeValue,
     Image,
     Avatar,
     Menu,
@@ -29,6 +30,7 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 import Logo from '../assets/logo_algoarena.png';
 import AccessibilityDrawer from '../accessibility/components/AccessibilityDrawer';
 import { useAuth } from '../pages/Frontoffice/auth/context/AuthContext';
+import ThemeSwitcher from './ThemeSwitcher';
 
 /* Inline accessibility icon (universal figure) */
 const AccessibilityIcon = (props) => (
@@ -100,6 +102,18 @@ const Header = () => {
         return location.pathname.startsWith(path) && !path.startsWith('/#');
     };
 
+    /* Color-mode-aware tokens */
+    const headerBg = useColorModeValue('rgba(255, 255, 255, 0.92)', 'rgba(17, 24, 39, 0.9)');
+    const headerBorder = useColorModeValue('gray.200', 'gray.800');
+    const spotlightGradient = useColorModeValue(
+        'linear(to-r, transparent, rgba(34, 211, 238, 0.04), transparent)',
+        'linear(to-r, transparent, rgba(34, 211, 238, 0.05), transparent)',
+    );
+    const navLinkColor = useColorModeValue('gray.600', 'gray.300');
+    const drawerBg = useColorModeValue('white', '#0f172a');
+    const drawerBorder = useColorModeValue('gray.200', 'gray.800');
+    const mobileCtaBorder = useColorModeValue('gray.200', 'gray.800');
+
     return (
         <Box
             as="header"
@@ -109,10 +123,11 @@ const Header = () => {
             right={0}
             zIndex={50}
             backdropFilter="blur(16px)"
-            bg="rgba(17, 24, 39, 0.9)"
+            bg={headerBg}
             borderBottom="1px solid"
-            borderColor="gray.800"
+            borderColor={headerBorder}
             onMouseMove={handleMouseMove}
+            transition="background-color 0.3s ease"
         >
             {/* Header Spotlight Effect */}
             <Box
@@ -121,7 +136,7 @@ const Header = () => {
                 left={`${headerSpotlight.left}px`}
                 width="300px"
                 height="100%"
-                bgGradient="linear(to-r, transparent, rgba(34, 211, 238, 0.05), transparent)"
+                bgGradient={spotlightGradient}
                 pointerEvents="none"
                 transition="left 0.1s ease-out"
             />
@@ -144,7 +159,7 @@ const Header = () => {
                                 key={item.to}
                                 as={NavLink}
                                 to={item.to}
-                                color={isActive(item.to) ? 'brand.500' : 'gray.300'}
+                                color={isActive(item.to) ? 'brand.500' : navLinkColor}
                                 fontWeight={isActive(item.to) ? 'semibold' : 'normal'}
                                 _hover={{ color: 'brand.500' }}
                                 transition="all 0.3s"
@@ -167,6 +182,9 @@ const Header = () => {
 
                     {/* CTA Buttons / Profile Avatar – conditional */}
                     <HStack spacing={3}>
+
+                        {/* Theme Switcher */}
+                        <ThemeSwitcher size="md" />
 
                         {!isLoggedIn ? (
                             /* ─── Logged OUT: show Login + Create Account ─── */
@@ -197,7 +215,7 @@ const Header = () => {
                                 <Text
                                     fontSize="sm"
                                     fontWeight="600"
-                                    color="gray.200"
+                                    color="var(--color-text-primary)"
                                     display={{ base: 'none', md: 'block' }}
                                 >
                                     {currentUser?.username}
@@ -219,23 +237,23 @@ const Header = () => {
                                             name={currentUser?.username}
                                             src={currentUser?.avatar}
                                             border="2px solid"
-                                            borderColor="gray.700"
+                                            borderColor="var(--color-border)"
                                             cursor="pointer"
                                             _hover={{ borderColor: '#22d3ee', boxShadow: '0 0 12px rgba(34, 211, 238, 0.3)' }}
                                             transition="all 0.2s"
                                         />
                                     </MenuButton>
                                     <MenuList
-                                        bg="#1e293b"
-                                        borderColor="#334155"
-                                        boxShadow="0 8px 30px rgba(0,0,0,0.5)"
+                                        bg="var(--color-bg-secondary)"
+                                        borderColor="var(--color-border)"
+                                        boxShadow="var(--shadow-card)"
                                         borderRadius="12px"
                                         py={2}
                                         minW="200px"
                                     >
                                         <MenuItem
                                             bg="transparent"
-                                            color="gray.200"
+                                            color="var(--color-text-primary)"
                                             _hover={{ bg: 'rgba(34, 211, 238, 0.08)', color: '#22d3ee' }}
                                             icon={<UserIcon w={4} h={4} />}
                                             fontSize="sm"
@@ -247,7 +265,7 @@ const Header = () => {
                                         </MenuItem>
                                         {/* <MenuItem
                                             bg="transparent"
-                                            color="gray.200"
+                                            color="var(--color-text-primary)"
                                             _hover={{ bg: 'rgba(34, 211, 238, 0.08)', color: '#22d3ee' }}
                                             icon={<SettingsIcon w={4} h={4} />}
                                             fontSize="sm"
@@ -257,7 +275,7 @@ const Header = () => {
                                         >
                                             Account Settings
                                         </MenuItem> */}
-                                        <MenuDivider borderColor="#334155" mx={2} />
+                                        <MenuDivider borderColor="var(--color-border)" mx={2} />
                                         <MenuItem
                                             bg="transparent"
                                             color="#ef4444"
@@ -286,7 +304,7 @@ const Header = () => {
                                 src={currentUser?.avatar}
                                 display={{ base: 'flex', sm: 'none' }}
                                 border="2px solid"
-                                borderColor="gray.700"
+                                borderColor="var(--color-border)"
                                 cursor="pointer"
                                 onClick={() => { navigate('/profile'); onClose(); }}
                                 _hover={{ borderColor: '#22d3ee' }}
@@ -299,7 +317,7 @@ const Header = () => {
                             aria-label="Open menu"
                             icon={<HamburgerIcon />}
                             variant="ghost"
-                            color="gray.300"
+                            color="var(--color-text-secondary)"
                             fontSize="24px"
                             display={{ base: 'flex', md: 'none' }}
                             onClick={onOpen}
@@ -312,8 +330,8 @@ const Header = () => {
             {/* Mobile Nav Drawer */}
             <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xs">
                 <DrawerOverlay bg="rgba(0, 0, 0, 0.6)" backdropFilter="blur(4px)" />
-                <DrawerContent bg="#0f172a" borderLeft="1px solid" borderColor="gray.800">
-                    <DrawerCloseButton color="gray.400" _hover={{ color: 'brand.500' }} mt={2} />
+                <DrawerContent bg={drawerBg} borderLeft="1px solid" borderColor={drawerBorder}>
+                    <DrawerCloseButton color="var(--color-text-muted)" _hover={{ color: 'brand.500' }} mt={2} />
                     <DrawerBody pt={16}>
                         <VStack spacing={6} align="stretch">
                             {filteredNavItems.map((item) => (
@@ -321,7 +339,7 @@ const Header = () => {
                                     key={item.to}
                                     as={NavLink}
                                     to={item.to}
-                                    color={isActive(item.to) ? 'brand.500' : 'gray.300'}
+                                    color={isActive(item.to) ? 'brand.500' : navLinkColor}
                                     fontWeight={isActive(item.to) ? 'bold' : 'medium'}
                                     fontSize="lg"
                                     fontFamily="heading"
@@ -366,7 +384,7 @@ const Header = () => {
                                 display="flex"
                                 alignItems="center"
                                 gap={3}
-                                color="gray.400"
+                                color="var(--color-text-muted)"
                                 fontSize="lg"
                                 fontFamily="heading"
                                 fontWeight="medium"
@@ -382,7 +400,7 @@ const Header = () => {
                             </Box>
 
                             {/* Mobile CTA – conditional */}
-                            <Box pt={4} borderTop="1px solid" borderColor="gray.800">
+                            <Box pt={4} borderTop="1px solid" borderColor={mobileCtaBorder}>
                                 <VStack spacing={3}>
                                     {!isLoggedIn ? (
                                         <>

@@ -6,7 +6,7 @@
  *  • onSelect         (method) => void
  */
 import React from 'react';
-import { SimpleGrid, Box, VStack, Text, Icon } from '@chakra-ui/react';
+import { SimpleGrid, Box, VStack, Text, Icon, useColorModeValue } from '@chakra-ui/react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 const MotionBox = motion.create(Box);
@@ -44,6 +44,19 @@ const METHODS = [
 const TwoFactorMethodSelector = ({ selectedMethod, onSelect }) => {
     const prefersReducedMotion = useReducedMotion();
 
+    const cardBgHover = useColorModeValue('rgba(34, 211, 238, 0.05)', 'rgba(34, 211, 238, 0.05)');
+    const cardBgUnselected = useColorModeValue('white', 'var(--color-bg-secondary)');
+    const cardBgSelected = useColorModeValue('cyan.50', 'rgba(34, 211, 238, 0.08)');
+
+    const iconWrapperBgUnselected = useColorModeValue('gray.100', 'rgba(71, 85, 105, 0.4)');
+    const iconWrapperBgSelected = useColorModeValue('cyan.100', 'rgba(34, 211, 238, 0.15)');
+
+    const textTitleUnselected = useColorModeValue('gray.800', 'gray.200');
+    const textTitleSelected = useColorModeValue('brand.500', '#22d3ee');
+    const textDesc = useColorModeValue('gray.600', 'gray.400');
+    const iconColorUnselected = useColorModeValue('gray.500', 'gray.400');
+    const shadowUnselected = useColorModeValue('sm', 'none');
+
     return (
         <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
             {METHODS.map((m) => {
@@ -55,13 +68,14 @@ const TwoFactorMethodSelector = ({ selectedMethod, onSelect }) => {
                         onClick={() => onSelect(m.id)}
                         textAlign="center"
                         p={6}
-                        bg={isSelected ? 'rgba(34, 211, 238, 0.08)' : '#1e293b'}
+                        bg={isSelected ? cardBgSelected : cardBgUnselected}
                         border="2px solid"
-                        borderColor={isSelected ? '#22d3ee' : '#334155'}
+                        borderColor={isSelected ? '#22d3ee' : 'var(--color-border)'}
                         borderRadius="12px"
+                        boxShadow={isSelected ? '0 0 10px rgba(34, 211, 238, 0.2)' : shadowUnselected}
                         cursor="pointer"
-                        _hover={{ borderColor: '#22d3ee', bg: 'rgba(34, 211, 238, 0.05)' }}
-                        transition="border-color 0.2s, background 0.2s"
+                        _hover={{ borderColor: '#22d3ee', bg: cardBgHover, transform: 'translateY(-2px)', boxShadow: 'md' }}
+                        transition="all 0.2s"
                         whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
                         whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
                     >
@@ -69,14 +83,14 @@ const TwoFactorMethodSelector = ({ selectedMethod, onSelect }) => {
                             <Box
                                 p={3}
                                 borderRadius="full"
-                                bg={isSelected ? 'rgba(34, 211, 238, 0.15)' : 'rgba(71, 85, 105, 0.4)'}
+                                bg={isSelected ? iconWrapperBgSelected : iconWrapperBgUnselected}
                             >
-                                <m.icon w={6} h={6} color={isSelected ? '#22d3ee' : 'gray.400'} />
+                                <m.icon w={6} h={6} color={isSelected ? textTitleSelected : iconColorUnselected} />
                             </Box>
-                            <Text fontFamily="heading" fontWeight="600" color={isSelected ? '#22d3ee' : 'gray.200'}>
+                            <Text fontFamily="heading" fontWeight="600" color={isSelected ? textTitleSelected : textTitleUnselected}>
                                 {m.title}
                             </Text>
-                            <Text fontSize="xs" color="gray.400">
+                            <Text fontSize="xs" fontWeight="500" color={textDesc}>
                                 {m.desc}
                             </Text>
                         </VStack>
@@ -88,3 +102,5 @@ const TwoFactorMethodSelector = ({ selectedMethod, onSelect }) => {
 };
 
 export default TwoFactorMethodSelector;
+
+

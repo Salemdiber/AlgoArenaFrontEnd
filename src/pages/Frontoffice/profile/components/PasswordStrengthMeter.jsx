@@ -29,7 +29,7 @@ const PasswordStrengthMeter = ({ score, label, color, glowColor, percent }) => {
                     {label}
                 </Text>
             </Flex>
-            <Box h="6px" w="100%" bg="#334155" borderRadius="full" overflow="hidden">
+            <Box h="6px" w="100%" bg="var(--color-border)" borderRadius="full" overflow="hidden">
                 <MotionBox
                     h="100%"
                     borderRadius="full"

@@ -14,6 +14,7 @@ import {
     Text,
     Icon,
     Spinner,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useProfile } from '../context/ProfileContext';
@@ -75,9 +76,9 @@ const AvatarSection = () => {
             initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.5, ease: 'easeOut' }}
-            bg="#1e293b"
+            bg="var(--color-bg-secondary)"
             borderRadius="12px"
-            boxShadow="0 4px 20px rgba(0,0,0,0.4)"
+            boxShadow="var(--shadow-card)"
             borderTop="2px solid #22d3ee"
             p={{ base: 6, md: 8 }}
             position="relative"
@@ -112,14 +113,14 @@ const AvatarSection = () => {
                         h={{ base: '96px', md: '128px' }}
                         borderRadius="full"
                         border="4px solid"
-                        borderColor="#334155"
+                        borderColor="var(--color-border)"
                         overflow="hidden"
                         boxShadow="lg"
                         transition="box-shadow 0.3s"
                         _hover={{ boxShadow: '0 0 20px rgba(34, 211, 238, 0.25)' }}
                     >
                         {isUpdating ? (
-                            <Flex w="100%" h="100%" align="center" justify="center" bg="#0f172a">
+                            <Flex w="100%" h="100%" align="center" justify="center" bg="var(--color-bg-primary)">
                                 <Spinner color="#22d3ee" />
                             </Flex>
                         ) : (
@@ -143,7 +144,7 @@ const AvatarSection = () => {
                         bg="#22d3ee"
                         color="#0f172a"
                         borderRadius="full"
-                        border="2px solid #1e293b"
+                        border="2px solid var(--color-bg-secondary)"
                         _hover={{ transform: 'scale(1.1)' }}
                         transition="transform 0.2s"
                         onClick={(e) => {
@@ -163,10 +164,10 @@ const AvatarSection = () => {
                     w="100%"
                 >
                     <Box>
-                        <Text fontFamily="heading" fontSize="lg" fontWeight="600" color="gray.100">
+                        <Text fontFamily="heading" fontSize="lg" fontWeight="600" color={useColorModeValue("gray.800","gray.100")}>
                             Profile Avatar
                         </Text>
-                        <Text color="gray.400" fontSize="sm" mt={1}>
+                        <Text color={useColorModeValue("gray.500","gray.400")} fontSize="sm" mt={1}>
                             Update your profile picture. Max size 5MB.
                         </Text>
                     </Box>
@@ -189,8 +190,8 @@ const AvatarSection = () => {
 
                         <Button
                             variant="outline"
-                            borderColor="gray.600"
-                            color="gray.300"
+                            borderColor="var(--color-border)"
+                            color={useColorModeValue("gray.600","gray.300")}
                             fontWeight="500"
                             borderRadius="6px"
                             fontSize="sm"
@@ -208,7 +209,7 @@ const AvatarSection = () => {
                         w="100%"
                         mt={4}
                         border="2px dashed"
-                        borderColor={isDragOver ? '#22d3ee' : '#334155'}
+                        borderColor={isDragOver ? '#22d3ee' : 'var(--color-border)'}
                         borderRadius="8px"
                         p={4}
                         textAlign="center"

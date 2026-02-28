@@ -2,16 +2,16 @@
  *  Battle Arena – Design System
  *  ════════════════════════════════════════════════════════
  *  Colors:
- *    bg-primary    #0f172a
- *    bg-card       #1e293b
- *    accent-cyan   #22d3ee
- *    accent-purple #8b5cf6
- *    accent-green  #22c55e
- *    accent-yellow #facc15
- *    accent-red    #ef4444
- *    text-primary  #f1f5f9
- *    text-muted    #94a3b8
- *    border-default #334155
+ *    bg-primary    var(--color-bg-primary)
+ *    bg-card       var(--color-bg-card)
+ *    accent-cyan   var(--color-cyan-400)
+ *    accent-purple var(--color-purple-500)
+ *    accent-green  var(--color-green-500)
+ *    accent-yellow var(--color-yellow-500)
+ *    accent-red    var(--color-red-500)
+ *    text-primary  var(--color-text-primary)
+ *    text-muted    var(--color-text-muted)
+ *    border-default var(--color-border)
  *  ════════════════════════════════════════════════════════ */
 
 /* ─── Base Layout ─────────────────────────────────────── */
@@ -19,12 +19,12 @@
 .battle-page {
     min-height: 100vh;
     padding: 6rem 1rem 2rem;
-    background-color: #0f172a;
-    color: #f1f5f9;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
     font-family: 'Inter', sans-serif;
     background-image:
-        linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px);
+        linear-gradient(var(--color-grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--color-grid-line) 1px, transparent 1px);
     background-size: 50px 50px;
 }
 
@@ -46,7 +46,9 @@
 /* ─── Cards ───────────────────────────────────────────── */
 
 .battle-card {
-    background-color: #1e293b;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
     border-radius: 16px;
     padding: 1.5rem;
     transition: all 0.3s ease;
@@ -58,15 +60,15 @@
 }
 
 .battle-card--live {
-    border: 1px solid #22d3ee;
+    border: 1px solid var(--color-cyan-400);
 }
 
 .battle-card--completed {
-    border: 1px solid #475569;
+    border: 1px solid var(--color-border-hover);
 }
 
 .battle-card--glow {
-    border: 1px solid #22d3ee;
+    border: 1px solid var(--color-cyan-400);
     box-shadow: 0 0 40px rgba(34, 211, 238, 0.35);
 }
 
@@ -82,33 +84,33 @@
 }
 
 .battle-badge--cyan {
-    background-color: #22d3ee;
-    color: #0f172a;
+    background-color: var(--color-cyan-400);
+    color: var(--color-bg-primary);
 }
 
 .battle-badge--purple {
-    background-color: #8b5cf6;
-    color: white;
+    background-color: var(--color-purple-500);
+    color: var(--color-bg-primary);
 }
 
 .battle-badge--green {
-    background-color: #22c55e;
-    color: #0f172a;
+    background-color: var(--color-green-500);
+    color: var(--color-bg-primary);
 }
 
 .battle-badge--yellow {
-    background-color: #facc15;
-    color: #0f172a;
+    background-color: var(--color-yellow-500);
+    color: var(--color-bg-primary);
 }
 
 .battle-badge--gray {
-    background-color: #475569;
-    color: #e2e8f0;
+    background-color: var(--color-border-hover);
+    color: var(--color-text-primary);
 }
 
 .battle-badge--red {
-    background-color: #ef4444;
-    color: white;
+    background-color: var(--color-red-500);
+    color: var(--color-bg-primary);
 }
 
 /* ─── Buttons ─────────────────────────────────────────── */
@@ -125,32 +127,32 @@
 }
 
 .battle-btn--primary {
-    background-color: #22d3ee;
-    color: #0f172a;
+    background-color: var(--color-cyan-400);
+    color: var(--color-bg-primary);
 }
 
 .battle-btn--primary:hover {
-    background-color: #06b6d4;
+    background-color: var(--color-cyan-500);
     transform: scale(1.03);
     box-shadow: 0 4px 20px rgba(34, 211, 238, 0.4);
 }
 
 .battle-btn--secondary {
-    background-color: #334155;
-    color: #f1f5f9;
+    background-color: var(--color-border);
+    color: var(--color-text-primary);
 }
 
 .battle-btn--secondary:hover {
-    background-color: #475569;
+    background-color: var(--color-border-hover);
 }
 
 .battle-btn--danger {
-    background-color: #ef4444;
-    color: white;
+    background-color: var(--color-red-500);
+    color: var(--color-bg-primary);
 }
 
 .battle-btn--danger:hover {
-    background-color: #dc2626;
+    background-color: var(--color-red-600);
 }
 
 .battle-btn--full {
@@ -167,7 +169,7 @@
 .battle-progress {
     width: 100%;
     height: 8px;
-    background-color: #334155;
+    background-color: var(--color-border);
     border-radius: 4px;
     overflow: hidden;
 }
@@ -176,27 +178,27 @@
     height: 100%;
     border-radius: 4px;
     transition: width 0.5s ease;
-    background: linear-gradient(to right, #22d3ee, #06b6d4);
+    background: linear-gradient(to right, var(--color-cyan-400), var(--color-cyan-500));
 }
 
 .battle-progress__fill--green {
-    background: linear-gradient(to right, #22c55e, #16a34a);
+    background: linear-gradient(to right, var(--color-green-500), var(--color-green-600));
 }
 
 .battle-progress__fill--purple {
-    background: linear-gradient(to right, #8b5cf6, #6366f1);
+    background: linear-gradient(to right, var(--color-purple-500), var(--color-purple-600));
 }
 
 .battle-progress__fill--opponent {
-    background-color: #64748b;
+    background-color: var(--color-border-hover);
 }
 
 /* ─── Filter Panel ────────────────────────────────────── */
 
 .battle-filter-panel {
-    background: rgba(30, 41, 59, 0.6);
+    background: var(--color-glass-bg);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(34, 211, 238, 0.1);
+    border: 1px solid var(--color-orb-cyan);
     border-radius: 16px;
     padding: 1rem;
 }
@@ -206,14 +208,14 @@
     align-items: center;
     gap: 0.75rem;
     cursor: pointer;
-    color: #cbd5e1;
+    color: var(--color-text-secondary);
     font-size: 0.9rem;
 }
 
 .battle-filter-panel h3 {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #cbd5e1;
+    color: var(--color-text-secondary);
     margin-bottom: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -223,27 +225,27 @@
     width: 1rem;
     height: 1rem;
     border-radius: 4px;
-    border: 1px solid #475569;
-    background-color: #1e293b;
+    border: 1px solid var(--color-border-hover);
+    background-color: var(--color-bg-card);
     cursor: pointer;
-    accent-color: #22d3ee;
+    accent-color: var(--color-cyan-400);
 }
 
 .battle-filter-panel input[type="text"] {
     width: 100%;
-    background-color: #1e293b;
-    border: 1px solid #475569;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border-hover);
     border-radius: 8px;
     padding: 0.5rem 0.75rem;
-    color: #e2e8f0;
+    color: var(--color-text-primary);
     font-size: 0.875rem;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .battle-filter-panel input[type="text"]:focus {
-    border-color: #22d3ee;
-    box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.2);
+    border-color: var(--color-cyan-400);
+    box-shadow: 0 0 0 2px var(--color-focus-ring);
 }
 
 /* ─── Modal ───────────────────────────────────────────── */
@@ -262,14 +264,14 @@
 }
 
 .battle-modal {
-    background-color: #1e293b;
+    background-color: var(--color-bg-card);
     border-radius: 16px;
     max-width: 42rem;
     width: 100%;
     padding: 2rem;
     max-height: 90vh;
     overflow-y: auto;
-    border: 1px solid #22d3ee;
+    border: 1px solid var(--color-cyan-400);
     box-shadow: 0 0 40px rgba(34, 211, 238, 0.35);
     animation: battleSlideUp 0.3s ease-out;
 }
@@ -325,20 +327,20 @@
 }
 
 .battle-timeline__circle--completed {
-    background-color: #22c55e;
-    color: white;
+    background-color: var(--color-green-500);
+    color: var(--color-bg-primary);
 }
 
 .battle-timeline__circle--active {
-    background-color: #22d3ee;
-    color: #0f172a;
+    background-color: var(--color-cyan-400);
+    color: var(--color-bg-primary);
     box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
     animation: battlePulse 2s ease-in-out infinite;
 }
 
 .battle-timeline__circle--upcoming {
-    background-color: #334155;
-    color: #64748b;
+    background-color: var(--color-border);
+    color: var(--color-border-hover);
 }
 
 .battle-timeline__line {
@@ -349,15 +351,15 @@
 }
 
 .battle-timeline__line--completed {
-    background-color: #22c55e;
+    background-color: var(--color-green-500);
 }
 
 .battle-timeline__line--active {
-    background: linear-gradient(to right, #22c55e, #22d3ee);
+    background: linear-gradient(to right, var(--color-green-500), var(--color-cyan-400));
 }
 
 .battle-timeline__line--upcoming {
-    background-color: #334155;
+    background-color: var(--color-border);
 }
 
 @keyframes battlePulse {
@@ -394,15 +396,15 @@
 }
 
 .battle-scoreboard__avatar--player {
-    border: 4px solid #22d3ee;
+    border: 4px solid var(--color-cyan-400);
 }
 
 .battle-scoreboard__avatar--opponent {
-    border: 4px solid #475569;
+    border: 4px solid var(--color-border-hover);
 }
 
 .battle-scoreboard__avatar--winner {
-    border-color: #22c55e;
+    border-color: var(--color-green-500);
 }
 
 .battle-scoreboard__vs {
@@ -416,7 +418,7 @@
     width: 5rem;
     height: 5rem;
     border-radius: 50%;
-    background: linear-gradient(to bottom right, #22d3ee, #06b6d4);
+    background: linear-gradient(to bottom right, var(--color-cyan-400), var(--color-cyan-500));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -426,7 +428,7 @@
 /* ─── Victory Banner ──────────────────────────────────── */
 
 .battle-victory-banner {
-    background: linear-gradient(to right, #22c55e, #16a34a);
+    background: linear-gradient(to right, var(--color-green-500), var(--color-green-600));
     border-radius: 16px;
     padding: 2rem;
     text-align: center;
@@ -435,7 +437,7 @@
 }
 
 .battle-defeat-banner {
-    background: linear-gradient(to right, #ef4444, #dc2626);
+    background: linear-gradient(to right, var(--color-red-500), var(--color-red-600));
     border-radius: 16px;
     padding: 2rem;
     text-align: center;
@@ -444,7 +446,7 @@
 }
 
 .battle-draw-banner {
-    background: linear-gradient(to right, #f59e0b, #d97706);
+    background: linear-gradient(to right, var(--color-yellow-500), var(--color-yellow-600));
     border-radius: 16px;
     padding: 2rem;
     text-align: center;
@@ -467,19 +469,19 @@
 /* ─── Round Card ──────────────────────────────────────── */
 
 .battle-round-card {
-    border-left: 4px solid #334155;
+    border-left: 4px solid var(--color-border);
 }
 
 .battle-round-card--won {
-    border-left-color: #22c55e;
+    border-left-color: var(--color-green-500);
 }
 
 .battle-round-card--lost {
-    border-left-color: #ef4444;
+    border-left-color: var(--color-red-500);
 }
 
 .battle-round-card--draw {
-    border-left-color: #facc15;
+    border-left-color: var(--color-yellow-500);
 }
 
 /* ─── Performance Analytics ───────────────────────────── */
@@ -513,35 +515,35 @@
 }
 
 .battle-step-circle--active {
-    background-color: #22d3ee;
-    color: #0f172a;
+    background-color: var(--color-cyan-400);
+    color: var(--color-bg-primary);
 }
 
 .battle-step-circle--inactive {
-    background-color: #334155;
-    color: #94a3b8;
+    background-color: var(--color-border);
+    color: var(--color-text-muted);
 }
 
 .battle-step-circle--done {
-    background-color: #22c55e;
-    color: white;
+    background-color: var(--color-green-500);
+    color: var(--color-bg-primary);
 }
 
 .battle-step-line {
     width: 4rem;
     height: 2px;
-    background-color: #334155;
+    background-color: var(--color-border);
     transition: background-color 0.3s ease;
 }
 
 .battle-step-line--active {
-    background-color: #22d3ee;
+    background-color: var(--color-cyan-400);
 }
 
 /* ─── Mode Cards (Create modal) ───────────────────────── */
 
 .battle-mode-card {
-    background: rgba(30, 41, 59, 0.6);
+    background: var(--color-glass-bg);
     backdrop-filter: blur(10px);
     border: 2px solid transparent;
     border-radius: 16px;
@@ -557,8 +559,8 @@
 }
 
 .battle-mode-card--selected {
-    border-color: #22d3ee;
-    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+    border-color: var(--color-cyan-400);
+    box-shadow: 0 0 20px var(--color-focus-ring);
 }
 
 .battle-mode-icon {
@@ -573,22 +575,22 @@
 }
 
 .battle-mode-icon--pvp {
-    background: linear-gradient(to bottom right, #22d3ee, #06b6d4);
+    background: linear-gradient(to bottom right, var(--color-cyan-400), var(--color-cyan-500));
 }
 
 .battle-mode-icon--ai {
-    background: linear-gradient(to bottom right, #8b5cf6, #6366f1);
+    background: linear-gradient(to bottom right, var(--color-purple-500), var(--color-purple-600));
 }
 
 /* ─── Config Select ───────────────────────────────────── */
 
 .battle-select {
     width: 100%;
-    background-color: #1e293b;
-    border: 1px solid #475569;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border-hover);
     border-radius: 8px;
     padding: 0.6rem 0.75rem;
-    color: #e2e8f0;
+    color: var(--color-text-primary);
     font-size: 0.875rem;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -597,8 +599,8 @@
 }
 
 .battle-select:focus {
-    border-color: #22d3ee;
-    box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.2);
+    border-color: var(--color-cyan-400);
+    box-shadow: 0 0 0 2px var(--color-focus-ring);
 }
 
 /* ─── AI Opponent Avatar ──────────────────────────────── */
@@ -607,11 +609,11 @@
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-    background: linear-gradient(to bottom right, #8b5cf6, #6366f1);
+    background: linear-gradient(to bottom right, var(--color-purple-500), var(--color-purple-600));
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #8b5cf6;
+    border: 2px solid var(--color-purple-500);
     font-size: 1.5rem;
 }
 
@@ -627,26 +629,26 @@
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-    background-color: #334155;
+    background-color: var(--color-border);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #475569;
+    border: 2px solid var(--color-border-hover);
     font-size: 1.5rem;
 }
 
 /* ─── Code Block ──────────────────────────────────────── */
 
 .battle-code-block {
-    background-color: #0f172a;
+    background-color: var(--color-bg-primary);
     border-radius: 8px;
     padding: 1rem;
     font-family: 'JetBrains Mono', 'Fira Code', monospace;
     font-size: 0.85rem;
-    color: #cbd5e1;
+    color: var(--color-text-secondary);
     overflow-x: auto;
     white-space: pre-wrap;
-    border: 1px solid #1e293b;
+    border: 1px solid var(--color-bg-card);
 }
 
 /* ─── Score Display (inline card) ─────────────────────── */
@@ -664,20 +666,20 @@
 }
 
 .battle-score-value--player {
-    color: #22d3ee;
+    color: var(--color-cyan-400);
 }
 
 .battle-score-value--opponent {
-    color: #cbd5e1;
+    color: var(--color-text-secondary);
 }
 
 .battle-score-value--winner {
-    color: #22c55e;
+    color: var(--color-green-500);
 }
 
 .battle-score-label {
     font-size: 0.75rem;
-    color: #94a3b8;
+    color: var(--color-text-muted);
 }
 
 /* ─── Grid/Layout Utilities ───────────────────────────── */
@@ -733,23 +735,23 @@
 }
 
 .battle-text-muted {
-    color: #94a3b8;
+    color: var(--color-text-muted);
 }
 
 .battle-text-cyan {
-    color: #22d3ee;
+    color: var(--color-cyan-400);
 }
 
 .battle-text-green {
-    color: #22c55e;
+    color: var(--color-green-500);
 }
 
 .battle-text-yellow {
-    color: #facc15;
+    color: var(--color-yellow-500);
 }
 
 .battle-text-red {
-    color: #ef4444;
+    color: var(--color-red-500);
 }
 
 .battle-text-sm {

@@ -53,7 +53,7 @@ const StageCard = ({ player }) => {
             position="relative"
             borderRadius="12px"
             p={6}
-            bg="linear-gradient(135deg, #1e293b 0%, #0f172a 100%)"
+            bg="linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%)"
             border={`1px solid ${colors.solid}30`}
             boxShadow={stageBoxShadow[rank]}
             cursor="pointer"
@@ -104,7 +104,7 @@ const StageCard = ({ player }) => {
                 </Box>
 
                 {/* Username */}
-                <Text fontFamily="heading" fontSize="2xl" fontWeight="bold" color="white" mb={2}>
+                <Text fontFamily="heading" fontSize="2xl" fontWeight="bold" color="var(--color-text-primary)" mb={2}>
                     {player.username}
                 </Text>
 
@@ -143,16 +143,16 @@ const StageCard = ({ player }) => {
 
                 {/* Stats */}
                 <Grid templateColumns="1fr 1fr" gap={4} w="full">
-                    <Box textAlign="center" p={3} borderRadius="6px" bg="rgba(15, 23, 42, 0.5)">
-                        <Text fontFamily="heading" fontSize="2xl" fontWeight="bold" color="white">
+                    <Box textAlign="center" p={3} borderRadius="6px" bg="var(--color-bg-elevated)">
+                        <Text fontFamily="heading" fontSize="2xl" fontWeight="bold" color="var(--color-text-primary)">
                             {player.wins}
                         </Text>
                         <Text fontFamily="body" fontSize="xs" color="gray.400" textTransform="uppercase" letterSpacing="wider">
                             Victories
                         </Text>
                     </Box>
-                    <Box textAlign="center" p={3} borderRadius="6px" bg="rgba(15, 23, 42, 0.5)">
-                        <Text fontFamily="heading" fontSize="2xl" fontWeight="bold" color="#10b981">
+                    <Box textAlign="center" p={3} borderRadius="6px" bg="var(--color-bg-elevated)">
+                        <Text fontFamily="heading" fontSize="2xl" fontWeight="bold" color="var(--color-green-500)">
                             {player.winRate}%
                         </Text>
                         <Text fontFamily="body" fontSize="xs" color="gray.400" textTransform="uppercase" letterSpacing="wider">
@@ -180,14 +180,14 @@ const CompactCard = ({ player }) => {
             p={5}
             bg={
                 isUser
-                    ? 'linear-gradient(135deg, rgba(34, 211, 238, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%)'
-                    : 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)'
+                    ? 'linear-gradient(135deg, var(--color-info-bg) 0%, var(--color-bg-secondary) 100%)'
+                    : 'linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%)'
             }
-            border={isUser ? '2px solid #22d3ee' : '1px solid rgba(30, 41, 59, 0.5)'}
+            border={isUser ? '2px solid var(--color-cyan-400)' : '1px solid var(--color-border)'}
             boxShadow={
                 isUser
-                    ? '0 0 30px rgba(34, 211, 238, 0.3), 0 4px 16px rgba(0, 0, 0, 0.3)'
-                    : '0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                    ? '0 0 30px rgba(34, 211, 238, 0.3), 0 4px 16px rgba(0, 0, 0, 0.1)'
+                    : 'var(--shadow-custom)'
             }
             cursor="pointer"
             initial={{ opacity: 0, y: 20 }}
@@ -212,8 +212,8 @@ const CompactCard = ({ player }) => {
                     fontFamily="heading"
                     fontWeight="black"
                     fontSize="2xl"
-                    bg={isUser ? '#22d3ee' : 'rgba(34, 211, 238, 0.1)'}
-                    color={isUser ? '#0f172a' : '#22d3ee'}
+                    bg={isUser ? 'var(--color-cyan-400)' : 'var(--color-info-bg)'}
+                    color={isUser ? '#ffffff' : 'var(--color-cyan-400)'}
                 >
                     {player.rankPosition}
                 </Box>
@@ -238,7 +238,7 @@ const CompactCard = ({ player }) => {
                 {/* Info */}
                 <Box flex={1} minW={0}>
                     <Flex align="center" gap={2} mb={1} flexWrap="wrap">
-                        <Text fontFamily="heading" fontSize="lg" fontWeight="bold" color="white">
+                        <Text fontFamily="heading" fontSize="lg" fontWeight="bold" color="var(--color-text-primary)">
                             {player.username}
                         </Text>
                         {isUser && (
@@ -249,8 +249,8 @@ const CompactCard = ({ player }) => {
                                 fontSize="xs"
                                 fontFamily="body"
                                 fontWeight="bold"
-                                bg="#22d3ee"
-                                color="#0f172a"
+                                bg="var(--color-cyan-400)"
+                                color="#ffffff"
                             >
                                 YOUR RANK
                             </Badge>
@@ -264,7 +264,7 @@ const CompactCard = ({ player }) => {
                                 fontSize="xs"
                                 fontFamily="body"
                                 fontWeight="bold"
-                                color="white"
+                                color="var(--color-text-primary)"
                                 bg="linear-gradient(135deg, #10b981 0%, #22d3ee 100%)"
                             >
                                 RISING
@@ -278,7 +278,7 @@ const CompactCard = ({ player }) => {
                                 fontSize="xs"
                                 fontFamily="body"
                                 fontWeight="bold"
-                                color="white"
+                                color="var(--color-text-primary)"
                                 bg="linear-gradient(135deg, #ef4444 0%, #f97316 100%)"
                             >
                                 HOT
@@ -312,7 +312,7 @@ const CompactCard = ({ player }) => {
                         <Text fontFamily="body" fontSize="xs" color="gray.400" textTransform="uppercase" letterSpacing="wider" mb={1}>
                             Wins
                         </Text>
-                        <Text fontFamily="heading" fontSize="xl" fontWeight="bold" color="white">
+                        <Text fontFamily="heading" fontSize="xl" fontWeight="bold" color="var(--color-text-primary)">
                             {player.wins}
                         </Text>
                     </Box>

@@ -29,7 +29,7 @@ const AuthCard = ({ children, maxW = 'md' }) => {
     return (
         <Box
             minH="100vh"
-            bg="#0f172a"
+            bg="var(--color-bg-primary)"
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -59,11 +59,11 @@ const AuthCard = ({ children, maxW = 'md' }) => {
                 zIndex={10}
                 w="100%"
                 maxW={maxW}
-                bg="#1e293b"
+                bg="var(--color-bg-secondary)"
                 borderRadius="12px"
                 borderTop="2px solid"
                 borderColor="#22d3ee"
-                boxShadow="0 4px 24px rgba(0, 0, 0, 0.4)"
+                boxShadow="var(--shadow-card)"
                 p={{ base: 8, md: 12 }}
                 initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}

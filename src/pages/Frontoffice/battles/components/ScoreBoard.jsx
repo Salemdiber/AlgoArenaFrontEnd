@@ -61,7 +61,7 @@ const ScoreBoard = ({ battle, playerScore, opponentScore, isResult = false, winn
                                         borderRadius: '50%',
                                         backgroundColor:
                                             r.status === 'COMPLETED' ? '#22c55e' :
-                                                r.status === 'IN_PROGRESS' ? '#22d3ee' : '#334155',
+                                                r.status === 'IN_PROGRESS' ? '#22d3ee' : 'var(--color-border)',
                                     }}
                                 />
                             ))}

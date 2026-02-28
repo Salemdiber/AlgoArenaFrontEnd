@@ -64,7 +64,7 @@ const AppLoader = ({ isLoading = true }) => {
                     left={0}
                     right={0}
                     bottom={0}
-                    bg="#0f172a"
+                    bg="var(--color-bg-primary)"
                     zIndex={10000}
                     initial={{ opacity: 1 }}
                     exit={{
@@ -182,7 +182,7 @@ const AppLoader = ({ isLoading = true }) => {
                                 justifyContent="center"
                                 fontSize="3xl"
                                 fontWeight="bold"
-                                color="white"
+                                color="var(--color-text-primary)"
                                 position="relative"
                                 boxShadow="0 0 60px rgba(34,211,238,0.5), inset 0 0 40px rgba(255,255,255,0.1)"
                                 animate={reducedMotion ? {} : {

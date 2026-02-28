@@ -11,6 +11,7 @@ import {
     Button,
     Icon,
     IconButton,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useChallengeContext } from '../context/ChallengeContext';
@@ -54,9 +55,9 @@ const ChallengeHeader = () => {
 
     return (
         <Flex
-            bg="#1e293b"
+            bg="var(--color-bg-secondary)"
             borderBottom="1px solid"
-            borderColor="gray.700"
+            borderColor={useColorModeValue("gray.200","gray.700")}
             px={4}
             py={3}
             align="center"
@@ -67,17 +68,17 @@ const ChallengeHeader = () => {
                 <IconButton
                     icon={<ArrowLeftIcon w={6} h={6} />}
                     variant="ghost"
-                    color="gray.400"
+                    color={useColorModeValue("gray.500","gray.400")}
                     _hover={{ color: 'gray.100' }}
                     onClick={() => navigate('/challenges')}
                     aria-label="Back to challenges"
                     size="sm"
                 />
                 <Box>
-                    <Text fontFamily="heading" fontWeight="bold" color="gray.100" fontSize="md">
+                    <Text fontFamily="heading" fontWeight="bold" color={useColorModeValue("gray.800","gray.100")} fontSize="md">
                         {selectedChallenge.title}
                     </Text>
-                    <Text fontSize="xs" color="gray.400">
+                    <Text fontSize="xs" color={useColorModeValue("gray.500","gray.400")}>
                         {diffMeta.label} • {selectedChallenge.tags.join(' • ')}
                     </Text>
                 </Box>
@@ -85,14 +86,14 @@ const ChallengeHeader = () => {
 
             {/* Right: Timer + actions */}
             <Flex align="center" gap={4}>
-                <Flex align="center" gap={2} fontSize="sm" color="gray.400">
+                <Flex align="center" gap={2} fontSize="sm" color={useColorModeValue("gray.500","gray.400")}>
                     <ClockIcon w={4} h={4} color="brand.500" />
                     <Text fontFamily="mono" color="brand.500" fontWeight="bold">{timerStr}</Text>
                 </Flex>
                 <Button
                     size="sm"
-                    bg="gray.700"
-                    color="gray.300"
+                    bg="var(--color-tag-bg)"
+                    color={useColorModeValue("gray.600","gray.300")}
                     _hover={{ bg: 'gray.600' }}
                     fontWeight="semibold"
                     onClick={resetCode}

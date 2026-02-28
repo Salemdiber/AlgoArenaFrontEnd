@@ -86,7 +86,7 @@ const TrendIndicator = ({ trend = 'STABLE', size = 6 }) => {
 
     return (
         <Box flexShrink={0}>
-            <StableDash w={size} h={size} color="#64748b" />
+            <StableDash w={size} h={size} color="var(--color-text-muted)" />
         </Box>
     );
 };

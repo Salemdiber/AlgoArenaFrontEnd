@@ -18,12 +18,14 @@ import {
     HStack,
     Text,
     Divider,
+    useToast,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import AuthCard from '../components/AuthCard';
 import AuthHeader from '../components/AuthHeader';
 import { authService } from '../../../../services/authService';
-import { useToast } from '@chakra-ui/react';
+
 
 /* Icons */
 const ShieldIcon = (props) => (
@@ -51,7 +53,7 @@ const ForgotPasswordPage = () => {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    
+
     const toast = useToast();
 
     const validateEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -86,7 +88,7 @@ const ForgotPasswordPage = () => {
             <form onSubmit={handleSubmit}>
                 {/* Email input */}
                 <FormControl isInvalid={!!error} mb={6}>
-                    <FormLabel fontSize="sm" fontWeight="medium" color="gray.300">
+                    <FormLabel fontSize="sm" fontWeight="medium" color={useColorModeValue("gray.600", "gray.300")}>
                         Email Address
                     </FormLabel>
                     <Input
@@ -94,11 +96,11 @@ const ForgotPasswordPage = () => {
                         placeholder="you@example.com"
                         value={email}
                         onChange={(e) => { setEmail(e.target.value); setError(''); }}
-                        bg="#0f172a"
+                        bg="var(--color-bg-primary)"
                         border="1px solid"
-                        borderColor="gray.600"
+                        borderColor="var(--color-border)"
                         borderRadius="8px"
-                        color="gray.100"
+                        color={useColorModeValue("gray.800", "gray.100")}
                         h="48px"
                         fontSize="sm"
                         _placeholder={{ color: 'gray.500' }}
@@ -113,7 +115,7 @@ const ForgotPasswordPage = () => {
                     <FormErrorMessage fontSize="xs" mt={2}>{error}</FormErrorMessage>
                 </FormControl>
 
-                
+
 
                 {/* Submit */}
                 <Button
@@ -141,7 +143,7 @@ const ForgotPasswordPage = () => {
             </form>
 
             {/* Divider */}
-            <Divider borderColor="gray.600" my={6} />
+            <Divider borderColor="var(--color-border)" my={6} />
 
             {/* Back to login */}
             <Box textAlign="center">

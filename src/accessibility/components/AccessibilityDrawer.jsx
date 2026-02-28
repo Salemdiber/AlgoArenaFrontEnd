@@ -71,7 +71,7 @@ const ResetIcon = (props) => (
 const SectionHeader = ({ icon, title }) => (
     <HStack spacing={3} mb={4}>
         {icon}
-        <Text fontFamily="heading" fontSize="md" fontWeight="bold" color="white">
+        <Text fontFamily="heading" fontSize="md" fontWeight="bold" color="var(--color-text-primary)">
             {title}
         </Text>
     </HStack>
@@ -81,11 +81,11 @@ const SectionHeader = ({ icon, title }) => (
 const ControlRow = ({ label, description, children }) => (
     <HStack justify="space-between" align="center" w="full" py={2}>
         <Box flex={1} pr={3}>
-            <Text fontSize="sm" fontWeight="medium" color="gray.200">
+            <Text fontSize="sm" fontWeight="medium" color="var(--color-text-primary)">
                 {label}
             </Text>
             {description && (
-                <Text fontSize="xs" color="gray.500" mt={0.5}>
+                <Text fontSize="xs" color="var(--color-text-muted)" mt={0.5}>
                     {description}
                 </Text>
             )}
@@ -121,20 +121,20 @@ const AccessibilityDrawer = ({ isOpen, onClose }) => {
         >
             <DrawerOverlay bg="rgba(0, 0, 0, 0.6)" backdropFilter="blur(4px)" />
             <DrawerContent
-                bg="#0f172a"
+                bg="var(--color-bg-primary)"
                 borderLeft="1px solid"
-                borderColor="gray.800"
+                borderColor="var(--color-border)"
                 maxW={{ base: '100%', md: '380px' }}
             >
                 <DrawerCloseButton
-                    color="gray.400"
+                    color="var(--color-text-muted)"
                     _hover={{ color: '#22d3ee' }}
                     mt={2}
                 />
 
                 <DrawerHeader
                     borderBottom="1px solid"
-                    borderColor="gray.800"
+                    borderColor="var(--color-border)"
                     pb={4}
                 >
                     <HStack spacing={3}>
@@ -154,10 +154,10 @@ const AccessibilityDrawer = ({ isOpen, onClose }) => {
                             </Icon>
                         </Box>
                         <Box>
-                            <Text fontFamily="heading" fontSize="lg" fontWeight="bold" color="white">
+                            <Text fontFamily="heading" fontSize="lg" fontWeight="bold" color="var(--color-text-primary)">
                                 Accessibility
                             </Text>
-                            <Text fontSize="xs" color="gray.500">
+                            <Text fontSize="xs" color="var(--color-text-muted)">
                                 Customize your experience
                             </Text>
                         </Box>
@@ -212,11 +212,11 @@ const AccessibilityDrawer = ({ isOpen, onClose }) => {
 
                                 {/* Font Size Slider */}
                                 <Box pt={2}>
-                                    <Text fontSize="sm" fontWeight="medium" color="gray.200" mb={3}>
+                                    <Text fontSize="sm" fontWeight="medium" color="var(--color-text-primary)" mb={3}>
                                         Font Size
                                     </Text>
                                     <HStack spacing={4}>
-                                        <Text fontSize="xs" color="gray.500" minW="40px">
+                                        <Text fontSize="xs" color="var(--color-text-muted)" minW="40px">
                                             {FONT_SCALE_LABELS[fontScaleIndex]}
                                         </Text>
                                         <Slider
@@ -227,14 +227,14 @@ const AccessibilityDrawer = ({ isOpen, onClose }) => {
                                             onChange={(val) => updateSetting('fontScale', FONT_SCALE_VALUES[val])}
                                             flex={1}
                                         >
-                                            <SliderTrack bg="gray.700" h="6px" borderRadius="full">
+                                            <SliderTrack bg="var(--color-tag-bg)" h="6px" borderRadius="full">
                                                 <SliderFilledTrack bg="#22d3ee" />
                                             </SliderTrack>
                                             <SliderThumb
                                                 boxSize={5}
                                                 bg="#22d3ee"
                                                 border="2px solid"
-                                                borderColor="white"
+                                                bordercolor="var(--color-text-primary)"
                                                 _focus={{ boxShadow: '0 0 0 3px rgba(34,211,238,0.4)' }}
                                             />
                                         </Slider>
@@ -280,10 +280,10 @@ const AccessibilityDrawer = ({ isOpen, onClose }) => {
                                         <Button
                                             size="sm"
                                             variant="ghost"
-                                            color="gray.400"
+                                            color="var(--color-text-muted)"
                                             border="1px solid"
-                                            borderColor="gray.700"
-                                            _hover={{ bg: 'gray.800', color: 'white' }}
+                                            borderColor="var(--color-border)"
+                                            _hover={{ bg: 'var(--color-bg-secondary)', color: 'var(--color-text-heading)' }}
                                             onClick={stopSpeaking}
                                             flex={1}
                                         >
@@ -334,7 +334,7 @@ const AccessibilityDrawer = ({ isOpen, onClose }) => {
                                                     '"Start battle"',
                                                     '"Go home"',
                                                 ].map((cmd) => (
-                                                    <Text key={cmd} fontSize="xs" color="gray.500" fontFamily="mono">
+                                                    <Text key={cmd} fontSize="xs" color="var(--color-text-muted)" fontFamily="mono">
                                                         {cmd}
                                                     </Text>
                                                 ))}
@@ -345,17 +345,17 @@ const AccessibilityDrawer = ({ isOpen, onClose }) => {
                             </VStack>
                         </Box>
 
-                        <Divider borderColor="gray.800" />
+                        <Divider borderColor="var(--color-border)" />
 
                         {/* ─── Reset ─── */}
                         <Button
                             size="sm"
                             leftIcon={<ResetIcon w={4} h={4} />}
                             variant="ghost"
-                            color="gray.400"
+                            color="var(--color-text-muted)"
                             border="1px solid"
-                            borderColor="gray.700"
-                            _hover={{ bg: 'gray.800', color: 'white', borderColor: 'gray.600' }}
+                            borderColor="var(--color-border)"
+                            _hover={{ bg: 'var(--color-bg-secondary)', color: 'var(--color-text-heading)', borderColor: 'var(--color-border-hover)' }}
                             onClick={resetSettings}
                             w="full"
                         >

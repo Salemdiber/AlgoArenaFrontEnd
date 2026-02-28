@@ -30,7 +30,7 @@ const EditorToolbar = () => {
 
     return (
         <Flex
-            bg="#1e293b"
+            bg="var(--color-bg-secondary)"
             borderBottom="1px solid"
             borderColor="gray.700"
             px={4}
@@ -41,7 +41,7 @@ const EditorToolbar = () => {
             <Select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                bg="#0f172a"
+                bg="var(--color-bg-primary)"
                 border="1px solid"
                 borderColor="gray.700"
                 borderRadius="8px"

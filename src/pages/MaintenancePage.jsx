@@ -11,7 +11,7 @@ const MaintenancePage = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#0f172a] flex flex-col items-center justify-center relative overflow-hidden font-body select-none">
+        <div className="min-h-screen bg-(--color-bg-primary) flex flex-col items-center justify-center relative overflow-hidden font-body select-none">
             {/* Background Effects */}
             <div className="absolute inset-0 z-0">
                 {/* Animated glow orbs */}
@@ -122,7 +122,7 @@ const StatusCard = ({ icon, label, status }) => {
     };
 
     return (
-        <div className="bg-[#0f172a]/80 border border-gray-700/50 rounded-xl p-4 backdrop-blur-sm">
+        <div className="bg-(--color-bg-primary)/80 border border-gray-700/50 rounded-xl p-4 backdrop-blur-sm">
             <div className="flex items-center justify-center mb-2">
                 <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     {icons[icon]}

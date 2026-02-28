@@ -22,6 +22,7 @@ import {
     Collapse,
     Button,
     useDisclosure,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { CodeEditor, EditorToolbar, OutputTerminal, useEditorState } from '../editor';
@@ -74,7 +75,7 @@ const TryChallenge = () => {
             id="try-challenge"
             as="section"
             py={{ base: 16, lg: 24 }}
-            bg="#0f172a"
+            bg="var(--color-bg-primary)"
             position="relative"
             overflow="hidden"
         >
@@ -131,7 +132,7 @@ const TryChallenge = () => {
                         fontSize={{ base: '3xl', sm: '4xl', lg: '5xl' }}
                         fontFamily="heading"
                         fontWeight="bold"
-                        color="gray.100"
+                        color={useColorModeValue("gray.800", "gray.100")}
                         mb={4}
                     >
                         Try a Challenge{' '}
@@ -139,7 +140,7 @@ const TryChallenge = () => {
                             Instantly
                         </Text>
                     </Heading>
-                    <Text fontSize={{ base: 'lg', lg: 'xl' }} color="gray.400" maxW="2xl" mx="auto">
+                    <Text fontSize={{ base: 'lg', lg: 'xl' }} color={useColorModeValue("gray.500", "gray.400")} maxW="2xl" mx="auto">
                         No sign-up needed. Write code, hit run, and see the results.
                     </Text>
                 </MotionBox>
@@ -154,10 +155,10 @@ const TryChallenge = () => {
                     <Flex
                         direction={{ base: 'column', lg: 'row' }}
                         gap={{ base: 6, lg: 0 }}
-                        bg="#111827"
+                        bg="var(--color-editor-toolbar)"
                         borderRadius="16px"
                         border="1px solid"
-                        borderColor="#1e293b"
+                        borderColor="var(--color-editor-border)"
                         overflow="hidden"
                         boxShadow="0 8px 40px rgba(0, 0, 0, 0.4)"
                     >
@@ -166,19 +167,19 @@ const TryChallenge = () => {
                             w={{ base: '100%', lg: '40%' }}
                             p={{ base: 6, lg: 8 }}
                             borderRight={{ lg: '1px solid' }}
-                            borderColor={{ lg: '#1e293b' }}
+                            borderColor={{ lg: 'var(--color-editor-border)' }}
                             overflowY="auto"
                             maxH={{ lg: '520px' }}
                             sx={{
                                 '&::-webkit-scrollbar': { width: '5px' },
                                 '&::-webkit-scrollbar-track': { bg: 'transparent' },
-                                '&::-webkit-scrollbar-thumb': { bg: '#334155', borderRadius: '3px' },
+                                '&::-webkit-scrollbar-thumb': { bg: 'var(--color-border)', borderRadius: '3px' },
                                 overscrollBehavior: 'contain',
                             }}
                         >
                             {/* Title + difficulty */}
                             <HStack mb={4} spacing={3}>
-                                <Heading fontSize="xl" fontFamily="heading" fontWeight="bold" color="gray.100">
+                                <Heading fontSize="xl" fontFamily="heading" fontWeight="bold" color={useColorModeValue("gray.800", "gray.100")}>
                                     {DEMO_CHALLENGE.title}
                                 </Heading>
                                 <Badge
@@ -200,8 +201,8 @@ const TryChallenge = () => {
                                     <Tag
                                         key={tag}
                                         size="sm"
-                                        bg="#1e293b"
-                                        color="gray.300"
+                                        bg="var(--color-bg-secondary)"
+                                        color={useColorModeValue("gray.600", "gray.300")}
                                         borderRadius="6px"
                                         fontSize="xs"
                                     >
@@ -211,7 +212,7 @@ const TryChallenge = () => {
                             </HStack>
 
                             {/* Description */}
-                            <Text color="gray.300" fontSize="sm" lineHeight="1.8" mb={5}>
+                            <Text color={useColorModeValue("gray.600", "gray.300")} fontSize="sm" lineHeight="1.8" mb={5}>
                                 {DEMO_CHALLENGE.description}
                             </Text>
 
@@ -220,7 +221,7 @@ const TryChallenge = () => {
                                 {DEMO_CHALLENGE.rules.map((rule, i) => (
                                     <HStack key={i} align="start" spacing={2}>
                                         <Text color="#22d3ee" fontSize="sm" mt="2px">•</Text>
-                                        <Text color="gray.400" fontSize="sm">{rule}</Text>
+                                        <Text color={useColorModeValue("gray.500", "gray.400")} fontSize="sm">{rule}</Text>
                                     </HStack>
                                 ))}
                             </VStack>
@@ -231,7 +232,7 @@ const TryChallenge = () => {
                                 display="flex"
                                 alignItems="center"
                                 gap={2}
-                                color="gray.400"
+                                color={useColorModeValue("gray.500", "gray.400")}
                                 fontSize="sm"
                                 fontWeight="semibold"
                                 mb={3}
@@ -247,22 +248,22 @@ const TryChallenge = () => {
                                     {DEMO_CHALLENGE.examples.map((ex, i) => (
                                         <Box
                                             key={i}
-                                            bg="#0f172a"
+                                            bg="var(--color-bg-primary)"
                                             borderRadius="10px"
                                             p={4}
                                             border="1px solid"
-                                            borderColor="#1e293b"
+                                            borderColor="var(--color-editor-border)"
                                         >
                                             <Text fontSize="xs" fontWeight="bold" color="gray.500" mb={2}>
                                                 Example {i + 1}
                                             </Text>
                                             <Box fontFamily="mono" fontSize="13px" lineHeight="1.8">
-                                                <Text color="gray.400">
-                                                    <Text as="span" color="#94a3b8" fontWeight="semibold">Input: </Text>
+                                                <Text color={useColorModeValue("gray.500", "gray.400")}>
+                                                    <Text as="span" color="var(--color-text-muted)" fontWeight="semibold">Input: </Text>
                                                     {ex.input}
                                                 </Text>
                                                 <Text color="#22c55e">
-                                                    <Text as="span" color="#94a3b8" fontWeight="semibold">Output: </Text>
+                                                    <Text as="span" color="var(--color-text-muted)" fontWeight="semibold">Output: </Text>
                                                     {ex.output}
                                                 </Text>
                                                 {ex.explanation && (
@@ -281,7 +282,7 @@ const TryChallenge = () => {
                         <Flex
                             w={{ base: '100%', lg: '60%' }}
                             direction="column"
-                            bg="#0f172a"
+                            bg="var(--color-bg-primary)"
                         >
                             {/* Toolbar */}
                             <EditorToolbar

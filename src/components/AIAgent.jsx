@@ -102,6 +102,8 @@ User input: "${userText}"`;
             if (target === 'landing') target = 'home';
 
             switch (target) {
+                case 'Signin': route = '/signin'; spokenText = 'Navigating to Signin page.'; break;
+                case 'Signup': route = '/signup'; spokenText = 'Navigating to Signup page.'; break;
                 case 'home': route = '/'; spokenText = 'Navigating to home page.'; break;
                 case 'challenges': route = '/challenges'; spokenText = 'Navigating to challenges.'; break;
                 case 'battles': route = '/battles'; spokenText = 'Navigating to battles.'; break;
@@ -246,27 +248,27 @@ Your primary responsibilities:
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="group relative w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:-translate-y-1 transition-all duration-300 border border-cyan-500/30 overflow-visible"
+                    className="group relative w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-(--color-bg-primary) to-(--color-bg-secondary) text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:-translate-y-1 transition-all duration-300 border border-(--color-border) overflow-visible"
                     aria-label="Open AI Assistant"
                 >
                     <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div className="absolute inset-[-4px] rounded-full border border-dashed border-cyan-500/30 animate-[spin_8s_linear_infinite] group-hover:border-cyan-400/60 hidden md:block"></div>
+                    <div className="absolute inset-[-4px] rounded-full border border-dashed border-(--color-border) animate-[spin_8s_linear_infinite] group-hover:border-cyan-400/60 hidden md:block"></div>
                     <div className="relative z-10 flex items-center justify-center filter drop-shadow-[0_0_8px_rgba(34,211,238,0.8)] group-hover:scale-110 transition-transform duration-300">
                         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
-                    <div className="absolute top-0 right-0 w-3.5 h-3.5 bg-cyan-400 rounded-full border-2 border-[#0f172a] z-20" />
-                    <div className="absolute top-0 right-0 w-3.5 h-3.5 bg-cyan-400 rounded-full border-2 border-[#0f172a] z-10 animate-ping opacity-75" />
+                    <div className="absolute top-0 right-0 w-3.5 h-3.5 bg-cyan-400 rounded-full border-2 border-(--color-bg-primary) z-20" />
+                    <div className="absolute top-0 right-0 w-3.5 h-3.5 bg-cyan-400 rounded-full border-2 border-(--color-bg-primary) z-10 animate-ping opacity-75" />
                 </button>
             )}
 
             {/* AI Assistant Interface */}
             {isOpen && (
-                <div className="w-[380px] h-[600px] flex flex-col glass-panel rounded-2xl border border-gray-700/50 bg-[#0f172a]/95 backdrop-blur-2xl shadow-2xl animate-fade-in-up overflow-hidden ring-1 ring-white/10">
+                <div className="w-[380px] h-[600px] flex flex-col rounded-2xl border border-(--color-border) bg-(--color-glass-bg-solid) backdrop-blur-2xl shadow-[var(--shadow-dropdown)] animate-fade-in-up overflow-hidden ring-1 ring-(--color-border)/50">
 
                     {/* Header */}
-                    <div className="relative flex flex-col bg-gradient-to-br from-[#1e293b] to-[#0f172a] border-b border-gray-700/50">
+                    <div className="relative flex flex-col bg-gradient-to-br from-(--color-bg-secondary) to-(--color-bg-primary) border-b border-(--color-border)">
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 opacity-50"></div>
 
                         <div className="flex items-center justify-between p-5 pb-4">
@@ -275,17 +277,17 @@ Your primary responsibilities:
                                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                     </svg>
-                                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-[#1e293b]"></div>
+                                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-(--color-bg-secondary)"></div>
                                 </div>
                                 <div>
-                                    <h2 className="font-heading font-bold text-gray-100 text-lg tracking-wide">AlgoArena AI</h2>
+                                    <h2 className="font-heading font-bold text-(--color-text-heading) text-lg tracking-wide">AlgoArena AI</h2>
                                     <p className="text-xs text-green-400 flex items-center gap-1.5 font-medium">
                                         <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
                                         System Online
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-full transition-colors focus:outline-none">
+                            <button onClick={() => setIsOpen(false)} className="text-(--color-text-muted) hover:text-(--color-text-primary) hover:bg-(--color-hover-bg) p-2 rounded-full transition-colors focus:outline-none">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
@@ -294,17 +296,17 @@ Your primary responsibilities:
 
                         {/* Mode Segmented Control */}
                         <div className="px-5 pb-5">
-                            <div className="flex w-full bg-[#0f172a] rounded-xl p-1.5 border border-gray-800 shadow-inner relative z-10">
+                            <div className="flex w-full bg-(--color-bg-primary) rounded-xl p-1.5 border border-(--color-border) shadow-inner relative z-10">
                                 <button
                                     onClick={() => { setMode('chat'); if (isListening) stopListening(); }}
-                                    className={`flex-1 flex items-center justify-center gap-2 text-xs font-semibold py-2 rounded-lg transition-all duration-300 ${mode === 'chat' ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-md' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'}`}
+                                    className={`flex-1 flex items-center justify-center gap-2 text-xs font-semibold py-2 rounded-lg transition-all duration-300 ${mode === 'chat' ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-[0_4px_12px_rgba(34,211,238,0.3)]' : 'text-(--color-text-muted) hover:text-(--color-text-primary) hover:bg-(--color-hover-bg)'}`}
                                 >
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
                                     Chat AI
                                 </button>
                                 <button
                                     onClick={() => setMode('nav')}
-                                    className={`flex-1 flex items-center justify-center gap-2 text-xs font-semibold py-2 rounded-lg transition-all duration-300 ${mode === 'nav' ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-md' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'}`}
+                                    className={`flex-1 flex items-center justify-center gap-2 text-xs font-semibold py-2 rounded-lg transition-all duration-300 ${mode === 'nav' ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-[0_4px_12px_rgba(168,85,247,0.3)]' : 'text-(--color-text-muted) hover:text-(--color-text-primary) hover:bg-(--color-hover-bg)'}`}
                                 >
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
                                     Audio Nav
@@ -314,7 +316,7 @@ Your primary responsibilities:
                     </div>
 
                     {/* Chat Area Body */}
-                    <div className="flex-1 p-5 overflow-y-auto space-y-5 custom-scrollbar bg-gradient-to-b from-[#1e293b]/30 to-[#0f172a]/80 relative">
+                    <div className="flex-1 p-5 overflow-y-auto space-y-5 custom-scrollbar bg-gradient-to-b from-(--color-bg-secondary) to-(--color-bg-primary) relative">
                         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
                             <svg className="w-48 h-48" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         </div>
@@ -333,14 +335,14 @@ Your primary responsibilities:
                                     </div>
                                 )}
                                 <div className={`max-w-[75%] ${msg.isUser ? 'order-1' : 'order-2'} group`}>
-                                    <div className={`relative p-4 rounded-2xl shadow-sm ${msg.isUser ? 'bg-cyan-600 rounded-tr-sm text-white' : 'bg-[#1e293b] rounded-tl-sm border border-gray-700/60 text-gray-200'} transition-all`}>
-                                        <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                                    <div className={`relative p-4 rounded-2xl ${msg.isUser ? 'bg-gradient-to-br from-cyan-500 to-blue-600 rounded-tr-sm text-white shadow-[0_4px_12px_rgba(34,211,238,0.2)]' : 'bg-(--color-bg-elevated) rounded-tl-sm border border-(--color-border) text-(--color-text-primary) shadow-sm'} transition-all`}>
+                                        <p className="text-[13px] leading-[1.6] whitespace-pre-wrap">{msg.text}</p>
 
                                         {/* Playback Button Overlay for AI Messages */}
                                         {!msg.isUser && (
                                             <button
                                                 onClick={() => playMessageAudio(msg.id, msg.text)}
-                                                className={`absolute -right-3 -top-3 p-1.5 rounded-full shadow-lg transition-all duration-300 ${playingMessageId === msg.id ? 'bg-cyan-500 text-white ring-2 ring-cyan-500/50 opacity-100 scale-110' : 'bg-gray-800 text-gray-400 opacity-0 group-hover:opacity-100 border border-gray-700 hover:text-cyan-400 hover:bg-gray-700 hover:scale-105'} focus:outline-none`}
+                                                className={`absolute -right-3 -top-3 p-1.5 rounded-full shadow-lg transition-all duration-300 ${playingMessageId === msg.id ? 'bg-cyan-500 text-white ring-2 ring-cyan-500/50 opacity-100 scale-110' : 'bg-(--color-bg-secondary) text-(--color-text-muted) opacity-0 group-hover:opacity-100 border border-(--color-border) hover:text-cyan-400 hover:bg-(--color-hover-bg) hover:scale-105'} focus:outline-none`}
                                                 title={playingMessageId === msg.id ? "Stop playback" : "Read aloud"}
                                             >
                                                 {playingMessageId === msg.id ? (
@@ -358,7 +360,7 @@ Your primary responsibilities:
                                             </button>
                                         )}
                                     </div>
-                                    <p className={`text-[11px] text-gray-500 mt-1.5 font-medium ${msg.isUser ? 'text-right' : 'text-left ml-1'}`}>{msg.time}</p>
+                                    <p className={`text-[11px] text-(--color-text-muted) mt-1.5 font-medium ${msg.isUser ? 'text-right' : 'text-left ml-1'}`}>{msg.time}</p>
                                 </div>
                             </div>
                         ))}
@@ -371,17 +373,17 @@ Your primary responsibilities:
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                     </svg>
                                 </div>
-                                <div className="px-5 py-4 bg-[#1e293b]/80 backdrop-blur-sm rounded-2xl rounded-tl-sm border border-gray-700/60 text-gray-300 flex items-center gap-2 shadow-sm">
+                                <div className="px-5 py-4 bg-(--color-bg-card) backdrop-blur-sm rounded-2xl rounded-tl-sm border border-(--color-border) text-(--color-text-primary) flex items-center gap-2 shadow-sm">
                                     {isListening ? (
                                         <div className="flex items-center gap-2">
                                             <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                                            <span className="text-sm text-gray-300 animate-pulse">Listening...</span>
+                                            <span className="text-sm text-(--color-text-primary) animate-pulse">Listening...</span>
                                         </div>
                                     ) : (
                                         <>
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+                                            <div className="w-2 h-2 bg-(--color-text-muted) rounded-full animate-bounce"></div>
+                                            <div className="w-2 h-2 bg-(--color-text-muted) rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
+                                            <div className="w-2 h-2 bg-(--color-text-muted) rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
                                         </>
                                     )}
                                 </div>
@@ -391,7 +393,7 @@ Your primary responsibilities:
                     </div>
 
                     {/* Interactive Input Footer */}
-                    <div className="p-4 border-t border-gray-700/80 bg-[#1e293b]/90 backdrop-blur-md">
+                    <div className="p-4 border-t border-(--color-border) bg-(--color-bg-card) backdrop-blur-md">
                         <div className="relative flex items-center gap-2">
                             <div className="relative group flex-1">
                                 <input
@@ -401,7 +403,7 @@ Your primary responsibilities:
                                     onKeyPress={handleKeyPress}
                                     disabled={isLoading || isListening}
                                     placeholder={mode === 'chat' ? "Ask about the platform..." : "Type or speak destination..."}
-                                    className="w-full h-12 bg-[#0f172a] border border-gray-600 rounded-xl pl-4 pr-12 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500 transition-all disabled:opacity-60 shadow-inner"
+                                    className="w-full h-12 bg-(--color-bg-input) border border-(--color-border) rounded-xl pl-4 pr-12 text-[13px] text-(--color-text-primary) placeholder:text-(--color-text-muted) hover:border-(--color-border-hover) focus:outline-none focus:border-cyan-400 focus:ring-4 focus:ring-[var(--color-focus-glow)] transition-all duration-300 disabled:opacity-60 shadow-sm"
                                 />
                                 <button
                                     onClick={handleSend}
@@ -422,7 +424,7 @@ Your primary responsibilities:
                                     className={`h-12 w-12 flex-shrink-0 flex flex-col items-center justify-center rounded-xl transition-all duration-300 border focus:outline-none disabled:opacity-50
                                         ${isListening
                                             ? 'bg-red-500/20 border-red-500 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)] animate-pulse'
-                                            : 'bg-[#0f172a] border-gray-600 text-purple-400 hover:bg-purple-500/10 hover:border-purple-500/50'}`}
+                                            : 'bg-(--color-bg-primary) border-(--color-border) text-purple-400 hover:bg-purple-500/10 hover:border-purple-500/50'}`}
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
@@ -431,8 +433,8 @@ Your primary responsibilities:
                             )}
                         </div>
                         <div className="text-center mt-3">
-                            <p className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold flex items-center justify-center gap-1.5">
-                                <svg className="w-3 h-3 text-gray-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" /></svg>
+                            <p className="text-[10px] text-(--color-text-muted) uppercase tracking-widest font-semibold flex items-center justify-center gap-1.5">
+                                <svg className="w-3 h-3 text-(--color-text-muted)" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" /></svg>
                                 Powered by AlgoArena Dev team
                             </p>
                         </div>

@@ -16,6 +16,7 @@ import {
     Tag,
     HStack,
     Icon,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -60,7 +61,7 @@ const ChallengeCard = ({ challenge }) => {
 
     return (
         <MotionBox
-            bg="#1e293b"
+            bg="var(--color-bg-secondary)"
             borderRadius="12px"
             p={5}
             border="1px solid"
@@ -123,12 +124,12 @@ const ChallengeCard = ({ challenge }) => {
                     </HStack>
 
                     {/* Title */}
-                    <Text fontFamily="heading" fontSize="xl" fontWeight="bold" color="gray.100" mb={2}>
+                    <Text fontFamily="heading" fontSize="xl" fontWeight="bold" color={useColorModeValue("gray.800", "gray.100")} mb={2}>
                         {challenge.title}
                     </Text>
 
                     {/* Description excerpt */}
-                    <Text fontSize="sm" color="gray.400" mb={3} noOfLines={2}>
+                    <Text fontSize="sm" color={useColorModeValue("gray.500", "gray.400")} mb={3} noOfLines={2}>
                         {challenge.description.split('\n')[0]}
                     </Text>
 
@@ -137,8 +138,8 @@ const ChallengeCard = ({ challenge }) => {
                         {challenge.tags.map(tag => (
                             <Tag
                                 key={tag}
-                                bg="gray.700"
-                                color="gray.300"
+                                bg="var(--color-tag-bg)"
+                                color={useColorModeValue("gray.600", "gray.300")}
                                 size="sm"
                                 borderRadius="8px"
                                 fontSize="xs"
@@ -150,12 +151,12 @@ const ChallengeCard = ({ challenge }) => {
 
                     {/* Meta row */}
                     {isSolved && progress ? (
-                        <HStack spacing={6} fontSize="sm" color="gray.400">
+                        <HStack spacing={6} fontSize="sm" color={useColorModeValue("gray.500", "gray.400")}>
                             <Text>Your time: <Text as="strong" color="green.400">{progress.bestRuntime}ms</Text></Text>
                             <Text>Score: <Text as="strong" color="green.400">{progress.earnedXp}/{challenge.xpReward}</Text></Text>
                         </HStack>
                     ) : (
-                        <HStack spacing={6} fontSize="sm" color="gray.400">
+                        <HStack spacing={6} fontSize="sm" color={useColorModeValue("gray.500", "gray.400")}>
                             <Flex align="center" gap={2}>
                                 <ClockIcon w={4} h={4} />
                                 <Text>~{challenge.estimatedTime} min</Text>
@@ -165,7 +166,7 @@ const ChallengeCard = ({ challenge }) => {
                                 <Text>+{challenge.xpReward} XP</Text>
                             </Flex>
                             <Text>
-                                Acceptance: <Text as="strong" color="gray.100">{challenge.acceptanceRate}%</Text>
+                                Acceptance: <Text as="strong" color={useColorModeValue("gray.800", "gray.100")}>{challenge.acceptanceRate}%</Text>
                             </Text>
                         </HStack>
                     )}

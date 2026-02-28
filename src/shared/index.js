@@ -12,6 +12,10 @@ export { LoadingProvider } from './context/LoadingContext';
 export { default as LoadingContext } from './context/LoadingContext';
 export { default as useLoading } from './hooks/useLoading';
 
+// Theme context & hook
+export { ThemeProvider, useThemePreference } from './context/ThemeContext';
+export { default as ThemeContext } from './context/ThemeContext';
+
 // Skeleton components
 export { default as LeaderboardSkeleton } from './skeletons/LeaderboardSkeleton';
 export { default as ChallengeCardSkeleton } from './skeletons/ChallengeCardSkeleton';
