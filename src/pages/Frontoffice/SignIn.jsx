@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { getReCaptchaV3Token } from '../../services/recaptchaV3';
-import { Box, Heading, Text, Button, VStack, HStack, Input, Checkbox, Link, Flex, InputGroup, InputLeftElement, InputRightElement, IconButton, Icon } from '@chakra-ui/react';
+import { Box, Heading, Text, Button, VStack, HStack, Input, Checkbox, Link, Flex, InputGroup, InputLeftElement, InputRightElement, IconButton, Icon, useColorModeValue } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AuthLayout from '../../layout/AuthLayout';
@@ -58,11 +58,21 @@ const SignIn = () => {
         }
     };
 
+    const headingColor = 'var(--color-text-heading)';
+    const labelColor = 'var(--color-text-secondary)';
+    const inputTextColor = 'var(--color-text-primary)';
+    const socialBtnBg = 'var(--color-bg-input)';
+    const socialBtnColor = 'var(--color-text-primary)';
+    const socialBtnHoverBg = 'var(--color-bg-elevated)';
+    const iconStroke = 'var(--color-text-muted)';
+
     const inputStyles = {
-        bg: '#0f172a', border: '1px solid', borderColor: 'gray.600', borderRadius: '8px',
-        color: 'gray.100', h: '48px', fontSize: 'sm', _placeholder: { color: 'gray.500' },
-        _focus: { borderColor: 'brand.500', boxShadow: '0 0 0 1px #22d3ee, 0 0 20px -5px rgba(34,211,238,0.3)', outline: 'none' },
-        _hover: { borderColor: 'gray.500' }, transition: 'all 0.3s',
+        bg: 'var(--color-bg-input)', border: '1px solid', borderColor: 'var(--color-border)', borderRadius: '10px',
+        color: 'var(--color-text-primary)', h: '52px', fontSize: '15px', pl: '2.75rem', pr: '1rem',
+        boxShadow: '0 2px 4px var(--color-glass-border)',
+        _placeholder: { color: 'var(--color-text-muted)', fontWeight: 'medium' },
+        _focus: { borderColor: 'var(--color-cyan-400)', boxShadow: '0 0 0 4px var(--color-focus-glow), inset 0 2px 4px var(--color-glass-border)', outline: 'none', bg: 'var(--color-bg-elevated)' },
+        _hover: { borderColor: 'var(--color-border-hover)' }, transition: 'all 0.3s ease',
     };
 
     return (
@@ -74,20 +84,20 @@ const SignIn = () => {
 
                     <Box position="relative" zIndex={10}>
                         <VStack spacing={2} mb={8} textAlign="center">
-                            <Heading fontFamily="heading" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" color="white">
+                            <Heading fontFamily="heading" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" color={headingColor}>
                                 Welcome Back, <Text as="span" color="brand.500">Challenger</Text>
                             </Heading>
-                            <Text color="gray.400" fontSize="sm">Continue your coding journey.</Text>
+                            <Text color={labelColor} fontSize="sm">Continue your coding journey.</Text>
                         </VStack>
 
                         <form onSubmit={handleSubmit}>
                             <VStack spacing={5}>
                                 {/* Username */}
                                 <Box w="100%">
-                                    <Text fontSize="xs" fontWeight="semibold" color="gray.400" textTransform="uppercase" letterSpacing="wider" ml={1} mb={1}>Username</Text>
+                                    <Text fontSize="xs" fontWeight="semibold" color={labelColor} textTransform="uppercase" letterSpacing="wider" ml={1} mb={1}>Username</Text>
                                     <InputGroup>
                                         <InputLeftElement pointerEvents="none" h="100%">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" /></svg>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={iconStroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" /></svg>
                                         </InputLeftElement>
                                         <Input type="text" placeholder="dev_algoarena" value={username} onChange={(e) => setUsername(e.target.value)} {...inputStyles} />
                                     </InputGroup>
@@ -96,14 +106,14 @@ const SignIn = () => {
                                 {/* Password */}
                                 <Box w="100%">
                                     <Flex justify="space-between" align="center" ml={1} mb={1}>
-                                        <Text fontSize="xs" fontWeight="semibold" color="gray.400" textTransform="uppercase" letterSpacing="wider">Password</Text>
+                                        <Text fontSize="xs" fontWeight="semibold" color={labelColor} textTransform="uppercase" letterSpacing="wider">Password</Text>
                                     </Flex>
                                     <InputGroup>
                                         <InputLeftElement pointerEvents="none" h="100%">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={iconStroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
                                         </InputLeftElement>
-                                        <Input type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} {...inputStyles} pr="2.5rem" />
-                                        <InputRightElement h="100%" right="1" display="flex" alignItems="center" justifyContent="center">
+                                        <Input type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} {...inputStyles} pr="3rem" />
+                                        <InputRightElement h="100%" w="3rem" right="0" display="flex" alignItems="center" justify="center">
                                             <IconButton
                                                 variant="unstyled"
                                                 size="sm"
@@ -113,7 +123,7 @@ const SignIn = () => {
                                                 onClick={() => setShowPassword(!showPassword)}
                                                 icon={showPassword ? <EyeOffIcon w={4} h={4} /> : <EyeIcon w={4} h={4} />}
                                                 color="gray.500"
-                                                _hover={{ color: 'gray.300' }}
+                                                _hover={{ color: 'var(--color-text-heading)' }}
                                                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                                             />
                                         </InputRightElement>
@@ -123,7 +133,7 @@ const SignIn = () => {
                                 {/* Remember + Forgot */}
                                 <Flex w="100%" justify="space-between" align="center">
                                     <Checkbox colorScheme="cyan" size="sm" isChecked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)}>
-                                        <Text fontSize="sm" color="gray.400">Remember me</Text>
+                                        <Text fontSize="sm" color={labelColor}>Remember me</Text>
                                     </Checkbox>
                                     <Link as={RouterLink} to="/forgot-password" fontSize="sm" fontWeight="medium" color="brand.500" _hover={{ color: 'brand.300' }}>Forgot password?</Link>
                                 </Flex>
@@ -142,7 +152,7 @@ const SignIn = () => {
 
                         {/* Divider */}
                         <Box mt={8} position="relative">
-                            <Box position="absolute" inset={0} display="flex" alignItems="center"><Box w="100%" borderTop="1px solid" borderColor="gray.600" /></Box>
+                            <Box position="absolute" inset={0} display="flex" alignItems="center"><Box w="100%" borderTop="1px solid" borderColor="var(--color-border)" /></Box>
                             <Flex position="relative" justify="center">
                                 <Text px={4} fontSize="xs" color="gray.500" className="glass-panel" borderRadius="full">Or enter the arena with</Text>
                             </Flex>
@@ -157,16 +167,16 @@ const SignIn = () => {
                                 <Button
                                     as="a"
                                     href={`http://localhost:3000/auth/${label.toLowerCase()}`}
-                                    key={label} flex={1} h="44px" bg="#0f172a" border="1px solid" borderColor="gray.600" borderRadius="8px" color="gray.300" fontSize="sm" fontWeight="medium"
+                                    key={label} flex={1} h="44px" bg={socialBtnBg} border="1px solid" borderColor="var(--color-border)" borderRadius="8px" color={socialBtnColor} fontSize="sm" fontWeight="medium"
                                     leftIcon={<svg width="20" height="20" fill="currentColor" viewBox={vb}><path fillRule="evenodd" clipRule="evenodd" d={path} /></svg>}
-                                    _hover={{ bg: 'gray.800', borderColor: 'brand.500', color: 'white' }} transition="all 0.3s">
+                                    _hover={{ bg: socialBtnHoverBg, borderColor: 'brand.500', color: 'var(--color-text-heading)' }} transition="all 0.3s">
                                     {label}
                                 </Button>
                             ))}
                         </HStack>
 
                         {/* Link to sign up */}
-                        <Text mt={8} textAlign="center" fontSize="sm" color="gray.400">
+                        <Text mt={8} textAlign="center" fontSize="sm" color={labelColor}>
                             New to AlgoArena?{' '}
                             <Link as={RouterLink} to="/signup" fontWeight="medium" color="brand.500" _hover={{ color: 'brand.300' }}>Sign up</Link>
                         </Text>

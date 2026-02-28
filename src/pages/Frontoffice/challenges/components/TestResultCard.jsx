@@ -35,7 +35,7 @@ const TestResultCard = ({ result, index }) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
-            bg="#1e293b"
+            bg="var(--color-bg-secondary)"
             borderRadius="12px"
             p={3}
             borderLeft="4px solid"

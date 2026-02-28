@@ -33,24 +33,24 @@ const LanguageSelector = ({
         <Select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            bg="#0f172a"
+            bg="var(--color-bg-primary)"
             border="1px solid"
-            borderColor="#334155"
+            borderColor="var(--color-border)"
             borderRadius="8px"
             fontSize="sm"
-            color="gray.200"
+            color="var(--color-text-primary)"
             w="150px"
             h="36px"
             _focus={{ borderColor: '#22d3ee', boxShadow: '0 0 0 1px #22d3ee' }}
             _hover={{ borderColor: '#475569' }}
             transition="all 0.2s"
-            iconColor="gray.400"
+            iconColor="var(--color-text-muted)"
         >
             {languages.map((lang) => (
                 <option
                     key={lang.value}
                     value={lang.value}
-                    style={{ background: '#1e293b', color: '#e2e8f0' }}
+                    style={{ background: 'var(--color-bg-secondary)', color: 'var(--color-text-primary)' }}
                 >
                     {lang.label}
                 </option>

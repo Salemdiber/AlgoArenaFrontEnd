@@ -13,6 +13,7 @@ import {
     Button,
     Icon,
     VStack,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useChallengeContext } from '../context/ChallengeContext';
@@ -56,12 +57,12 @@ const TerminalPanel = () => {
         : 0;
 
     return (
-        <Box bg="#0f172a" borderTop="1px solid" borderColor="gray.700" display="flex" flexDirection="column">
+        <Box bg="var(--color-bg-primary)" borderTop="1px solid" borderColor={useColorModeValue("gray.200","gray.700")} display="flex" flexDirection="column">
             {/* Action buttons bar */}
-            <Flex bg="#1e293b" borderBottom="1px solid" borderColor="gray.700" px={4} py={3} gap={3}>
+            <Flex bg="var(--color-bg-secondary)" borderBottom="1px solid" borderColor={useColorModeValue("gray.200","gray.700")} px={4} py={3} gap={3}>
                 <Button
-                    bg="gray.700"
-                    color="gray.100"
+                    bg="var(--color-tag-bg)"
+                    color={useColorModeValue("gray.800","gray.100")}
                     _hover={{ bg: 'gray.600' }}
                     size="sm"
                     fontWeight="semibold"
@@ -86,7 +87,7 @@ const TerminalPanel = () => {
             </Flex>
 
             {/* Terminal tabs */}
-            <Flex borderBottom="1px solid" borderColor="gray.700" px={4} py={2} gap={4}>
+            <Flex borderBottom="1px solid" borderColor={useColorModeValue("gray.200","gray.700")} px={4} py={2} gap={4}>
                 {['Test Results', 'Console'].map((label, i) => (
                     <Button
                         key={label}
@@ -122,7 +123,7 @@ const TerminalPanel = () => {
                         {isRunning && testResults.length === 0 && (
                             <Flex align="center" justify="center" h="80px" gap={3}>
                                 <Spinner size="sm" color="brand.500" />
-                                <Text color="gray.400" fontSize="sm">Running test cases...</Text>
+                                <Text color={useColorModeValue("gray.500","gray.400")} fontSize="sm">Running test cases...</Text>
                             </Flex>
                         )}
 
@@ -159,7 +160,7 @@ const TerminalPanel = () => {
                                                         ? 'All test cases passed!'
                                                         : `${testResults.filter(r => r.status === 'FAILED').length} test case(s) failed`}
                                                 </Text>
-                                                <Flex fontSize="sm" color="gray.300" gap={2}>
+                                                <Flex fontSize="sm" color={useColorModeValue("gray.600","gray.300")} gap={2}>
                                                     <Text>
                                                         Runtime: <Text as="strong" color={allPassed ? 'green.400' : 'red.400'}>{avgRuntime}ms</Text>
                                                     </Text>
@@ -176,7 +177,7 @@ const TerminalPanel = () => {
                         </AnimatePresence>
                     </>
                 ) : (
-                    <Box fontFamily="mono" fontSize="sm" color="gray.400">
+                    <Box fontFamily="mono" fontSize="sm" color={useColorModeValue("gray.500","gray.400")}>
                         <Text>{'>'} Console output will appear here...</Text>
                     </Box>
                 )}

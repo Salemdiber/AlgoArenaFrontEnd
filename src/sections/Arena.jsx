@@ -15,13 +15,14 @@ import {
     Badge,
     Avatar,
     Divider,
+    useColorModeValue,
 } from '@chakra-ui/react';
 
 const Arena = () => {
     const [mode, setMode] = useState('ai');
 
     return (
-        <Box as="section" py={32} bg="gray.900" position="relative" overflow="hidden">
+        <Box as="section" py={32} bg={useColorModeValue("white", "gray.900")} position="relative" overflow="hidden">
             {/* Background Glow */}
             <Box
                 position="absolute"
@@ -44,11 +45,11 @@ const Arena = () => {
                             fontSize={{ base: '4xl', sm: '5xl', lg: '6xl' }}
                             fontFamily="heading"
                             fontWeight="bold"
-                            color="gray.100"
+                            color={useColorModeValue("gray.800", "gray.100")}
                         >
                             This Is The Product.
                         </Heading>
-                        <Text fontSize={{ base: 'xl', sm: '2xl' }} color="gray.300">
+                        <Text fontSize={{ base: 'xl', sm: '2xl' }} color={useColorModeValue("gray.600", "gray.300")}>
                             Experience the full competitive coding arena. Battle AI or real players in real-time.
                         </Text>
 
@@ -88,12 +89,12 @@ const Arena = () => {
                     >
                         <Grid templateColumns={{ base: '1fr', lg: 'repeat(12, 1fr)' }} gap={0}>
                             {/* Challenge Panel */}
-                            <GridItem colSpan={{ base: 12, lg: 3 }} bg="gray.900" borderRight="1px solid" borderColor="gray.700" p={6}>
-                                <Heading as="h3" size="md" mb={4} color="gray.100">
+                            <GridItem colSpan={{ base: 12, lg: 3 }} bg={useColorModeValue("white", "gray.900")} borderRight="1px solid" borderColor={useColorModeValue("gray.200", "gray.700")} p={6}>
+                                <Heading as="h3" size="md" mb={4} color={useColorModeValue("gray.800", "gray.100")}>
                                     Challenge
                                 </Heading>
                                 <VStack spacing={4} align="stretch">
-                                    <Box bg="gray.800" borderRadius="8px" p={4}>
+                                    <Box bg={useColorModeValue("gray.50", "gray.800")} borderRadius="8px" p={4}>
                                         <HStack justify="space-between" mb={2}>
                                             <Text fontSize="sm" fontWeight="bold" color="brand.500">
                                                 Two Sum
@@ -102,7 +103,7 @@ const Arena = () => {
                                                 Easy
                                             </Badge>
                                         </HStack>
-                                        <Text fontSize="xs" color="gray.400" mb={3}>
+                                        <Text fontSize="xs" color={useColorModeValue("gray.500", "gray.400")} mb={3}>
                                             Given an array of integers, return indices of two numbers that add up to target.
                                         </Text>
                                         <HStack justify="space-between" fontSize="xs" color="gray.500">
@@ -112,16 +113,16 @@ const Arena = () => {
                                     </Box>
 
                                     <Box>
-                                        <Text fontSize="xs" fontWeight="bold" color="gray.400" textTransform="uppercase" mb={2}>
+                                        <Text fontSize="xs" fontWeight="bold" color={useColorModeValue("gray.500", "gray.400")} textTransform="uppercase" mb={2}>
                                             Test Cases
                                         </Text>
                                         <VStack spacing={2} align="stretch">
-                                            <Box bg="gray.800" borderRadius="8px" p={3} fontSize="xs" fontFamily="mono">
-                                                <Text color="gray.400">Input: [2,7,11,15], 9</Text>
+                                            <Box bg={useColorModeValue("gray.50", "gray.800")} borderRadius="8px" p={3} fontSize="xs" fontFamily="mono">
+                                                <Text color={useColorModeValue("gray.500", "gray.400")}>Input: [2,7,11,15], 9</Text>
                                                 <Text color="green.400">Output: [0,1]</Text>
                                             </Box>
-                                            <Box bg="gray.800" borderRadius="8px" p={3} fontSize="xs" fontFamily="mono">
-                                                <Text color="gray.400">Input: [3,2,4], 6</Text>
+                                            <Box bg={useColorModeValue("gray.50", "gray.800")} borderRadius="8px" p={3} fontSize="xs" fontFamily="mono">
+                                                <Text color={useColorModeValue("gray.500", "gray.400")}>Input: [3,2,4], 6</Text>
                                                 <Text color="green.400">Output: [1,2]</Text>
                                             </Box>
                                         </VStack>
@@ -130,26 +131,26 @@ const Arena = () => {
                             </GridItem>
 
                             {/* Coding Arena */}
-                            <GridItem colSpan={{ base: 12, lg: 6 }} bg="gray.900" p={6}>
+                            <GridItem colSpan={{ base: 12, lg: 6 }} bg={useColorModeValue("white", "gray.900")} p={6}>
                                 {mode === 'ai' ? (
                                     // Single Terminal
                                     <Box>
                                         <HStack justify="space-between" mb={4}>
                                             <HStack spacing={3}>
-                                                <Text fontSize="sm" fontWeight="semibold" color="gray.100">
+                                                <Text fontSize="sm" fontWeight="semibold" color={useColorModeValue("gray.800", "gray.100")}>
                                                     Your Solution
                                                 </Text>
-                                                <Select size="xs" width="auto" bg="gray.800" borderColor="gray.700">
+                                                <Select size="xs" width="auto" bg={useColorModeValue("gray.50", "gray.800")} borderColor={useColorModeValue("gray.200", "gray.700")}>
                                                     <option>JavaScript</option>
                                                     <option>Python</option>
                                                 </Select>
                                             </HStack>
-                                            <Text fontSize="xs" color="gray.400">
+                                            <Text fontSize="xs" color={useColorModeValue("gray.500", "gray.400")}>
                                                 ⏱ 12:34
                                             </Text>
                                         </HStack>
-                                        <Box bg="gray.800" borderRadius="8px" p={4} mb={4} h="80" overflow="auto">
-                                            <Code display="block" whiteSpace="pre" bg="transparent" color="gray.300" fontSize="sm">
+                                        <Box bg={useColorModeValue("gray.50", "gray.800")} borderRadius="8px" p={4} mb={4} h="80" overflow="auto">
+                                            <Code display="block" whiteSpace="pre" bg="transparent" color={useColorModeValue("gray.600", "gray.300")} fontSize="sm">
                                                 {`function twoSum(nums, target) {
   const map = new Map();
   
@@ -171,8 +172,8 @@ const Arena = () => {
                                             <Button flex={1} variant="primary">Run Code</Button>
                                             <Button flex={1} colorScheme="green">Submit</Button>
                                         </HStack>
-                                        <Box bg="gray.800" borderRadius="8px" p={4}>
-                                            <Text fontSize="xs" fontWeight="semibold" color="gray.400" mb={2}>
+                                        <Box bg={useColorModeValue("gray.50", "gray.800")} borderRadius="8px" p={4}>
+                                            <Text fontSize="xs" fontWeight="semibold" color={useColorModeValue("gray.500", "gray.400")} mb={2}>
                                                 Console Output
                                             </Text>
                                             <Text fontSize="xs" fontFamily="mono" color="green.400">
@@ -181,7 +182,7 @@ const Arena = () => {
                                             <Text fontSize="xs" fontFamily="mono" color="green.400">
                                                 ✓ Test case 2 passed
                                             </Text>
-                                            <Text fontSize="xs" fontFamily="mono" color="gray.400" mt={2}>
+                                            <Text fontSize="xs" fontFamily="mono" color={useColorModeValue("gray.500", "gray.400")} mt={2}>
                                                 Runtime: 52ms | Memory: 42.1MB
                                             </Text>
                                         </Box>
@@ -195,8 +196,8 @@ const Arena = () => {
                                                 <Text fontSize="sm" fontWeight="bold" color="brand.500">You</Text>
                                                 <Text fontSize="xs" color="green.400">● Active</Text>
                                             </HStack>
-                                            <Box bg="gray.800" borderRadius="8px" p={3} h="64" overflow="auto" mb={3}>
-                                                <Code display="block" whiteSpace="pre" bg="transparent" color="gray.300" fontSize="xs">
+                                            <Box bg={useColorModeValue("gray.50", "gray.800")} borderRadius="8px" p={3} h="64" overflow="auto" mb={3}>
+                                                <Code display="block" whiteSpace="pre" bg="transparent" color={useColorModeValue("gray.600", "gray.300")} fontSize="xs">
                                                     {`function twoSum(nums, target) {
   const map = new Map();
   // Live coding...
@@ -211,11 +212,11 @@ const Arena = () => {
                                                 <Text fontSize="sm" fontWeight="bold" color="yellow.400">Opponent</Text>
                                                 <Text fontSize="xs" color="yellow.400">Typing...</Text>
                                             </HStack>
-                                            <Box bg="gray.800" borderRadius="8px" p={3} h="64" overflow="hidden" mb={3} position="relative">
+                                            <Box bg={useColorModeValue("gray.50", "gray.800")} borderRadius="8px" p={3} h="64" overflow="hidden" mb={3} position="relative">
                                                 <Box position="absolute" inset={0} bg="rgba(17, 24, 39, 0.8)" backdropFilter="blur(4px)" display="flex" alignItems="center" justifyContent="center">
                                                     <VStack>
                                                         <Box w={12} h={12} borderRadius="full" border="4px solid" borderColor="yellow.400" borderTopColor="transparent" animation="spin 1s linear infinite" />
-                                                        <Text fontSize="xs" color="gray.400">Opponent is coding...</Text>
+                                                        <Text fontSize="xs" color={useColorModeValue("gray.500", "gray.400")}>Opponent is coding...</Text>
                                                     </VStack>
                                                 </Box>
                                             </Box>
@@ -225,8 +226,8 @@ const Arena = () => {
                             </GridItem>
 
                             {/* Leaderboard Sidebar */}
-                            <GridItem colSpan={{ base: 12, lg: 3 }} bg="gray.900" borderLeft="1px solid" borderColor="gray.700" p={6}>
-                                <Heading as="h3" size="md" mb={4} color="gray.100">
+                            <GridItem colSpan={{ base: 12, lg: 3 }} bg={useColorModeValue("white", "gray.900")} borderLeft="1px solid" borderColor={useColorModeValue("gray.200", "gray.700")} p={6}>
+                                <Heading as="h3" size="md" mb={4} color={useColorModeValue("gray.800", "gray.100")}>
                                     Live Leaderboard
                                 </Heading>
                                 <VStack spacing={3} align="stretch">
@@ -238,37 +239,40 @@ const Arena = () => {
                                     ].map((user) => (
                                         <HStack
                                             key={user.rank}
-                                            bg={user.active ? 'rgba(34, 211, 238, 0.1)' : 'gray.800'}
-                                            borderRadius="8px"
+                                            bg={user.active ? useColorModeValue('cyan.50', 'rgba(34, 211, 238, 0.1)') : useColorModeValue('white', 'gray.800')}
+                                            borderRadius="10px"
                                             p={3}
-                                            border={user.active ? '1px solid' : 'none'}
-                                            borderColor="rgba(34, 211, 238, 0.3)"
+                                            border="1px solid"
+                                            borderColor={user.active ? 'cyan.400' : useColorModeValue('gray.200', 'transparent')}
+                                            boxShadow={user.active ? '0 0 10px rgba(34, 211, 238, 0.2)' : useColorModeValue('0 2px 4px rgba(0,0,0,0.05)', 'none')}
+                                            transition="all 0.2s"
+                                            _hover={{ transform: 'translateY(-2px)', boxShadow: useColorModeValue('md', 'lg') }}
                                         >
                                             <Box
                                                 w={8}
                                                 h={8}
                                                 borderRadius="full"
-                                                bg={user.rank === 1 ? 'yellow.500' : user.active ? 'brand.500' : 'gray.700'}
+                                                bg={user.rank === 1 ? 'yellow.500' : user.active ? 'brand.500' : useColorModeValue('gray.200', 'gray.700')}
                                                 display="flex"
                                                 alignItems="center"
                                                 justifyContent="center"
                                                 fontWeight="bold"
                                                 fontSize="sm"
-                                                color="gray.900"
+                                                color={user.rank === 1 || user.active ? 'white' : useColorModeValue('gray.700', 'gray.300')}
                                             >
                                                 {user.rank}
                                             </Box>
-                                            <Box flex={1}>
-                                                <Text fontSize="sm" fontWeight="semibold" color={user.active ? 'brand.500' : 'gray.100'}>
+                                            <Box flex={1} ml={1}>
+                                                <Text fontSize="sm" fontWeight="semibold" color={user.active ? 'brand.500' : useColorModeValue('gray.900', 'gray.100')}>
                                                     {user.name}
                                                 </Text>
-                                                <Text fontSize="xs" color="gray.400">
+                                                <Text fontSize="xs" fontWeight="medium" color={useColorModeValue('gray.500', 'gray.400')}>
                                                     {user.score}
                                                 </Text>
                                             </Box>
-                                            <Text fontSize="xs" color="green.400">
+                                            <Badge colorScheme="green" variant="subtle" borderRadius="full" px={2} py={0.5}>
                                                 🔥 {user.flame}
-                                            </Text>
+                                            </Badge>
                                         </HStack>
                                     ))}
                                 </VStack>
@@ -278,11 +282,11 @@ const Arena = () => {
                 </VStack>
             </Container>
             <style>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `}</style>
         </Box>
     );
 };

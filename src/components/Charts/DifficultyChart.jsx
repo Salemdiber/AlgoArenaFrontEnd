@@ -19,9 +19,9 @@ const options = {
             },
         },
         tooltip: {
-            backgroundColor: '#1e293b',
+            backgroundColor: 'var(--color-bg-secondary)',
             bodyColor: '#e2e8f0',
-            borderColor: '#334155',
+            borderColor: 'var(--color-border)',
             borderWidth: 1,
             padding: 10,
         },

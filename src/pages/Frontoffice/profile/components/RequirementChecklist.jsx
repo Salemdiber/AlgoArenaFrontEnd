@@ -21,7 +21,7 @@ const RequirementChecklist = ({ requirements }) => {
                             h="12px"
                             borderRadius="full"
                             border="1px solid"
-                            borderColor="gray.600"
+                            borderColor="var(--color-border)"
                             mr={2}
                             flexShrink={0}
                         />

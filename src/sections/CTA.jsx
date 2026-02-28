@@ -6,16 +6,24 @@ import {
     Button,
     VStack,
     HStack,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
 const CTA = () => {
+    const headingColor = useColorModeValue('gray.800', 'gray.100');
+    const textColor = useColorModeValue('gray.600', 'gray.300');
+    const bgGradient = useColorModeValue(
+        'linear(to-br, gray.50, gray.100, cyan.50)',
+        'linear(to-br, gray.900, gray.800, cyan.900)',
+    );
+
     return (
         <Box
             id="community"
             as="section"
             py={20}
-            bgGradient="linear(to-br, gray.900, gray.800, cyan.900)"
+            bgGradient={bgGradient}
             position="relative"
             overflow="hidden"
         >
@@ -41,12 +49,12 @@ const CTA = () => {
                         fontSize={{ base: '4xl', sm: '5xl', lg: '6xl' }}
                         fontFamily="heading"
                         fontWeight="bold"
-                        color="gray.100"
+                        color={headingColor}
                     >
                         Enter the Arena.
                     </Heading>
 
-                    <Text fontSize={{ base: 'xl', sm: '2xl' }} color="gray.300" maxW="2xl">
+                    <Text fontSize={{ base: 'xl', sm: '2xl' }} color={textColor} maxW="2xl">
                         Master algorithms. Compete globally. Build elegant code.
                     </Text>
 

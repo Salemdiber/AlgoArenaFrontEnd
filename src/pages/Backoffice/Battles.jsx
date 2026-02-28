@@ -19,11 +19,11 @@ const BattleCard = ({ id, status, mode, participants, challenge, category, progr
             <div className="flex items-center justify-between mb-4 relative z-10">
                 <div className="flex items-center gap-4 flex-wrap">
                     <span className={`badge ${statusStyles[status]}`}>{status}</span>
-                    <span className="text-sm text-gray-400">Battle ID: #{id}</span>
+                    <span style={{ color: 'var(--color-text-muted)' }} className="text-sm ">Battle ID: #{id}</span>
                     <span className={`badge ${modeStyles[mode]}`}>{mode}</span>
                 </div>
                 <button className={`px-4 py-2 rounded-lg text-sm font-medium transition-all btn-glow ${status === 'Completed'
-                    ? 'bg-[#1e293b] hover:bg-gray-700 text-gray-300'
+                    ? 'bg-(--color-bg-secondary) hover:bg-gray-700 text-gray-300'
                     : 'bg-cyan-500 hover:bg-cyan-600 text-white'
                     }`}>
                     {status === 'Completed' ? 'View Results' : 'View Details'}
@@ -34,7 +34,7 @@ const BattleCard = ({ id, status, mode, participants, challenge, category, progr
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
                 {/* Participants */}
                 <div>
-                    <p className="text-xs text-gray-400 mb-2">
+                    <p style={{ color: 'var(--color-text-muted)' }} className="text-xs  mb-2">
                         {isWinner ? 'Winner' : (participants.length > 1 ? 'Participants' : 'Participant')}
                     </p>
                     {participants.map((p, idx) => (
@@ -59,14 +59,14 @@ const BattleCard = ({ id, status, mode, participants, challenge, category, progr
 
                 {/* Challenge */}
                 <div>
-                    <p className="text-xs text-gray-400 mb-2">Challenge</p>
-                    <p className="text-sm font-medium text-gray-200">{challenge}</p>
-                    <p className="text-xs text-gray-400">{category}</p>
+                    <p style={{ color: 'var(--color-text-muted)' }} className="text-xs  mb-2">Challenge</p>
+                    <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm font-medium ">{challenge}</p>
+                    <p style={{ color: 'var(--color-text-muted)' }} className="text-xs ">{category}</p>
                 </div>
 
                 {/* Progress */}
                 <div>
-                    <p className="text-xs text-gray-400 mb-2">{status === 'Completed' ? 'Completion' : 'Progress'}</p>
+                    <p style={{ color: 'var(--color-text-muted)' }} className="text-xs  mb-2">{status === 'Completed' ? 'Completion' : 'Progress'}</p>
                     <div className="flex items-center gap-3">
                         <div className="flex-1 progress-bar h-2">
                             <div
@@ -78,7 +78,7 @@ const BattleCard = ({ id, status, mode, participants, challenge, category, progr
                             {progress}%
                         </span>
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p style={{ color: 'var(--color-text-muted)' }} className="text-xs  mt-1">
                         {status === 'Completed' ? 'Duration' : 'Time'}: {time}
                     </p>
                 </div>
@@ -129,8 +129,8 @@ const Battles = () => {
         <div className="space-y-6 animate-fade-in-up">
             {/* Page Header */}
             <div className="mb-6">
-                <h1 className="font-heading text-3xl font-bold text-gray-100 mb-2">Battle Monitor</h1>
-                <p className="text-gray-400">Track live battles and competition activity</p>
+                <h1 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-3xl font-bold  mb-2">Battle Monitor</h1>
+                <p style={{ color: 'var(--color-text-muted)' }} className="">Track live battles and competition activity</p>
             </div>
 
             {/* Stats Grid */}
@@ -143,8 +143,8 @@ const Battles = () => {
                             </svg>
                         </div>
                     </div>
-                    <h3 className="font-heading text-2xl font-bold text-gray-100 mb-1">342</h3>
-                    <p className="text-sm text-gray-400">Active Battles</p>
+                    <h3 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-2xl font-bold  mb-1">342</h3>
+                    <p style={{ color: 'var(--color-text-muted)' }} className="text-sm ">Active Battles</p>
                 </div>
 
                 <div className="glass-panel rounded-2xl p-6 shadow-custom">
@@ -155,8 +155,8 @@ const Battles = () => {
                             </svg>
                         </div>
                     </div>
-                    <h3 className="font-heading text-2xl font-bold text-gray-100 mb-1">1,847</h3>
-                    <p className="text-sm text-gray-400">Completed Today</p>
+                    <h3 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-2xl font-bold  mb-1">1,847</h3>
+                    <p style={{ color: 'var(--color-text-muted)' }} className="text-sm ">Completed Today</p>
                 </div>
 
                 <div className="glass-panel rounded-2xl p-6 shadow-custom">
@@ -167,8 +167,8 @@ const Battles = () => {
                             </svg>
                         </div>
                     </div>
-                    <h3 className="font-heading text-2xl font-bold text-gray-100 mb-1">4.2m</h3>
-                    <p className="text-sm text-gray-400">Avg Duration</p>
+                    <h3 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-2xl font-bold  mb-1">4.2m</h3>
+                    <p style={{ color: 'var(--color-text-muted)' }} className="text-sm ">Avg Duration</p>
                 </div>
             </div>
 
@@ -185,13 +185,13 @@ const Battles = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
-                    <select className="form-select w-full md:w-40 bg-[#0f172a]">
+                    <select className="form-select w-full md:w-40 bg-(--color-bg-input)">
                         <option>All Modes</option>
                         <option>AI Battle</option>
                         <option>PvP</option>
                         <option>Tournament</option>
                     </select>
-                    <select className="form-select w-full md:w-40 bg-[#0f172a]">
+                    <select className="form-select w-full md:w-40 bg-(--color-bg-input)">
                         <option>All Status</option>
                         <option>Active</option>
                         <option>Completed</option>

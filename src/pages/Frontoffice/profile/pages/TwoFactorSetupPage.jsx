@@ -20,6 +20,7 @@ import {
     PinInputField,
     Icon,
     useToast,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
@@ -43,36 +44,43 @@ const CheckCircleIcon = (props) => (
     </Icon>
 );
 
-const QRPlaceholder = () => (
-    <Box
-        w="180px"
-        h="180px"
-        bg="#0f172a"
-        border="1px solid #334155"
-        borderRadius="12px"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        mx="auto"
-    >
-        <VStack spacing={1}>
-            {/* Simple QR-like grid */}
-            {[0, 1, 2, 3, 4].map((row) => (
-                <HStack key={row} spacing={1}>
-                    {[0, 1, 2, 3, 4].map((col) => (
-                        <Box
-                            key={col}
-                            w="20px"
-                            h="20px"
-                            bg={(row + col) % 2 === 0 ? '#22d3ee' : '#1e293b'}
-                            borderRadius="2px"
-                        />
-                    ))}
-                </HStack>
-            ))}
-        </VStack>
-    </Box>
-);
+const QRPlaceholder = () => {
+    const bgContainer = useColorModeValue('gray.50', 'var(--color-bg-primary)');
+    const borderColor = useColorModeValue('gray.200', 'var(--color-border)');
+    const gridEmpty = useColorModeValue('white', 'var(--color-bg-secondary)');
+
+    return (
+        <Box
+            w="180px"
+            h="180px"
+            bg={bgContainer}
+            border="1px solid"
+            borderColor={borderColor}
+            borderRadius="12px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            mx="auto"
+        >
+            <VStack spacing={1}>
+                {/* Simple QR-like grid */}
+                {[0, 1, 2, 3, 4].map((row) => (
+                    <HStack key={row} spacing={1}>
+                        {[0, 1, 2, 3, 4].map((col) => (
+                            <Box
+                                key={col}
+                                w="20px"
+                                h="20px"
+                                bg={(row + col) % 2 === 0 ? '#22d3ee' : gridEmpty}
+                                borderRadius="2px"
+                            />
+                        ))}
+                    </HStack>
+                ))}
+            </VStack>
+        </Box>
+    );
+};
 
 const MOCK_SECRET = 'JBSW Y3DP EHPK 3PXP';
 
@@ -122,6 +130,22 @@ const TwoFactorSetupPage = () => {
         ? { duration: 0 }
         : { duration: 0.3, ease: 'easeOut' };
 
+    // Form/Theme state colors moved up to comply with rules of hooks
+    const btnBackHoverColor = useColorModeValue("gray.500", "gray.400");
+    const textHeadingColor = useColorModeValue("gray.800", "gray.100");
+    const textSubColor = useColorModeValue("gray.500", "gray.400");
+    const textDescColor = useColorModeValue("gray.600", "gray.300");
+
+    const cardBg = useColorModeValue('white', 'var(--color-bg-secondary)');
+    const cardBorderColor = useColorModeValue('gray.200', 'var(--color-border)');
+    const cardBoxShadow = useColorModeValue('sm', 'var(--shadow-card)');
+
+    const inputBg = useColorModeValue('white', 'var(--color-bg-primary)');
+    const inputBorderColor = useColorModeValue('gray.300', 'var(--color-border)');
+    const inputHoverBorderColor = useColorModeValue('gray.400', '#475569');
+
+    const boxSecondaryBg = useColorModeValue('gray.50', 'var(--color-bg-primary)');
+
     return (
         <MotionBox
             initial={prefersReducedMotion ? false : { opacity: 0 }}
@@ -131,9 +155,7 @@ const TwoFactorSetupPage = () => {
             pt={{ base: 24, md: 28 }}
             pb={{ base: 10, md: 16 }}
             px={{ base: 4, sm: 6, lg: 8 }}
-            bg="#0f172a"
-            bgImage="linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px)"
-            bgSize="50px 50px"
+            bg="var(--color-bg-primary)"
             position="relative"
             overflow="hidden"
         >
@@ -143,7 +165,7 @@ const TwoFactorSetupPage = () => {
                     <Button
                         leftIcon={<ArrowLeftIcon w={4} h={4} />}
                         variant="unstyled"
-                        color="gray.400"
+                        color={btnBackHoverColor}
                         display="flex"
                         alignItems="center"
                         mb={6}
@@ -166,7 +188,7 @@ const TwoFactorSetupPage = () => {
                             w={s === step ? '32px' : '8px'}
                             h="8px"
                             borderRadius="full"
-                            bg={s <= step ? '#22d3ee' : '#334155'}
+                            bg={s <= step ? '#22d3ee' : 'var(--color-border)'}
                             transition="all 0.3s"
                         />
                     ))}
@@ -185,16 +207,18 @@ const TwoFactorSetupPage = () => {
                             transition={transition}
                         >
                             <Box
-                                bg="#1e293b"
+                                bg={cardBg}
                                 borderRadius="12px"
                                 p={{ base: 6, md: 8 }}
-                                boxShadow="0 4px 20px rgba(0,0,0,0.4)"
-                                borderTop="2px solid #22d3ee"
+                                border="1px solid"
+                                borderColor={cardBorderColor}
+                                boxShadow={cardBoxShadow}
+                                borderTop="3px solid #22d3ee"
                             >
-                                <Text fontFamily="heading" fontSize="xl" fontWeight="bold" color="gray.100" mb={2}>
+                                <Text fontFamily="heading" fontSize="xl" fontWeight="bold" color={textHeadingColor} mb={2}>
                                     Choose Verification Method
                                 </Text>
-                                <Text color="gray.400" fontSize="sm" mb={6}>
+                                <Text color={textSubColor} fontSize="sm" mb={6}>
                                     Select how you'd like to verify your identity when signing in.
                                 </Text>
 
@@ -229,20 +253,22 @@ const TwoFactorSetupPage = () => {
                             transition={transition}
                         >
                             <Box
-                                bg="#1e293b"
+                                bg={cardBg}
                                 borderRadius="12px"
                                 p={{ base: 6, md: 8 }}
-                                boxShadow="0 4px 20px rgba(0,0,0,0.4)"
-                                borderTop="2px solid #22d3ee"
+                                border="1px solid"
+                                borderColor={cardBorderColor}
+                                boxShadow={cardBoxShadow}
+                                borderTop="3px solid #22d3ee"
                             >
                                 {method === 'authenticator' ? (
                                     /* ── Authenticator flow ── */
                                     <VStack spacing={6} align="stretch">
                                         <Box>
-                                            <Text fontFamily="heading" fontSize="xl" fontWeight="bold" color="gray.100" mb={2}>
+                                            <Text fontFamily="heading" fontSize="xl" fontWeight="bold" color={textHeadingColor} mb={2}>
                                                 Scan QR Code
                                             </Text>
-                                            <Text color="gray.400" fontSize="sm">
+                                            <Text color={textSubColor} fontSize="sm">
                                                 Open your authenticator app and scan the QR code, or enter the secret key manually.
                                             </Text>
                                         </Box>
@@ -251,12 +277,13 @@ const TwoFactorSetupPage = () => {
 
                                         {/* Secret key */}
                                         <Box textAlign="center">
-                                            <Text fontSize="xs" color="gray.400" mb={1}>
+                                            <Text fontSize="xs" color={textSubColor} mb={1}>
                                                 Secret Key
                                             </Text>
                                             <Box
-                                                bg="#0f172a"
-                                                border="1px solid #334155"
+                                                bg={boxSecondaryBg}
+                                                border="1px solid"
+                                                borderColor={cardBorderColor}
                                                 borderRadius="6px"
                                                 px={4}
                                                 py={2}
@@ -273,7 +300,7 @@ const TwoFactorSetupPage = () => {
 
                                         {/* Code input */}
                                         <Box>
-                                            <Text fontSize="sm" fontWeight="500" color="gray.300" mb={3} textAlign="center">
+                                            <Text fontSize="sm" fontWeight="500" color={textDescColor} mb={3} textAlign="center">
                                                 Enter the 6-digit code from your app
                                             </Text>
                                             <Flex justify="center">
@@ -287,12 +314,12 @@ const TwoFactorSetupPage = () => {
                                                         {[...Array(6)].map((_, i) => (
                                                             <PinInputField
                                                                 key={i}
-                                                                bg="#0f172a"
+                                                                bg={inputBg}
                                                                 border="1px solid"
-                                                                borderColor="#334155"
-                                                                color="gray.100"
+                                                                borderColor={inputBorderColor}
+                                                                color={textHeadingColor}
                                                                 _focus={{ borderColor: '#22d3ee', boxShadow: '0 0 0 1px #22d3ee' }}
-                                                                _hover={{ borderColor: '#475569' }}
+                                                                _hover={{ borderColor: inputHoverBorderColor }}
                                                                 borderRadius="8px"
                                                                 fontFamily="mono"
                                                                 fontSize="lg"
@@ -322,18 +349,19 @@ const TwoFactorSetupPage = () => {
                                     /* ── Email flow ── */
                                     <VStack spacing={6} align="stretch">
                                         <Box>
-                                            <Text fontFamily="heading" fontSize="xl" fontWeight="bold" color="gray.100" mb={2}>
+                                            <Text fontFamily="heading" fontSize="xl" fontWeight="bold" color={textHeadingColor} mb={2}>
                                                 Email Verification
                                             </Text>
-                                            <Text color="gray.400" fontSize="sm">
+                                            <Text color={textSubColor} fontSize="sm">
                                                 We'll send a verification code to your registered email address.
                                             </Text>
                                         </Box>
 
                                         {/* Masked email */}
                                         <Flex
-                                            bg="#0f172a"
-                                            border="1px solid #334155"
+                                            bg={boxSecondaryBg}
+                                            border="1px solid"
+                                            borderColor={cardBorderColor}
                                             borderRadius="8px"
                                             p={4}
                                             align="center"
@@ -368,7 +396,7 @@ const TwoFactorSetupPage = () => {
 
                                         {/* Code input */}
                                         <Box>
-                                            <Text fontSize="sm" fontWeight="500" color="gray.300" mb={3} textAlign="center">
+                                            <Text fontSize="sm" fontWeight="500" color={textDescColor} mb={3} textAlign="center">
                                                 Enter the 6-digit code from your email
                                             </Text>
                                             <Flex justify="center">
@@ -382,12 +410,12 @@ const TwoFactorSetupPage = () => {
                                                         {[...Array(6)].map((_, i) => (
                                                             <PinInputField
                                                                 key={i}
-                                                                bg="#0f172a"
+                                                                bg={inputBg}
                                                                 border="1px solid"
-                                                                borderColor="#334155"
-                                                                color="gray.100"
+                                                                borderColor={inputBorderColor}
+                                                                color={textHeadingColor}
                                                                 _focus={{ borderColor: '#22d3ee', boxShadow: '0 0 0 1px #22d3ee' }}
-                                                                _hover={{ borderColor: '#475569' }}
+                                                                _hover={{ borderColor: inputHoverBorderColor }}
                                                                 borderRadius="8px"
                                                                 fontFamily="mono"
                                                                 fontSize="lg"
@@ -429,11 +457,13 @@ const TwoFactorSetupPage = () => {
                             transition={transition}
                         >
                             <Box
-                                bg="#1e293b"
+                                bg={cardBg}
                                 borderRadius="12px"
                                 p={{ base: 8, md: 12 }}
-                                boxShadow="0 4px 20px rgba(0,0,0,0.4)"
-                                borderTop="3px solid #10b981"
+                                border="1px solid"
+                                borderColor={cardBorderColor}
+                                boxShadow={cardBoxShadow}
+                                borderTop="4px solid #10b981"
                                 textAlign="center"
                             >
                                 <Box
@@ -450,10 +480,10 @@ const TwoFactorSetupPage = () => {
                                     <CheckCircleIcon w={10} h={10} color="#10b981" />
                                 </Box>
 
-                                <Text fontFamily="heading" fontSize="2xl" fontWeight="bold" color="gray.100" mb={3}>
+                                <Text fontFamily="heading" fontSize="2xl" fontWeight="bold" color={textHeadingColor} mb={3}>
                                     Two-Factor Enabled!
                                 </Text>
-                                <Text color="gray.400" fontSize="sm" maxW="sm" mx="auto" mb={8} lineHeight="1.7">
+                                <Text color={textSubColor} fontSize="sm" maxW="sm" mx="auto" mb={8} lineHeight="1.7">
                                     Your account is now protected with two-factor authentication using{' '}
                                     <Text as="span" color="#22d3ee" fontWeight="600">
                                         {method === 'authenticator' ? 'Mobile Authenticator' : 'Email Verification'}

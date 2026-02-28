@@ -116,7 +116,7 @@ const EmailSentPage = () => {
                 h="48px"
                 bg="transparent"
                 border="1px solid"
-                borderColor="gray.600"
+                borderColor="var(--color-border)"
                 color="gray.400"
                 fontSize="sm"
                 borderRadius="8px"
@@ -134,7 +134,7 @@ const EmailSentPage = () => {
                 {countdown > 0 ? `Resend in ${countdown}s` : 'Resend Email'}
             </Button>
 
-            <Divider borderColor="gray.600" my={6} />
+            <Divider borderColor="var(--color-border)" my={6} />
 
             {/* Back to Login */}
             <Box textAlign="center">

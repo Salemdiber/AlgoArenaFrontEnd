@@ -15,6 +15,7 @@ import {
     IconButton,
     Icon,
     useToast,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -27,9 +28,9 @@ const MotionBox = motion.create(Box);
 
 /* Input style token */
 const inputStyles = {
-    bg: '#0f172a',
+    bg: 'var(--color-bg-primary)',
     border: '1px solid',
-    borderColor: '#334155',
+    borderColor: 'var(--color-border)',
     borderRadius: '6px',
     color: 'gray.100',
     py: '10px',
@@ -94,17 +95,17 @@ const ChangePasswordSection = () => {
             initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.5, delay: 0.2, ease: 'easeOut' }}
-            bg="#1e293b"
+            bg="var(--color-bg-secondary)"
             borderRadius="12px"
-            boxShadow="0 4px 20px rgba(0,0,0,0.4)"
+            boxShadow="var(--shadow-card)"
             borderTop="2px solid #22d3ee"
             p={{ base: 6, md: 8 }}
         >
             <Box mb={6}>
-                <Text fontFamily="heading" fontSize="lg" fontWeight="600" color="gray.100">
+                <Text fontFamily="heading" fontSize="lg" fontWeight="600" color={useColorModeValue("gray.800","gray.100")}>
                     Change Password
                 </Text>
-                <Text color="gray.400" fontSize="sm" mt={1}>
+                <Text color={useColorModeValue("gray.500","gray.400")} fontSize="sm" mt={1}>
                     Ensure your account stays secure with a strong password.
                 </Text>
             </Box>
@@ -112,7 +113,7 @@ const ChangePasswordSection = () => {
             <Flex direction="column" gap={5}>
                 {/* Current Password */}
                 <Box>
-                    <Text fontSize="sm" fontWeight="500" color="gray.300" mb="6px">
+                    <Text fontSize="sm" fontWeight="500" color={useColorModeValue("gray.600","gray.300")} mb="6px">
                         Current Password
                     </Text>
                     <InputGroup>
@@ -139,7 +140,7 @@ const ChangePasswordSection = () => {
 
                 {/* New Password */}
                 <Box>
-                    <Text fontSize="sm" fontWeight="500" color="gray.300" mb="6px">
+                    <Text fontSize="sm" fontWeight="500" color={useColorModeValue("gray.600","gray.300")} mb="6px">
                         New Password
                     </Text>
                     <InputGroup>
@@ -178,7 +179,7 @@ const ChangePasswordSection = () => {
 
                 {/* Confirm Password */}
                 <Box>
-                    <Text fontSize="sm" fontWeight="500" color="gray.300" mb="6px">
+                    <Text fontSize="sm" fontWeight="500" color={useColorModeValue("gray.600","gray.300")} mb="6px">
                         Confirm New Password
                     </Text>
                     <InputGroup>

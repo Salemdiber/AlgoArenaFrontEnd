@@ -83,7 +83,7 @@ const ResetExpiredPage = () => {
                 Request New Reset Link
             </Button>
 
-            <Divider borderColor="gray.600" my={6} />
+            <Divider borderColor="var(--color-border)" my={6} />
 
             {/* Back to Login */}
             <Button

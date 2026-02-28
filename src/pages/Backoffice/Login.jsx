@@ -60,17 +60,17 @@ const Login = () => {
                     <div className="flex justify-center mb-4">
                         <img src={Logo} alt="AlgoArena" className="h-12 w-auto drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]" />
                     </div>
-                    <p className="text-gray-400">Admin Dashboard</p>
+                    <p style={{ color: 'var(--color-text-muted)' }} className="">Admin Dashboard</p>
                 </div>
 
                 {/* Login Card */}
                 <div className="glass-panel rounded-2xl p-8 shadow-custom-hover animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                    <h2 className="font-heading text-2xl font-bold text-gray-100 mb-6">Welcome Back</h2>
+                    <h2 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-2xl font-bold  mb-6">Welcome Back</h2>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* Email Field */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                            <label style={{ color: 'var(--color-text-secondary)' }} className="block text-sm font-medium  mb-2">Email Address</label>
                             <div className="relative">
                                 <input
                                     type="email"
@@ -88,7 +88,7 @@ const Login = () => {
 
                         {/* Password Field */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                            <label style={{ color: 'var(--color-text-secondary)' }} className="block text-sm font-medium  mb-2">Password</label>
                             <div className="relative">
                                 <input
                                     type={showPassword ? 'text' : 'password'}
@@ -104,7 +104,7 @@ const Login = () => {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors focus:outline-none"
+                                    style={{ color: 'var(--color-text-secondary)' }} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover: transition-colors focus:outline-none"
                                 >
                                     {showPassword ? (
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,16 +132,16 @@ const Login = () => {
                                     />
                                     <div className={`w-5 h-5 rounded border-2 transition-all duration-200 flex items-center justify-center ${rememberMe
                                         ? 'bg-gradient-to-br from-cyan-400 to-cyan-600 border-cyan-400'
-                                        : 'border-gray-600 bg-[#0f172a] group-hover:border-cyan-400/50'
+                                        : 'border-(--color-border) bg-(--color-bg-input) group-hover:border-cyan-400/50'
                                         }`}>
                                         {rememberMe && (
-                                            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg style={{ color: 'var(--color-text-heading)' }} className="w-3 h-3 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                                             </svg>
                                         )}
                                     </div>
                                 </div>
-                                <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">Remember me</span>
+                                <span style={{ color: 'var(--color-text-muted)' }} style={{ color: 'var(--color-text-secondary)' }} className="text-sm  group-hover: transition-colors">Remember me</span>
                             </label>
                             <a href="#" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">Forgot password?</a>
                         </div>
@@ -180,10 +180,10 @@ const Login = () => {
                     {/* Divider */}
                     <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-gray-700" />
+                            <div className="w-full border-t " />
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span className="px-4 bg-[#1e293b] text-gray-400">Or continue with</span>
+                            <span style={{ color: 'var(--color-text-muted)' }} className="px-4 bg-(--color-bg-secondary) ">Or continue with</span>
                         </div>
                     </div>
 
@@ -203,7 +203,7 @@ const Login = () => {
                         </button>
                     </div>
                     {/* Footer */}
-                    <div className="mt-8 pt-6 border-t border-gray-700/50 text-center">
+                    <div className="mt-8 pt-6 border-t  text-center">
                         <p className="text-sm text-gray-500">
                             Secure admin access powered by <span className="text-cyan-400 font-medium">AlgoArena</span>
                         </p>

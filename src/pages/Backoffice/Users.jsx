@@ -66,7 +66,7 @@ const EditUserModal = ({ user, onClose, onSave }) => {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
             <div className="glass-panel rounded-2xl p-6 w-full max-w-lg shadow-custom animate-fade-in-up max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-                <h2 className="text-xl font-bold text-gray-100 mb-4">Edit User</h2>
+                <h2 style={{ color: 'var(--color-text-heading)' }} className="text-xl font-bold  mb-4">Edit User</h2>
                 {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Avatar */}
@@ -83,7 +83,7 @@ const EditUserModal = ({ user, onClose, onSave }) => {
                                 </div>
                             )}
                             <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg style={{ color: 'var(--color-text-heading)' }} className="w-5 h-5 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
@@ -95,29 +95,29 @@ const EditUserModal = ({ user, onClose, onSave }) => {
 
                     {/* Username */}
                     <div>
-                        <label className="block text-sm text-gray-400 mb-1">Username</label>
+                        <label style={{ color: 'var(--color-text-muted)' }} className="block text-sm  mb-1">Username</label>
                         <input name="username" value={form.username} onChange={handleChange} className="search-input w-full" required />
                     </div>
 
                     {/* Email */}
                     <div>
-                        <label className="block text-sm text-gray-400 mb-1">Email</label>
+                        <label style={{ color: 'var(--color-text-muted)' }} className="block text-sm  mb-1">Email</label>
                         <input name="email" type="email" value={form.email} onChange={handleChange} className="search-input w-full" required />
                     </div>
 
                     {/* Role + Status row */}
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm text-gray-400 mb-1">Role</label>
-                            <select name="role" value={form.role} onChange={handleChange} className="form-select w-full bg-[#0f172a]">
+                            <label style={{ color: 'var(--color-text-muted)' }} className="block text-sm  mb-1">Role</label>
+                            <select name="role" value={form.role} onChange={handleChange} className="form-select w-full bg-(--color-bg-input)">
                                 <option value="Player">Player</option>
                                 <option value="Admin">Admin</option>
                                 <option value="Premium">Premium</option>
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm text-gray-400 mb-1">Status</label>
-                            <select name="status" value={String(form.status)} onChange={handleChange} className="form-select w-full bg-[#0f172a]">
+                            <label style={{ color: 'var(--color-text-muted)' }} className="block text-sm  mb-1">Status</label>
+                            <select name="status" value={String(form.status)} onChange={handleChange} className="form-select w-full bg-(--color-bg-input)">
                                 <option value="true">Active</option>
                                 <option value="false">Offline</option>
                             </select>
@@ -126,7 +126,7 @@ const EditUserModal = ({ user, onClose, onSave }) => {
 
                     {/* Bio */}
                     <div>
-                        <label className="block text-sm text-gray-400 mb-1">Bio</label>
+                        <label style={{ color: 'var(--color-text-muted)' }} className="block text-sm  mb-1">Bio</label>
                         <textarea
                             name="bio"
                             value={form.bio}
@@ -159,8 +159,8 @@ const ConfirmDeleteModal = ({ user, onClose, onConfirm, deleting }) => (
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
             </div>
-            <h2 className="text-lg font-bold text-gray-100 mb-2">Delete User</h2>
-            <p className="text-gray-400 text-sm mb-5">
+            <h2 style={{ color: 'var(--color-text-heading)' }} className="text-lg font-bold  mb-2">Delete User</h2>
+            <p style={{ color: 'var(--color-text-muted)' }} className=" text-sm mb-5">
                 Are you sure you want to delete <span className="text-cyan-400 font-semibold">@{user.username}</span>? This action cannot be undone.
             </p>
             <div className="flex justify-center gap-3">
@@ -182,7 +182,7 @@ const UserRow = ({ username, email, role, _id, status, avatar, bio, onEdit, onDe
     const name = username;
 
     return (
-        <tr className="table-row-hover border-b border-gray-800 transition-colors">
+        <tr className="table-row-hover border-b  transition-colors">
             <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center gap-3">
                     {avatar ? (
@@ -197,12 +197,12 @@ const UserRow = ({ username, email, role, _id, status, avatar, bio, onEdit, onDe
                         </div>
                     )}
                     <div>
-                        <p className="text-sm font-medium text-gray-200">@{username}</p>
-                        <p className="text-xs text-gray-400">{name}</p>
+                        <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm font-medium ">@{username}</p>
+                        <p style={{ color: 'var(--color-text-muted)' }} className="text-xs ">{name}</p>
                     </div>
                 </div>
             </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{email}</td>
+            <td style={{ color: 'var(--color-text-secondary)' }} className="px-6 py-4 whitespace-nowrap text-sm ">{email}</td>
             <td className="px-6 py-4 whitespace-nowrap">
                 <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${role === 'Admin' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
                     role === 'Premium' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' :
@@ -211,7 +211,7 @@ const UserRow = ({ username, email, role, _id, status, avatar, bio, onEdit, onDe
                     {role}
                 </span>
             </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{rank}</td>
+            <td style={{ color: 'var(--color-text-secondary)' }} className="px-6 py-4 whitespace-nowrap text-sm ">{rank}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-cyan-400">{score}</td>
             <td className="px-6 py-4 whitespace-nowrap">
                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${displayStatus === 'Active' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
@@ -376,8 +376,8 @@ const Users = () => {
         <div className="space-y-6 animate-fade-in-up">
             {/* Page Header */}
             <div className="mb-6">
-                <h1 className="font-heading text-3xl font-bold text-gray-100 mb-2">User Management</h1>
-                <p className="text-gray-400">Manage platform users and their permissions</p>
+                <h1 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-3xl font-bold  mb-2">User Management</h1>
+                <p style={{ color: 'var(--color-text-muted)' }} className="">Manage platform users and their permissions</p>
             </div>
 
             {/* Filters */}
@@ -396,7 +396,7 @@ const Users = () => {
                         </svg>
                     </div>
                     <select
-                        className="form-select w-full md:w-40 bg-[#0f172a]"
+                        className="form-select w-full md:w-40 bg-(--color-bg-input)"
                         value={roleFilter}
                         onChange={(e) => setRoleFilter(e.target.value)}
                     >
@@ -406,7 +406,7 @@ const Users = () => {
                         <option value="Premium">Premium</option>
                     </select>
                     <select
-                        className="form-select w-full md:w-40 bg-[#0f172a]"
+                        className="form-select w-full md:w-40 bg-(--color-bg-input)"
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
                     >
@@ -427,15 +427,15 @@ const Users = () => {
             <div className="glass-panel rounded-2xl shadow-custom overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-[#0b1220]/50 border-b border-gray-700/50">
+                        <thead className="bg-(--color-bg-sidebar)/50 border-b ">
                             <tr>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">User</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Email</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Role</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Rank</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Score</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
+                                <th style={{ color: 'var(--color-text-muted)' }} className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">User</th>
+                                <th style={{ color: 'var(--color-text-muted)' }} className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">Email</th>
+                                <th style={{ color: 'var(--color-text-muted)' }} className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">Role</th>
+                                <th style={{ color: 'var(--color-text-muted)' }} className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">Rank</th>
+                                <th style={{ color: 'var(--color-text-muted)' }} className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">Score</th>
+                                <th style={{ color: 'var(--color-text-muted)' }} className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">Status</th>
+                                <th style={{ color: 'var(--color-text-muted)' }} className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-800/50">
@@ -460,8 +460,8 @@ const Users = () => {
                 </div>
 
                 {/* Pagination */}
-                <div className="flex flex-col md:flex-row items-center justify-between px-6 py-4 border-t border-gray-700/50 gap-4">
-                    <p className="text-sm text-gray-400">
+                <div className="flex flex-col md:flex-row items-center justify-between px-6 py-4 border-t  gap-4">
+                    <p style={{ color: 'var(--color-text-muted)' }} className="text-sm ">
                         {filteredUsers.length === 0
                             ? 'No results'
                             : `Showing ${startIndex} to ${endIndex} of ${filteredUsers.length} users`}

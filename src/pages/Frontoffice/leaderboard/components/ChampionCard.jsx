@@ -56,7 +56,7 @@ const ChampionCard = ({ player }) => {
                 p={8}
                 pt={16}
                 mt={20}
-                bg="linear-gradient(135deg, #1e293b 0%, #0f172a 100%)"
+                bg="linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%)"
                 border="2px solid #22d3ee"
                 transform="scale(1.05)"
                 cursor="pointer"
@@ -154,7 +154,7 @@ const ChampionCard = ({ player }) => {
                         fontFamily="heading"
                         fontSize={{ base: '2xl', md: '3xl' }}
                         fontWeight="black"
-                        color="white"
+                        color="var(--color-text-primary)"
                         letterSpacing="tight"
                         mb={2}
                     >
@@ -205,10 +205,10 @@ const ChampionCard = ({ player }) => {
                             textAlign="center"
                             p={4}
                             borderRadius="6px"
-                            bg="rgba(15, 23, 42, 0.5)"
-                            border="1px solid rgba(34, 211, 238, 0.2)"
+                            bg="var(--color-bg-elevated)"
+                            border="1px solid var(--color-glass-border-strong)"
                         >
-                            <Text fontFamily="heading" fontSize="3xl" fontWeight="black" color="white">
+                            <Text fontFamily="heading" fontSize="3xl" fontWeight="black" color="var(--color-text-primary)">
                                 {player.wins}
                             </Text>
                             <Text fontFamily="body" fontSize="xs" color="gray.400" textTransform="uppercase" letterSpacing="wider">
@@ -219,10 +219,10 @@ const ChampionCard = ({ player }) => {
                             textAlign="center"
                             p={4}
                             borderRadius="6px"
-                            bg="rgba(15, 23, 42, 0.5)"
-                            border="1px solid rgba(34, 211, 238, 0.2)"
+                            bg="var(--color-bg-elevated)"
+                            border="1px solid var(--color-glass-border-strong)"
                         >
-                            <Text fontFamily="heading" fontSize="3xl" fontWeight="black" color="#10b981">
+                            <Text fontFamily="heading" fontSize="3xl" fontWeight="black" color="var(--color-green-500)">
                                 {player.winRate}%
                             </Text>
                             <Text fontFamily="body" fontSize="xs" color="gray.400" textTransform="uppercase" letterSpacing="wider">

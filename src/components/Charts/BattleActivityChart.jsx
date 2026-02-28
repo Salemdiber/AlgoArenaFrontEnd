@@ -27,10 +27,10 @@ const options = {
             display: false,
         },
         tooltip: {
-            backgroundColor: '#1e293b',
+            backgroundColor: 'var(--color-bg-secondary)',
             titleColor: '#e2e8f0',
             bodyColor: '#94a3b8',
-            borderColor: '#334155',
+            borderColor: 'var(--color-border)',
             borderWidth: 1,
             padding: 10,
         },

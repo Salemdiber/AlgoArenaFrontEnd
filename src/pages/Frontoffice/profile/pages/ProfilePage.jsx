@@ -12,7 +12,7 @@
  *   bg: #0f172a, subtle cyan grid overlay.
  */
 import React, { useRef, useState } from 'react';
-import { Box, Text, Button, VStack, Flex, useDisclosure, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, Input, useToast } from '@chakra-ui/react';
+import { Box, Text, Button, VStack, Flex, useDisclosure, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, Input, useToast , useColorModeValue } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 
@@ -62,7 +62,7 @@ const ProfilePage = () => {
             pt={{ base: 24, md: 28 }}
             pb={{ base: 10, md: 16 }}
             px={{ base: 4, sm: 6, lg: 8 }}
-            bg="#0f172a"
+            bg="var(--color-bg-primary)"
             bgImage="linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px)"
             bgSize="50px 50px"
             position="relative"
@@ -75,12 +75,12 @@ const ProfilePage = () => {
                         fontFamily="heading"
                         fontSize={{ base: '2xl', md: '3xl' }}
                         fontWeight="bold"
-                        color="gray.100"
+                        color={useColorModeValue("gray.800","gray.100")}
                         mb={2}
                     >
                         Account Settings
                     </Text>
-                    <Text color="gray.400" fontSize={{ base: 'sm', md: 'md' }}>
+                    <Text color={useColorModeValue("gray.500","gray.400")} fontSize={{ base: 'sm', md: 'md' }}>
                         Manage your profile, security, and authentication
                     </Text>
                 </Box>
@@ -107,7 +107,7 @@ const ProfilePage = () => {
                         <Text fontFamily="heading" color="#ef4444" fontWeight="600" fontSize="lg" mb={2}>
                             Danger Zone
                         </Text>
-                        <Text color="gray.400" fontSize="sm" mb={6}>
+                        <Text color={useColorModeValue("gray.500","gray.400")} fontSize="sm" mb={6}>
                             Once you delete your account, there is no going back. Please be certain.
                         </Text>
                         <Button
@@ -134,7 +134,7 @@ const ProfilePage = () => {
                 isCentered
             >
                 <AlertDialogOverlay>
-                    <AlertDialogContent bg="#1e293b" color="gray.100" border="1px solid" borderColor="gray.600">
+                    <AlertDialogContent bg="var(--color-bg-secondary)" color={useColorModeValue("gray.800","gray.100")} border="1px solid" borderColor="var(--color-border)">
                         <AlertDialogHeader fontSize="lg" fontWeight="bold">
                             Delete Account
                         </AlertDialogHeader>
@@ -148,8 +148,8 @@ const ProfilePage = () => {
                                 value={deletePassword}
                                 onChange={(e) => setDeletePassword(e.target.value)}
                                 placeholder="Enter password"
-                                bg="#0f172a"
-                                borderColor="#334155"
+                                bg="var(--color-bg-primary)"
+                                borderColor="var(--color-border)"
                                 _focus={{ borderColor: '#ef4444', boxShadow: '0 0 0 1px #ef4444' }}
                             />
                         </AlertDialogBody>

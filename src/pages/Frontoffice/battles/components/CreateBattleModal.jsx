@@ -72,7 +72,7 @@ const CreateBattleModal = () => {
                     <h2 className="battle-text-2xl battle-font-bold">Create New Battle</h2>
                     <button
                         onClick={closeCreateModal}
-                        style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '1.5rem' }}
+                        style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', fontSize: '1.5rem' }}
                     >
                         ×
                     </button>
@@ -89,7 +89,7 @@ const CreateBattleModal = () => {
                                 <span
                                     className="battle-text-xs"
                                     style={{
-                                        color: i + 1 === step ? '#22d3ee' : '#94a3b8',
+                                        color: i + 1 === step ? 'var(--color-cyan-400)' : 'var(--color-text-muted)',
                                         fontWeight: i + 1 === step ? 600 : 400,
                                         marginTop: '0.5rem',
                                     }}
@@ -117,7 +117,7 @@ const CreateBattleModal = () => {
                 )}
 
                 {/* Footer Actions */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', paddingTop: '1rem', borderTop: '1px solid #334155', marginTop: '1.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)', marginTop: '1.5rem' }}>
                     {step > 1 ? (
                         <button className="battle-btn battle-btn--secondary" onClick={handleBack}>← Back</button>
                     ) : (
@@ -181,9 +181,9 @@ const StepMode = ({ mode, setCreateMode, aiBattlesEnabled }) => (
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em',
                         borderRadius: '9999px',
-                        background: 'rgba(239,68,68,0.15)',
-                        color: '#f87171',
-                        border: '1px solid rgba(239,68,68,0.3)',
+                        background: 'var(--color-error-bg)',
+                        color: 'var(--color-red-500)',
+                        border: '1px solid var(--color-red-500)',
                     }}>Disabled</span>
                 )}
             </div>
@@ -259,7 +259,7 @@ const StepConfirm = ({ mode, totalRounds, difficulty, timeLimit }) => {
     return (
         <div>
             <h3 className="battle-text-lg battle-font-semibold battle-mb-md">Confirm Battle</h3>
-            <div className="battle-card" style={{ border: '1px solid #334155' }}>
+            <div className="battle-card" style={{ border: '1px solid var(--color-border)' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     <div className="battle-flex-between">
                         <span className="battle-text-muted">Mode</span>
@@ -271,7 +271,7 @@ const StepConfirm = ({ mode, totalRounds, difficulty, timeLimit }) => {
                     </div>
                     <div className="battle-flex-between">
                         <span className="battle-text-muted">Difficulty</span>
-                        <span className="battle-font-semibold" style={{ color: difficulty === 'HARD' ? '#ef4444' : difficulty === 'EASY' ? '#22c55e' : '#facc15' }}>
+                        <span className="battle-font-semibold" style={{ color: difficulty === 'HARD' ? 'var(--color-red-500)' : difficulty === 'EASY' ? 'var(--color-green-500)' : 'var(--color-yellow-500)' }}>
                             {difficulty}
                         </span>
                     </div>
@@ -282,7 +282,7 @@ const StepConfirm = ({ mode, totalRounds, difficulty, timeLimit }) => {
                 </div>
             </div>
 
-            <div style={{ marginTop: '1.25rem', padding: '1rem', background: 'rgba(34, 211, 238, 0.08)', borderRadius: '12px', border: '1px solid rgba(34, 211, 238, 0.2)' }}>
+            <div style={{ marginTop: '1.25rem', padding: '1rem', background: 'var(--color-info-bg)', borderRadius: '12px', border: '1px solid var(--color-glass-border-strong)' }}>
                 <p className="battle-text-sm battle-text-cyan">
                     {mode === BattleMode.ONE_VS_AI
                         ? '🤖 You will immediately enter the battle against the AI.'

@@ -106,8 +106,8 @@ const Settings = () => {
     return (
         <div className="space-y-6 animate-fade-in-up">
             <div className="mb-6">
-                <h1 className="font-heading text-3xl font-bold text-gray-100 mb-2">Platform Settings</h1>
-                <p className="text-gray-400">Configure system preferences and platform behavior</p>
+                <h1 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-3xl font-bold  mb-2">Platform Settings</h1>
+                <p style={{ color: 'var(--color-text-muted)' }} className="">Configure system preferences and platform behavior</p>
             </div>
 
             {/* Feedback banners */}
@@ -127,7 +127,7 @@ const Settings = () => {
                 {/* Settings Nav */}
                 <div className="lg:col-span-1">
                     <div className="glass-panel rounded-2xl p-6 shadow-custom sticky top-24">
-                        <h2 className="font-heading text-xl font-bold text-gray-100 mb-4">Settings Menu</h2>
+                        <h2 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-xl font-bold  mb-4">Settings Menu</h2>
                         <nav className="space-y-2">
                             <NavButton active icon="general">General</NavButton>
                             <NavButton icon="security">Security</NavButton>
@@ -141,28 +141,28 @@ const Settings = () => {
                 {/* Content Area */}
                 <div className="lg:col-span-2">
                     <div className="glass-panel rounded-2xl p-6 shadow-custom">
-                        <h2 className="font-heading text-xl font-bold text-gray-100 mb-6">General Settings</h2>
+                        <h2 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-xl font-bold  mb-6">General Settings</h2>
 
                         <div className="space-y-6">
 
                             {/* Platform Info */}
                             <div>
-                                <h3 className="font-heading text-lg font-semibold text-gray-100 mb-4">Platform Information</h3>
+                                <h3 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-lg font-semibold  mb-4">Platform Information</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">Platform Name</label>
+                                        <label style={{ color: 'var(--color-text-secondary)' }} className="block text-sm font-medium  mb-2">Platform Name</label>
                                         <input type="text" defaultValue="AlgoArena" className="form-input w-full" />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">Support Email</label>
+                                        <label style={{ color: 'var(--color-text-secondary)' }} className="block text-sm font-medium  mb-2">Support Email</label>
                                         <input type="email" defaultValue="support@algoarena.com" className="form-input w-full" />
                                     </div>
                                 </div>
                             </div>
 
                             {/* Toggles */}
-                            <div className="pt-6 border-t border-gray-700/50">
-                                <h3 className="font-heading text-lg font-semibold text-gray-100 mb-4">Feature Toggles</h3>
+                            <div className="pt-6 border-t ">
+                                <h3 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-lg font-semibold  mb-4">Feature Toggles</h3>
                                 <div className="space-y-4">
                                     <ToggleItem
                                         title="User Registration"
@@ -186,11 +186,11 @@ const Settings = () => {
                             </div>
 
                             {/* Rate Limits */}
-                            <div className="pt-6 border-t border-gray-700/50">
-                                <h3 className="font-heading text-lg font-semibold text-gray-100 mb-4">Rate Limits</h3>
+                            <div className="pt-6 border-t ">
+                                <h3 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-lg font-semibold  mb-4">Rate Limits</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">API Requests per Hour</label>
+                                        <label style={{ color: 'var(--color-text-secondary)' }} className="block text-sm font-medium  mb-2">API Requests per Hour</label>
                                         <input
                                             type="number"
                                             min="1"
@@ -200,7 +200,7 @@ const Settings = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">Code Executions per Day</label>
+                                        <label style={{ color: 'var(--color-text-secondary)' }} className="block text-sm font-medium  mb-2">Code Executions per Day</label>
                                         <input
                                             type="number"
                                             min="1"
@@ -213,7 +213,7 @@ const Settings = () => {
                             </div>
 
                             {/* Actions */}
-                            <div className="flex items-center gap-4 pt-6 mt-6 border-t border-gray-700/50">
+                            <div className="flex items-center gap-4 pt-6 mt-6 border-t ">
                                 <button className="btn-primary" onClick={handleSaveAll} disabled={saving}>
                                     {saving ? 'Saving...' : 'Save Changes'}
                                 </button>
@@ -241,7 +241,7 @@ const NavButton = ({ active, icon, children }) => {
     };
 
     return (
-        <a href="#" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all spotlight-hover ${active ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-gray-300 hover:bg-[#0f172a]'}`}>
+        <a href="#" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all spotlight-hover ${active ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-gray-300 hover:bg-(--color-bg-input)'}`}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {icons[icon]}
             </svg>
@@ -253,12 +253,12 @@ const NavButton = ({ active, icon, children }) => {
 const ToggleItem = ({ title, description, checked, onChange }) => {
     return (
         <div
-            className="flex items-center justify-between p-4 bg-[#0f172a] rounded-lg cursor-pointer hover:bg-[#152033] transition-colors border border-gray-800 hover:border-gray-700 group"
+            className="flex items-center justify-between p-4 bg-(--color-bg-input) rounded-lg cursor-pointer hover:bg-(--color-bg-elevated) transition-colors border  hover: group"
             onClick={onChange}
         >
             <div>
-                <p className="font-medium text-gray-200 group-hover:text-cyan-400 transition-colors">{title}</p>
-                <p className="text-sm text-gray-400">{description}</p>
+                <p style={{ color: 'var(--color-text-secondary)' }} className="font-medium  group-hover:text-cyan-400 transition-colors">{title}</p>
+                <p style={{ color: 'var(--color-text-muted)' }} className="text-sm ">{description}</p>
             </div>
             <div className={`toggle-switch ${checked ? 'active' : ''}`} />
         </div>

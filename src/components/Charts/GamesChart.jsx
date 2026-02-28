@@ -27,7 +27,7 @@ const options = {
             display: false,
         },
         tooltip: {
-            backgroundColor: '#1e293b',
+            backgroundColor: 'var(--color-bg-secondary)',
             titleColor: '#f3f4f6',
             bodyColor: '#cbd5e1',
             borderColor: '#374151',
