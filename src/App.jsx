@@ -46,6 +46,9 @@ import { settingsService } from './services/settingsService';
 const ChallengesListPage = lazy(() => import('./pages/Frontoffice/challenges/pages/ChallengesListPage'));
 const ChallengePlayPage = lazy(() => import('./pages/Frontoffice/challenges/pages/ChallengePlayPage'));
 
+// Frontoffice Speed Challenge
+const SpeedChallengePage = lazy(() => import('./pages/Frontoffice/speedchallenge/SpeedChallengePage'));
+
 // Frontoffice Leaderboard
 const LeaderboardPage = lazy(() => import('./pages/Frontoffice/leaderboard/pages/LeaderboardPage'));
 
@@ -161,45 +164,48 @@ function App() {
                   <ProfileProvider>
                     <Suspense fallback={<RouteLoader />}>
                       <MaintenanceGate>
-                      <Routes>
-                        {/* Public Routes */}
-                        <Route element={<PublicLayout />}>
-                          <Route path="/" element={<LandingPage />} />
-                          <Route path="/battles" element={<BattleListPage />} />
-                          <Route path="/battles/:id" element={<ActiveBattlePage />} />
-                          <Route path="/battles/:id/summary" element={<BattleSummaryPage />} />
-                          <Route path="/challenges" element={<ChallengesListPage />} />
+                        <Routes>
+                          {/* Public Routes with global header+footer */}
+                          <Route element={<PublicLayout />}>
+                            <Route path="/" element={<LandingPage />} />
+                            <Route path="/battles" element={<BattleListPage />} />
+                            <Route path="/battles/:id" element={<ActiveBattlePage />} />
+                            <Route path="/battles/:id/summary" element={<BattleSummaryPage />} />
+                            <Route path="/challenges" element={<ChallengesListPage />} />
+                            <Route path="/leaderboard" element={<LeaderboardPage />} />
+                            <Route path="/profile" element={<ProfilePage />} />
+                            <Route path="/speed-challenge" element={<SpeedChallengePage />} />
+                            <Route path="/profile/2fa-setup" element={<TwoFactorSetupPage />} />
+                          </Route>
+
+                          {/* Challenge play page – full-screen, no global header/footer */}
                           <Route path="/challenges/:id" element={<ChallengePlayPage />} />
-                          <Route path="/leaderboard" element={<LeaderboardPage />} />
-                          <Route path="/profile" element={<ProfilePage />} />
-                          <Route path="/profile/2fa-setup" element={<TwoFactorSetupPage />} />
-                        </Route>
-                        <Route path="/login" element={<Navigate to="/signin" replace />} />
-                        <Route path="/signin" element={<SignIn />} />
-                        <Route path="/signup" element={<SignUp />} />
-                        <Route path="/auth/callback" element={<OAuthCallbackPage />} />
-                        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                        <Route path="/email-sent" element={<EmailSentPage />} />
-                        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-                        <Route path="/reset-success" element={<ResetSuccessPage />} />
-                        <Route path="/reset-expired" element={<ResetExpiredPage />} />
-                        <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
-                          <Route index element={<Dashboard />} />
-                          <Route path="users" element={<Users />} />
-                          <Route path="battles" element={<Battles />} />
-                          <Route path="challenges" element={<Challenges />} />
-                          <Route path="ai-logs" element={<AILogs />} />
-                          <Route path="leaderboards" element={<Leaderboards />} />
-                          <Route path="analytics" element={<Analytics />} />
-                          <Route path="system-health" element={<SystemHealth />} />
-                          <Route path="settings" element={<Settings />} />
-                          <Route path="sessions" element={<Sessions />} />
-                          <Route path="profile" element={<Profile />} />
-                          <Route path="add-admin" element={<AddAdmin />} />
+                          <Route path="/login" element={<Navigate to="/signin" replace />} />
+                          <Route path="/signin" element={<SignIn />} />
+                          <Route path="/signup" element={<SignUp />} />
+                          <Route path="/auth/callback" element={<OAuthCallbackPage />} />
+                          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                          <Route path="/email-sent" element={<EmailSentPage />} />
+                          <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+                          <Route path="/reset-success" element={<ResetSuccessPage />} />
+                          <Route path="/reset-expired" element={<ResetExpiredPage />} />
+                          <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+                            <Route index element={<Dashboard />} />
+                            <Route path="users" element={<Users />} />
+                            <Route path="battles" element={<Battles />} />
+                            <Route path="challenges" element={<Challenges />} />
+                            <Route path="ai-logs" element={<AILogs />} />
+                            <Route path="leaderboards" element={<Leaderboards />} />
+                            <Route path="analytics" element={<Analytics />} />
+                            <Route path="system-health" element={<SystemHealth />} />
+                            <Route path="settings" element={<Settings />} />
+                            <Route path="sessions" element={<Sessions />} />
+                            <Route path="profile" element={<Profile />} />
+                            <Route path="add-admin" element={<AddAdmin />} />
+                            <Route path="*" element={<NotFoundPage />} />
+                          </Route>
                           <Route path="*" element={<NotFoundPage />} />
-                        </Route>
-                        <Route path="*" element={<NotFoundPage />} />
-                      </Routes>
+                        </Routes>
                       </MaintenanceGate>
                     </Suspense>
                   </ProfileProvider>

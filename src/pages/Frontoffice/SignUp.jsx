@@ -113,6 +113,7 @@ const SignUp = () => {
             const token = await getReCaptchaV3Token(RECAPTCHA_SITE_KEY, 'signup');
             setRecaptchaToken(token);
             await signup(username, email, password, token, avatarUrl);
+            localStorage.setItem('sc_pending', 'true'); // trigger Speed Challenge after login
             navigate('/signin');
         } catch (err) {
             // error handled by toast in AuthContext

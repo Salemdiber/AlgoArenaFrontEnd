@@ -14,6 +14,18 @@ export const userService = {
         });
     },
 
+    /**
+     * Persist the Speed Challenge placement result to the user profile.
+     * Called once right after the challenge finishes.
+     * @param {{ rank: string, xp: number, level?: string }} data
+     */
+    updatePlacement: async (data) => {
+        return apiClient('/user/me/placement', {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+        });
+    },
+
     updateProfile: async (data) => {
         // PATCH /user/me
         // data: { username?, email?, bio? }

@@ -110,6 +110,8 @@ const ChallengePlayPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
+            h="100vh"
+            bg="#0f172a"
             minH="100vh"
             maxH="100vh"
             bg="var(--color-bg-primary)"
@@ -117,7 +119,7 @@ const ChallengePlayPage = () => {
             flexDirection="column"
             overflow="hidden"
         >
-            {/* Top nav bar */}
+            {/* Top nav bar – chrono + submit */}
             <ChallengeHeader />
 
             {/* Mobile problem drawer toggle */}
