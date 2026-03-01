@@ -173,13 +173,21 @@ const ConfirmDeleteModal = ({ user, onClose, onConfirm, deleting }) => (
     </div>
 );
 
+// ── Rank palette (mirrors Header.jsx) ────────────────────────────────────
+const RANK_STYLE = {
+    BRONZE: { emoji: '🥉', color: '#cd7f32', bg: 'rgba(205,127,50,0.12)', border: 'rgba(205,127,50,0.3)' },
+    SILVER: { emoji: '🥈', color: '#c0c0c0', bg: 'rgba(192,192,192,0.1)', border: 'rgba(192,192,192,0.25)' },
+    GOLD: { emoji: '🥇', color: '#facc15', bg: 'rgba(250,204,21,0.1)', border: 'rgba(250,204,21,0.3)' },
+    PLATINUM: { emoji: '🔷', color: '#22d3ee', bg: 'rgba(34,211,238,0.1)', border: 'rgba(34,211,238,0.3)' },
+    DIAMOND: { emoji: '💎', color: '#a855f7', bg: 'rgba(168,85,247,0.12)', border: 'rgba(168,85,247,0.3)' },
+};
+
 // ── User Row ────────────────────────────────────────────────────────────
-const UserRow = ({ username, email, role, _id, status, avatar, bio, onEdit, onDelete }) => {
+const UserRow = ({ username, email, role, _id, status, avatar, bio, rank, xp, onEdit, onDelete }) => {
     const firstLetter = username ? username.charAt(0).toUpperCase() : 'U';
     const displayStatus = status ? 'Active' : 'Offline';
-    const rank = '#N/A';
-    const score = '0';
-    const name = username;
+    const rankKey = String(rank || '').toUpperCase();
+    const rankMeta = RANK_STYLE[rankKey];
 
     return (
         <tr className="table-row-hover border-b border-gray-800 transition-colors">
@@ -188,7 +196,7 @@ const UserRow = ({ username, email, role, _id, status, avatar, bio, onEdit, onDe
                     {avatar ? (
                         <img
                             src={avatar.startsWith('uploads/') ? `/${avatar}` : avatar}
-                            alt={name}
+                            alt={username}
                             className="w-10 h-10 rounded-full border-2 border-cyan-400 object-cover"
                         />
                     ) : (
@@ -198,7 +206,7 @@ const UserRow = ({ username, email, role, _id, status, avatar, bio, onEdit, onDe
                     )}
                     <div>
                         <p className="text-sm font-medium text-gray-200">@{username}</p>
-                        <p className="text-xs text-gray-400">{name}</p>
+                        <p className="text-xs text-gray-400">{username}</p>
                     </div>
                 </div>
             </td>
@@ -211,8 +219,45 @@ const UserRow = ({ username, email, role, _id, status, avatar, bio, onEdit, onDe
                     {role}
                 </span>
             </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{rank}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-cyan-400">{score}</td>
+
+            {/* ── Rank badge ── */}
+            <td className="px-6 py-4 whitespace-nowrap">
+                {rankMeta ? (
+                    <span
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '5px',
+                            padding: '2px 10px',
+                            borderRadius: '8px',
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            fontFamily: 'monospace',
+                            color: rankMeta.color,
+                            background: rankMeta.bg,
+                            border: `1px solid ${rankMeta.border}`,
+                        }}
+                    >
+                        <span style={{ fontSize: '13px' }}>{rankMeta.emoji}</span>
+                        {rankKey}
+                    </span>
+                ) : (
+                    <span className="text-gray-600 text-xs font-mono">—</span>
+                )}
+            </td>
+
+            {/* ── XP ── */}
+            <td className="px-6 py-4 whitespace-nowrap">
+                {xp != null ? (
+                    <span className="text-sm font-mono font-semibold" style={{ color: '#facc15' }}>
+                        {xp >= 1000 ? `${(xp / 1000).toFixed(1).replace(/\.0$/, '')}k` : xp}
+                        <span className="text-gray-500 font-normal text-xs ml-1">XP</span>
+                    </span>
+                ) : (
+                    <span className="text-gray-600 text-xs font-mono">0 XP</span>
+                )}
+            </td>
+
             <td className="px-6 py-4 whitespace-nowrap">
                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${displayStatus === 'Active' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
                     displayStatus === 'Offline' ? 'bg-gray-500/10 text-gray-400 border-gray-500/20' :
@@ -354,11 +399,13 @@ const Users = () => {
 
     // ── CSV Export ──────────────────────────────────────────────────────
     const handleExportCSV = () => {
-        const header = ['Username', 'Email', 'Role', 'Status', 'Bio'];
+        const header = ['Username', 'Email', 'Role', 'Rank', 'XP', 'Status', 'Bio'];
         const rows = filteredUsers.map((u) => [
             u.username || '',
             u.email || '',
             u.role || '',
+            u.rank || '—',
+            u.xp ?? 0,
             u.status ? 'Active' : 'Offline',
             (u.bio || '').replace(/"/g, '""'),
         ]);

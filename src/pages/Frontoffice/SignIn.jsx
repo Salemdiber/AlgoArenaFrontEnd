@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { getReCaptchaV3Token } from '../../services/recaptchaV3';
 import { Box, Heading, Text, Button, VStack, HStack, Input, Checkbox, Link, Flex, InputGroup, InputLeftElement, InputRightElement, IconButton, Icon } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
@@ -33,7 +33,6 @@ const SignIn = () => {
     const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
     const { login } = useAuth();
     const navigate = useNavigate();
-
     const location = useLocation();
 
     const handleSubmit = async (e) => {
@@ -45,6 +44,15 @@ const SignIn = () => {
             const token = await getReCaptchaV3Token(RECAPTCHA_SITE_KEY, 'signin');
             setRecaptchaToken(token);
             const user = await login(username, password, token);
+
+            // New user coming from SignUp — redirect to Speed Challenge placement test
+            const isPendingChallenge = localStorage.getItem('sc_pending') === 'true';
+            if (isPendingChallenge) {
+                localStorage.removeItem('sc_pending');
+                navigate('/speed-challenge', { replace: true });
+                return;
+            }
+
             const fallbackPath = redirectBasedOnRole(user);
             let from = location.state?.from?.pathname || fallbackPath;
             if (["/signin", "/signup", "/login"].includes(from)) {

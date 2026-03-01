@@ -133,8 +133,9 @@ export const AuthProvider = ({ children }) => {
 
                 // Fetch complete profile details
                 const profile = await userService.getProfile('me', data.access_token);
-                // Fallback safely just in case /me fails or returned user has properties nested
-                const user = { ...profile, ...data.user, role: data.role || profile?.role || 'USER' };
+                // profile from /user/me has rank+xp; data.user from JWT only has basic claims.
+                // Merge: data.user provides base, profile overrides (has rank, xp, avatar, bio…)
+                const user = { ...data.user, role: data.role || profile?.role || 'USER', ...profile };
 
                 setCurrentUser(user);
                 writeStorage({ user });

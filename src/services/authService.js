@@ -52,6 +52,13 @@ export const authService = {
         });
     },
 
+    verifyResetCode: async (email, code) => {
+        return apiClient('/auth/verify-reset-code', {
+            method: 'POST',
+            body: JSON.stringify({ email, code }),
+        });
+    },
+
     resetPassword: async (token, newPassword, confirmPassword) => {
         return apiClient('/auth/reset-password', {
             method: 'POST',

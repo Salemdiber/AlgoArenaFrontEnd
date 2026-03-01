@@ -30,14 +30,14 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState('');
-        // Génère un avatar DiceBear à chaque changement de pseudo (si vide)
-        useEffect(() => {
-            if (username && username.length >= 3) {
-                setAvatarUrl(getDiceBearUrl(username, 'adventurer'));
-            } else {
-                setAvatarUrl('');
-            }
-        }, [username]);
+    // Génère un avatar DiceBear à chaque changement de pseudo (si vide)
+    useEffect(() => {
+        if (username && username.length >= 3) {
+            setAvatarUrl(getDiceBearUrl(username, 'adventurer'));
+        } else {
+            setAvatarUrl('');
+        }
+    }, [username]);
     const [isLoading, setIsLoading] = useState(false);
     const [recaptchaToken, setRecaptchaToken] = useState(null);
     const [errorMsg, setErrorMsg] = useState('');
@@ -113,6 +113,7 @@ const SignUp = () => {
             const token = await getReCaptchaV3Token(RECAPTCHA_SITE_KEY, 'signup');
             setRecaptchaToken(token);
             await signup(username, email, password, token, avatarUrl);
+            localStorage.setItem('sc_pending', 'true'); // trigger Speed Challenge after login
             navigate('/signin');
         } catch (err) {
             // error handled by toast in AuthContext

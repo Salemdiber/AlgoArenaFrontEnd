@@ -22,6 +22,7 @@ import {
     MenuItem,
     MenuDivider,
     Text,
+    Tooltip,
 } from '@chakra-ui/react';
 import { Link as RouterLink, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -29,6 +30,77 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 import Logo from '../assets/logo_algoarena.png';
 import AccessibilityDrawer from '../accessibility/components/AccessibilityDrawer';
 import { useAuth } from '../pages/Frontoffice/auth/context/AuthContext';
+
+/* ─── Rank colour palette ─────────────────────────────────────────── */
+const RANK_META = {
+    BRONZE: { emoji: '🥉', color: '#cd7f32', bg: 'rgba(205,127,50,0.12)', border: 'rgba(205,127,50,0.3)' },
+    SILVER: { emoji: '🥈', color: '#c0c0c0', bg: 'rgba(192,192,192,0.1)', border: 'rgba(192,192,192,0.25)' },
+    GOLD: { emoji: '🥇', color: '#facc15', bg: 'rgba(250,204,21,0.1)', border: 'rgba(250,204,21,0.3)' },
+    PLATINUM: { emoji: '🔷', color: '#22d3ee', bg: 'rgba(34,211,238,0.1)', border: 'rgba(34,211,238,0.3)' },
+    DIAMOND: { emoji: '💎', color: '#a855f7', bg: 'rgba(168,85,247,0.12)', border: 'rgba(168,85,247,0.3)' },
+};
+
+const fmtXp = (xp) => {
+    if (xp === null || xp === undefined) return null;
+    return xp >= 1000 ? `${(xp / 1000).toFixed(1).replace(/\.0$/, '')}k` : String(xp);
+};
+
+/** Compact rank + XP badge displayed in the navbar */
+const RankBadge = ({ rank, xp }) => {
+    const key = String(rank || '').toUpperCase();
+    const meta = RANK_META[key];
+    if (!meta) return null;
+    const xpStr = fmtXp(xp);
+    return (
+        <Tooltip
+            label={`${key} · ${xp ?? 0} XP`}
+            placement="bottom"
+            hasArrow
+            bg="#1e293b"
+            color="gray.200"
+            fontSize="xs"
+            borderRadius="8px"
+            px={3}
+            py={1.5}
+        >
+            <HStack
+                spacing={1.5}
+                px={2.5}
+                py={1}
+                borderRadius="8px"
+                border="1px solid"
+                borderColor={meta.border}
+                bg={meta.bg}
+                cursor="default"
+                transition="all 0.2s"
+                _hover={{ boxShadow: `0 0 12px ${meta.color}30` }}
+                flexShrink={0}
+                display={{ base: 'none', md: 'flex' }}
+            >
+                <Text fontSize="13px" lineHeight={1}>{meta.emoji}</Text>
+                <Text
+                    fontSize="xs"
+                    fontWeight="bold"
+                    fontFamily="mono"
+                    color={meta.color}
+                    letterSpacing="0.04em"
+                >
+                    {key}
+                </Text>
+                {xpStr !== null && (
+                    <>
+                        <Box w="1px" h="10px" bg={meta.border} />
+                        <Text fontSize="10px" fontFamily="mono" color={meta.color} opacity={0.85}>
+                            {xpStr} XP
+                        </Text>
+                    </>
+                )}
+            </HStack>
+        </Tooltip>
+    );
+};
+
+
 
 /* Inline accessibility icon (universal figure) */
 const AccessibilityIcon = (props) => (
@@ -192,8 +264,14 @@ const Header = () => {
                                 </Button>
                             </>
                         ) : (
-                            /* ─── Logged IN: show username + avatar dropdown ─── */
+                            /* ─── Logged IN: show rank badge + username + avatar dropdown ─── */
                             <HStack spacing={2} display={{ base: 'none', sm: 'flex' }}>
+                                {/* Rank + XP badge */}
+                                <RankBadge
+                                    rank={currentUser?.rank}
+                                    xp={currentUser?.xp}
+                                />
+
                                 <Text
                                     fontSize="sm"
                                     fontWeight="600"
@@ -231,8 +309,31 @@ const Header = () => {
                                         boxShadow="0 8px 30px rgba(0,0,0,0.5)"
                                         borderRadius="12px"
                                         py={2}
-                                        minW="200px"
+                                        minW="220px"
                                     >
+                                        {/* User info header */}
+                                        <Box px={4} py={3} mb={1} borderBottom="1px solid #334155">
+                                            <Text fontSize="sm" fontWeight="bold" color="white" mb={0.5}>
+                                                {currentUser?.username}
+                                            </Text>
+                                            {currentUser?.rank && (
+                                                <HStack spacing={2} mt={1}>
+                                                    <Text
+                                                        fontSize="xs"
+                                                        fontWeight="semibold"
+                                                        fontFamily="mono"
+                                                        color={RANK_META[currentUser.rank?.toUpperCase()]?.color || 'gray.400'}
+                                                    >
+                                                        {RANK_META[currentUser.rank?.toUpperCase()]?.emoji} {currentUser.rank?.toUpperCase()}
+                                                    </Text>
+                                                    <Box w="1px" h="10px" bg="#334155" />
+                                                    <Text fontSize="xs" fontFamily="mono" color="yellow.400">
+                                                        {fmtXp(currentUser?.xp) ?? '0'} XP
+                                                    </Text>
+                                                </HStack>
+                                            )}
+                                        </Box>
+
                                         <MenuItem
                                             bg="transparent"
                                             color="gray.200"
