@@ -39,32 +39,32 @@ const OutputTerminal = ({ output = [], isRunning = false }) => {
 
     return (
         <Box
-            bg="#0b1120"
+            bg="var(--color-terminal-bg)"
             borderTop="1px solid"
-            borderColor="#1e293b"
+            borderColor="var(--color-editor-border)"
             borderBottomRadius="12px"
             overflow="hidden"
             flexShrink={0}
         >
             {/* Terminal header */}
             <Flex
-                bg="#111827"
+                bg="var(--color-editor-toolbar)"
                 px={4}
                 py={2}
                 align="center"
                 gap={2}
                 borderBottom="1px solid"
-                borderColor="#1e293b"
+                borderColor="var(--color-editor-border)"
             >
-                <TerminalIcon w={3.5} h={3.5} color="#64748b" />
-                <Text fontSize="xs" fontWeight="semibold" color="#64748b" textTransform="uppercase" letterSpacing="wider">
+                <TerminalIcon w={3.5} h={3.5} color="var(--color-text-muted)" />
+                <Text fontSize="xs" fontWeight="semibold" color="var(--color-text-muted)" textTransform="uppercase" letterSpacing="wider">
                     Output
                 </Text>
                 {/* Decorative dots */}
                 <Flex ml="auto" gap={1.5}>
-                    <Box w="8px" h="8px" borderRadius="full" bg="#334155" />
-                    <Box w="8px" h="8px" borderRadius="full" bg="#334155" />
-                    <Box w="8px" h="8px" borderRadius="full" bg="#334155" />
+                    <Box w="8px" h="8px" borderRadius="full" bg="var(--color-border)" />
+                    <Box w="8px" h="8px" borderRadius="full" bg="var(--color-border)" />
+                    <Box w="8px" h="8px" borderRadius="full" bg="var(--color-border)" />
                 </Flex>
             </Flex>
 
@@ -81,12 +81,12 @@ const OutputTerminal = ({ output = [], isRunning = false }) => {
                 lineHeight="1.8"
                 sx={{
                     '&::-webkit-scrollbar': { width: '6px' },
-                    '&::-webkit-scrollbar-track': { bg: '#0b1120' },
-                    '&::-webkit-scrollbar-thumb': { bg: '#1e293b', borderRadius: '3px' },
+                    '&::-webkit-scrollbar-track': { bg: 'var(--color-terminal-bg)' },
+                    '&::-webkit-scrollbar-thumb': { bg: 'var(--color-border)', borderRadius: '3px' },
                 }}
             >
                 {output.length === 0 && !isRunning && (
-                    <Text color="#475569" fontStyle="italic" fontSize="sm">
+                    <Text color="var(--color-text-muted)" fontStyle="italic" fontSize="sm">
                         Click "Run Code" to execute and see results here…
                     </Text>
                 )}

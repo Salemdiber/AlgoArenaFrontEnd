@@ -36,6 +36,22 @@
 </head>
 
 <body>
+    <script>
+        // Prevent flash of wrong color mode (FOUC prevention)
+        (function () {
+            try {
+                var pref = localStorage.getItem('algoarena-theme-preference') || 'dark';
+                var mode = pref;
+                if (pref === 'auto') {
+                    mode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                document.documentElement.setAttribute('data-theme', mode);
+                document.documentElement.style.colorScheme = mode;
+                // Chakra reads chakra-ui-color-mode from localStorage
+                localStorage.setItem('chakra-ui-color-mode', mode);
+            } catch (e) { }
+        })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 </body>

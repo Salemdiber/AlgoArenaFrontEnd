@@ -10,6 +10,7 @@ import {
     Badge,
     Progress,
     Icon,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { useChallengeContext } from '../context/ChallengeContext';
 import { RANK_META } from '../data/mockChallenges';
@@ -32,7 +33,7 @@ const UserRankStatsBar = () => {
 
     return (
         <Flex
-            bg="#1e293b"
+            bg="var(--color-bg-secondary)"
             borderRadius="12px"
             p={4}
             flexWrap="wrap"
@@ -54,8 +55,8 @@ const UserRankStatsBar = () => {
                     {rankMeta.label} Rank
                 </Badge>
                 <Box>
-                    <Text fontSize="xs" color="gray.400">Current XP</Text>
-                    <Text fontFamily="heading" fontWeight="bold" color="gray.100">
+                    <Text fontSize="xs" color={useColorModeValue("gray.500","gray.400")}>Current XP</Text>
+                    <Text fontFamily="heading" fontWeight="bold" color={useColorModeValue("gray.800","gray.100")}>
                         {user.xp.toLocaleString()} / {xpToNextRank.toLocaleString()}
                     </Text>
                 </Box>
@@ -63,7 +64,7 @@ const UserRankStatsBar = () => {
 
             {/* Progress bar */}
             <Box flex={1} minW="200px">
-                <Flex justify="space-between" fontSize="xs" color="gray.400" mb={1}>
+                <Flex justify="space-between" fontSize="xs" color={useColorModeValue("gray.500","gray.400")} mb={1}>
                     <Text>Progress to {nextRank}</Text>
                     <Text>{progressPercent}%</Text>
                 </Flex>
@@ -71,7 +72,7 @@ const UserRankStatsBar = () => {
                     value={progressPercent}
                     size="sm"
                     borderRadius="full"
-                    bg="gray.700"
+                    bg="var(--color-tag-bg)"
                     sx={{
                         '& > div': {
                             bgGradient: 'linear(to-r, brand.500, #06b6d4)',
@@ -85,7 +86,7 @@ const UserRankStatsBar = () => {
             <Flex alignItems="center" gap={2}>
                 <FlameIcon w={5} h={5} color="red.500" />
                 <Box>
-                    <Text fontSize="xs" color="gray.400">Streak</Text>
+                    <Text fontSize="xs" color={useColorModeValue("gray.500","gray.400")}>Streak</Text>
                     <Text fontFamily="heading" fontWeight="bold" color="red.500">
                         {user.streak} days
                     </Text>

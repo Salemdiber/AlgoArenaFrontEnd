@@ -18,13 +18,13 @@ import {
 import { Difficulty, ALL_TAGS, ChallengeUserStatus } from '../data/mockChallenges';
 
 const FilterSection = ({ title, children }) => (
-    <Box bg="#1e293b" borderRadius="12px" p={4}>
+    <Box bg="var(--color-bg-card)" border="1px solid var(--color-border)" boxShadow="var(--shadow-card)" borderRadius="12px" p={5}>
         <Text
             fontFamily="heading"
-            fontSize="sm"
-            fontWeight="semibold"
-            color="gray.300"
-            mb={3}
+            fontSize="xs"
+            fontWeight="bold"
+            color="var(--color-text-secondary)"
+            mb={4}
             textTransform="uppercase"
             letterSpacing="wider"
         >
@@ -85,12 +85,14 @@ const ChallengesFilters = ({
                                     onChange={() => toggleDifficulty(d.key)}
                                     colorScheme="cyan"
                                     size="md"
-                                    borderColor="gray.600"
+                                    borderColor="var(--color-border)"
                                 />
-                                <Text color="gray.300" fontSize="sm" transition="colors 0.2s">{d.label}</Text>
-                                <Text ml="auto" fontSize="xs" color="gray.500">
-                                    {difficultyCounts[d.key] || 0}
-                                </Text>
+                                <Text color="var(--color-text-primary)" fontSize="sm" fontWeight="medium" transition="colors 0.2s">{d.label}</Text>
+                                <Box ml="auto">
+                                    <Text fontSize="xs" fontWeight="semibold" color="var(--color-text-muted)" bg="var(--color-bg-primary)" px={2} py={0.5} borderRadius="full" border="1px solid var(--color-border)">
+                                        {difficultyCounts[d.key] || 0}
+                                    </Text>
+                                </Box>
                             </Flex>
                         ))}
                     </VStack>
@@ -113,11 +115,15 @@ const ChallengesFilters = ({
                                     onChange={() => toggleTag(tag)}
                                     colorScheme="cyan"
                                     size="md"
-                                    borderColor="gray.600"
+                                    borderColor="var(--color-border)"
                                 />
-                                <Text color="gray.300" fontSize="sm" transition="colors 0.2s">{tag}</Text>
+                                <Text color="var(--color-text-primary)" fontSize="sm" fontWeight="medium" transition="colors 0.2s">{tag}</Text>
                                 {tagCounts[tag] && (
-                                    <Text ml="auto" fontSize="xs" color="gray.500">{tagCounts[tag]}</Text>
+                                    <Box ml="auto">
+                                        <Text fontSize="xs" fontWeight="semibold" color="var(--color-text-muted)" bg="var(--color-bg-primary)" px={2} py={0.5} borderRadius="full" border="1px solid var(--color-border)">
+                                            {tagCounts[tag]}
+                                        </Text>
+                                    </Box>
                                 )}
                             </Flex>
                         ))}
@@ -141,18 +147,18 @@ const ChallengesFilters = ({
                                     onChange={() => toggleStatus(s.key)}
                                     colorScheme="cyan"
                                     size="md"
-                                    borderColor="gray.600"
+                                    borderColor="var(--color-border)"
                                 />
-                                <Text color="gray.300" fontSize="sm" transition="colors 0.2s">{s.label}</Text>
+                                <Text color="var(--color-text-primary)" fontSize="sm" fontWeight="medium" transition="colors 0.2s">{s.label}</Text>
                             </Flex>
                         ))}
                     </VStack>
                 </FilterSection>
 
                 {/* Recommended toggle */}
-                <Box bg="#1e293b" borderRadius="12px" p={4}>
+                <Box bg="var(--color-bg-card)" border="1px solid var(--color-border)" boxShadow="var(--shadow-card)" borderRadius="12px" p={5}>
                     <Flex as="label" align="center" justify="space-between" cursor="pointer">
-                        <Text fontSize="sm" color="gray.300">Recommended for my rank</Text>
+                        <Text fontSize="sm" fontWeight="medium" color="var(--color-text-primary)">Recommended for my rank</Text>
                         <Switch
                             isChecked={recommendedOnly}
                             onChange={(e) => setRecommendedOnly(e.target.checked)}
@@ -163,19 +169,19 @@ const ChallengesFilters = ({
                 </Box>
 
                 {/* Search */}
-                <Box bg="#1e293b" borderRadius="12px" p={4}>
+                <Box bg="var(--color-bg-card)" border="1px solid var(--color-border)" boxShadow="var(--shadow-card)" borderRadius="12px" p={5}>
+                    <Text fontFamily="heading" fontSize="xs" fontWeight="bold" color="var(--color-text-secondary)" mb={3} textTransform="uppercase" letterSpacing="wider">
+                        Search
+                    </Text>
                     <Input
                         placeholder="Search challenges..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        bg="#0f172a"
-                        border="1px solid"
-                        borderColor="gray.700"
-                        borderRadius="8px"
-                        fontSize="sm"
-                        color="gray.300"
-                        _placeholder={{ color: 'gray.500' }}
-                        _focus={{ borderColor: 'brand.500', boxShadow: 'none' }}
+                        className="input-normalized"
+                        w="100%"
+                        h="44px"
+                        px={4}
+                        borderRadius="md"
                     />
                 </Box>
             </VStack>

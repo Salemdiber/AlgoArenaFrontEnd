@@ -4,7 +4,7 @@ import {
     Input, Textarea, useToast, Spinner, AlertDialog,
     AlertDialogBody, AlertDialogFooter, AlertDialogHeader,
     AlertDialogContent, AlertDialogOverlay, useDisclosure
-} from '@chakra-ui/react';
+, useColorModeValue } from '@chakra-ui/react';
 import { useAuth } from '../Frontoffice/auth/context/AuthContext';
 import { userService } from '../../services/userService';
 import TwoFactorSection from '../Frontoffice/profile/components/TwoFactorSection';
@@ -125,7 +125,7 @@ const Profile = () => {
         return (
             <Flex w="100%" h="50vh" align="center" justify="center" direction="column" gap={4}>
                 <Spinner size="xl" color="cyan.400" />
-                <Text color="gray.400">Loading admin profile...</Text>
+                <Text color={useColorModeValue("gray.500","gray.400")}>Loading admin profile...</Text>
             </Flex>
         );
     }
@@ -133,8 +133,8 @@ const Profile = () => {
     return (
         <div className="space-y-6 animate-fade-in-up">
             <div className="mb-6">
-                <h1 className="font-heading text-3xl font-bold text-gray-100 mb-2">My Profile</h1>
-                <p className="text-gray-400">Manage your account settings and preferences</p>
+                <h1 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-3xl font-bold  mb-2">My Profile</h1>
+                <p style={{ color: 'var(--color-text-muted)' }} className="">Manage your account settings and preferences</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -145,7 +145,7 @@ const Profile = () => {
                         <Flex direction="column" align="center" textAlign="center">
                             <Box position="relative" mb={4}>
                                 {isUpdatingAvatar ? (
-                                    <Flex w="128px" h="128px" align="center" justify="center" borderRadius="full" border="4px solid" borderColor="cyan.400" bg="#0f172a">
+                                    <Flex w="128px" h="128px" align="center" justify="center" borderRadius="full" border="4px solid" borderColor="cyan.400" bg="var(--color-bg-primary)">
                                         <Spinner color="cyan.400" />
                                     </Flex>
                                 ) : (
@@ -174,8 +174,8 @@ const Profile = () => {
                                 </Button>
                                 <input type="file" ref={fileInputRef} accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} />
                             </Box>
-                            <h2 className="font-heading text-2xl font-bold text-gray-100 mb-1">@{currentUser.username}</h2>
-                            <p className="text-sm text-gray-400 mb-2">{currentUser.email}</p>
+                            <h2 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-2xl font-bold  mb-1">@{currentUser.username}</h2>
+                            <p style={{ color: 'var(--color-text-muted)' }} className="text-sm  mb-2">{currentUser.email}</p>
                             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 uppercase">
                                 {currentUser.role}
                             </span>
@@ -188,29 +188,29 @@ const Profile = () => {
 
                     {/* Profile Information */}
                     <div className="glass-panel rounded-2xl p-6 shadow-custom">
-                        <h2 className="font-heading text-xl font-bold text-gray-100 mb-6">Profile Information</h2>
+                        <h2 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-xl font-bold  mb-6">Profile Information</h2>
                         <form onSubmit={handleProfileSave} className="space-y-4">
                             <FormControl>
-                                <FormLabel color="gray.300">Username</FormLabel>
+                                <FormLabel color={useColorModeValue("gray.600","gray.300")}>Username</FormLabel>
                                 <Input
-                                    bg="#0f172a" borderColor="gray.700" color="gray.100"
+                                    bg="var(--color-bg-primary)" borderColor={useColorModeValue("gray.200","gray.700")} color={useColorModeValue("gray.800","gray.100")}
                                     value={draft.username}
                                     onChange={(e) => setDraft({ ...draft, username: e.target.value })}
                                 />
                             </FormControl>
                             <FormControl>
-                                <FormLabel color="gray.300">Email Address</FormLabel>
+                                <FormLabel color={useColorModeValue("gray.600","gray.300")}>Email Address</FormLabel>
                                 <Input
                                     type="email"
-                                    bg="#0f172a" borderColor="gray.700" color="gray.100"
+                                    bg="var(--color-bg-primary)" borderColor={useColorModeValue("gray.200","gray.700")} color={useColorModeValue("gray.800","gray.100")}
                                     value={draft.email}
                                     onChange={(e) => setDraft({ ...draft, email: e.target.value })}
                                 />
                             </FormControl>
                             <FormControl>
-                                <FormLabel color="gray.300">Bio</FormLabel>
+                                <FormLabel color={useColorModeValue("gray.600","gray.300")}>Bio</FormLabel>
                                 <Textarea
-                                    bg="#0f172a" borderColor="gray.700" color="gray.100" rows={4}
+                                    bg="var(--color-bg-primary)" borderColor={useColorModeValue("gray.200","gray.700")} color={useColorModeValue("gray.800","gray.100")} rows={4}
                                     value={draft.bio}
                                     onChange={(e) => setDraft({ ...draft, bio: e.target.value })}
                                 />
@@ -223,28 +223,28 @@ const Profile = () => {
 
                     {/* Change Password */}
                     <div className="glass-panel rounded-2xl p-6 shadow-custom">
-                        <h2 className="font-heading text-xl font-bold text-gray-100 mb-6">Security (Change Password)</h2>
+                        <h2 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-xl font-bold  mb-6">Security (Change Password)</h2>
                         <form onSubmit={handlePasswordChange} className="space-y-4">
                             <FormControl isRequired>
-                                <FormLabel color="gray.300">Current Password</FormLabel>
+                                <FormLabel color={useColorModeValue("gray.600","gray.300")}>Current Password</FormLabel>
                                 <Input
-                                    type="password" bg="#0f172a" borderColor="gray.700" color="gray.100"
+                                    type="password" bg="var(--color-bg-primary)" borderColor={useColorModeValue("gray.200","gray.700")} color={useColorModeValue("gray.800","gray.100")}
                                     value={passwords.currentPassword}
                                     onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
                                 />
                             </FormControl>
                             <FormControl isRequired>
-                                <FormLabel color="gray.300">New Password</FormLabel>
+                                <FormLabel color={useColorModeValue("gray.600","gray.300")}>New Password</FormLabel>
                                 <Input
-                                    type="password" bg="#0f172a" borderColor="gray.700" color="gray.100"
+                                    type="password" bg="var(--color-bg-primary)" borderColor={useColorModeValue("gray.200","gray.700")} color={useColorModeValue("gray.800","gray.100")}
                                     value={passwords.newPassword}
                                     onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
                                 />
                             </FormControl>
                             <FormControl isRequired>
-                                <FormLabel color="gray.300">Confirm New Password</FormLabel>
+                                <FormLabel color={useColorModeValue("gray.600","gray.300")}>Confirm New Password</FormLabel>
                                 <Input
-                                    type="password" bg="#0f172a" borderColor="gray.700" color="gray.100"
+                                    type="password" bg="var(--color-bg-primary)" borderColor={useColorModeValue("gray.200","gray.700")} color={useColorModeValue("gray.800","gray.100")}
                                     value={passwords.confirmPassword}
                                     onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
                                 />
@@ -260,7 +260,7 @@ const Profile = () => {
                     {/* Danger Zone */}
                     <div className="glass-panel rounded-2xl p-6 shadow-custom border border-red-900/50">
                         <h2 className="font-heading text-xl font-bold text-red-500 mb-2">Danger Zone</h2>
-                        <p className="text-sm text-gray-400 mb-4">Once you delete your account, there is no going back. Please be certain.</p>
+                        <p style={{ color: 'var(--color-text-muted)' }} className="text-sm  mb-4">Once you delete your account, there is no going back. Please be certain.</p>
                         <Button colorScheme="red" variant="outline" onClick={onDeleteOpen} _hover={{ bg: 'red.500', color: 'white' }}>
                             Delete Account
                         </Button>
@@ -272,7 +272,7 @@ const Profile = () => {
             {/* Delete Account AlertDialog */}
             <AlertDialog isOpen={isDeleteOpen} leastDestructiveRef={cancelRef} onClose={onDeleteClose} isCentered>
                 <AlertDialogOverlay>
-                    <AlertDialogContent bg="#1e293b" color="gray.100" border="1px solid" borderColor="gray.600">
+                    <AlertDialogContent bg="var(--color-bg-secondary)" color={useColorModeValue("gray.800","gray.100")} border="1px solid" borderColor="var(--color-border)">
                         <AlertDialogHeader fontSize="lg" fontWeight="bold">
                             Delete Account
                         </AlertDialogHeader>
@@ -282,7 +282,7 @@ const Profile = () => {
                             <Input
                                 type="password"
                                 placeholder="Enter your password"
-                                bg="#0f172a" borderColor="gray.600" color="gray.100"
+                                bg="var(--color-bg-primary)" borderColor="var(--color-border)" color={useColorModeValue("gray.800","gray.100")}
                                 value={deletePassword}
                                 onChange={(e) => setDeletePassword(e.target.value)}
                             />

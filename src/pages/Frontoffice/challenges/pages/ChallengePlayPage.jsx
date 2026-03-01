@@ -22,6 +22,7 @@ import {
     DrawerBody,
     useDisclosure,
     Icon,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useChallengeContext } from '../context/ChallengeContext';
@@ -86,16 +87,16 @@ const ChallengePlayPage = () => {
         return (
             <Box
                 minH="100vh"
-                bg="#0f172a"
+                bg="var(--color-bg-primary)"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
             >
                 <Box textAlign="center">
-                    <Text fontSize="2xl" fontWeight="bold" color="gray.100" mb={4}>
+                    <Text fontSize="2xl" fontWeight="bold" color={useColorModeValue("gray.800","gray.100")} mb={4}>
                         Challenge Not Found
                     </Text>
-                    <Text color="gray.400" mb={6}>The requested challenge doesn't exist.</Text>
+                    <Text color={useColorModeValue("gray.500","gray.400")} mb={6}>The requested challenge doesn't exist.</Text>
                     <Button variant="primary" onClick={() => navigate('/challenges')}>
                         Back to Challenges
                     </Button>
@@ -111,6 +112,9 @@ const ChallengePlayPage = () => {
             transition={{ duration: 0.3 }}
             h="100vh"
             bg="#0f172a"
+            minH="100vh"
+            maxH="100vh"
+            bg="var(--color-bg-primary)"
             display="flex"
             flexDirection="column"
             overflow="hidden"
@@ -122,14 +126,14 @@ const ChallengePlayPage = () => {
             <Box
                 display={{ base: 'block', lg: 'none' }}
                 p={2}
-                bg="#1e293b"
+                bg="var(--color-bg-secondary)"
                 borderBottom="1px solid"
-                borderColor="gray.700"
+                borderColor={useColorModeValue("gray.200","gray.700")}
             >
                 <Button
                     size="sm"
                     variant="ghost"
-                    color="gray.300"
+                    color={useColorModeValue("gray.600","gray.300")}
                     leftIcon={<MenuIcon w={4} h={4} />}
                     onClick={onOpen}
                 >
@@ -140,8 +144,8 @@ const ChallengePlayPage = () => {
             {/* Mobile Drawer */}
             <Drawer isOpen={isOpen} onClose={onClose} placement="left" size="full">
                 <DrawerOverlay />
-                <DrawerContent bg="#0f172a" color="gray.100">
-                    <DrawerCloseButton color="gray.400" />
+                <DrawerContent bg="var(--color-bg-primary)" color={useColorModeValue("gray.800","gray.100")}>
+                    <DrawerCloseButton color={useColorModeValue("gray.500","gray.400")} />
                     <DrawerBody pt={12} px={6} overflowY="auto">
                         <ProblemTabs />
                         <ProblemDescription />
@@ -156,9 +160,9 @@ const ChallengePlayPage = () => {
                     display={{ base: 'none', lg: 'flex' }}
                     flexDirection="column"
                     w={{ lg: '40%' }}
-                    bg="#0f172a"
+                    bg="var(--color-bg-primary)"
                     borderRight="1px solid"
-                    borderColor="gray.700"
+                    borderColor={useColorModeValue("gray.200","gray.700")}
                     overflow="hidden"
                 >
                     <Box
@@ -167,8 +171,8 @@ const ChallengePlayPage = () => {
                         p={5}
                         sx={{
                             '&::-webkit-scrollbar': { width: '5px' },
-                            '&::-webkit-scrollbar-track': { bg: '#0f172a' },
-                            '&::-webkit-scrollbar-thumb': { bg: '#334155', borderRadius: '3px' },
+                            '&::-webkit-scrollbar-track': { bg: 'var(--color-bg-primary)' },
+                            '&::-webkit-scrollbar-thumb': { bg: 'var(--color-border)', borderRadius: '3px' },
                             overscrollBehavior: 'contain',
                         }}
                     >
@@ -181,7 +185,7 @@ const ChallengePlayPage = () => {
                 <Flex
                     w={{ base: '100%', lg: '60%' }}
                     direction="column"
-                    bg="#0f172a"
+                    bg="var(--color-bg-primary)"
                     overflow="hidden"
                     minH={0}
                 >

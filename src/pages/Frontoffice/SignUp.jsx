@@ -129,10 +129,12 @@ const SignUp = () => {
                     : { w: '100%', l: 'Strong Defense', c: 'green.400' };
 
     const inputStyles = {
-        bg: '#0f172a', border: '1px solid', borderColor: 'gray.600', borderRadius: '8px',
-        color: 'gray.100', h: '48px', fontSize: 'sm', _placeholder: { color: 'gray.500' },
-        _focus: { borderColor: 'brand.500', boxShadow: '0 0 0 1px #22d3ee, 0 0 20px -5px rgba(34,211,238,0.3)', outline: 'none' },
-        _hover: { borderColor: 'gray.500' }, transition: 'all 0.3s',
+        bg: 'var(--color-bg-input)', border: '1px solid', borderColor: 'var(--color-border)', borderRadius: '10px',
+        color: 'var(--color-text-primary)', h: '52px', fontSize: '15px', pl: '2.75rem', pr: '1rem',
+        boxShadow: '0 2px 4px var(--color-glass-border)',
+        _placeholder: { color: 'var(--color-text-muted)', fontWeight: 'medium' },
+        _focus: { borderColor: 'var(--color-cyan-400)', boxShadow: '0 0 0 4px var(--color-focus-glow), inset 0 2px 4px var(--color-glass-border)', outline: 'none', bg: 'var(--color-bg-elevated)' },
+        _hover: { borderColor: 'var(--color-border-hover)' }, transition: 'all 0.3s ease',
     };
 
 
@@ -156,7 +158,7 @@ const SignUp = () => {
                                 </Box>
                                 <Text fontSize="xs" fontFamily="mono" color="brand.500">LIVE ARENA</Text>
                             </HStack>
-                            <Heading fontFamily="heading" fontSize="3xl" fontWeight="bold" color="white" lineHeight="tight">
+                            <Heading fontFamily="heading" fontSize="3xl" fontWeight="bold" color="var(--color-text-primary)" lineHeight="tight">
                                 Rise Through<br />The <Text as="span" bgGradient="linear(to-r, brand.500, blue.500)" bgClip="text" color="transparent">Ranks</Text>
                             </Heading>
                             <Text mt={4} color="gray.400" fontSize="sm" lineHeight="relaxed">Join 10,000+ developers competing daily. Solve problems, earn XP, and get scouted by top tech companies.</Text>
@@ -164,7 +166,7 @@ const SignUp = () => {
 
                         {/* Stats cards */}
                         <VStack spacing={4} position="relative" zIndex={10} mt={8}>
-                            <Box w="100%" bg="rgba(30,41,59,0.8)" backdropFilter="blur(8px)" border="1px solid" borderColor="gray.600" borderRadius="lg" p={4} transition="transform 0.3s" _hover={{ transform: 'scale(1.05)' }}>
+                            <Box w="100%" bg="rgba(30,41,59,0.8)" backdropFilter="blur(8px)" border="1px solid" borderColor="var(--color-border)" borderRadius="lg" p={4} transition="transform 0.3s" _hover={{ transform: 'scale(1.05)' }}>
                                 <Flex justify="space-between" align="center" mb={2}>
                                     <Text fontSize="xs" color="gray.400" fontFamily="mono">CURRENT RANK</Text>
                                     <HStack spacing={1}>
@@ -178,9 +180,9 @@ const SignUp = () => {
                                 <Flex justify="space-between" mt={1}><Text fontSize="10px" color="gray.500">0 XP</Text><Text fontSize="10px" color="gray.500">1000 XP</Text></Flex>
                             </Box>
 
-                            <Flex w="100%" bg="rgba(30,41,59,0.8)" backdropFilter="blur(8px)" border="1px solid" borderColor="gray.600" borderRadius="lg" p={4} align="center" gap={4}>
-                                <Flex w={10} h={10} borderRadius="full" bgGradient="linear(to-br, purple.500, purple.700)" align="center" justify="center" fontWeight="bold" color="white" fontSize="sm">JS</Flex>
-                                <Box><Text fontSize="xs" color="gray.400">Primary Weapon</Text><Text fontSize="sm" fontWeight="bold" color="white">JavaScript</Text></Box>
+                            <Flex w="100%" bg="rgba(30,41,59,0.8)" backdropFilter="blur(8px)" border="1px solid" borderColor="var(--color-border)" borderRadius="lg" p={4} align="center" gap={4}>
+                                <Flex w={10} h={10} borderRadius="full" bgGradient="linear(to-br, purple.500, purple.700)" align="center" justify="center" fontWeight="bold" color="var(--color-text-primary)" fontSize="sm">JS</Flex>
+                                <Box><Text fontSize="xs" color="gray.400">Primary Weapon</Text><Text fontSize="sm" fontWeight="bold" color="var(--color-text-primary)">JavaScript</Text></Box>
                                 <Box ml="auto"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg></Box>
                             </Flex>
                         </VStack>
@@ -189,9 +191,9 @@ const SignUp = () => {
                         <Box position="relative" zIndex={10} mt="auto" pt={8}>
                             <Flex>
                                 {['photo-1534528741775-53994a69daeb', 'photo-1506794778202-cad84cf45f1d', 'photo-1507003211169-0a1dd7228f2d'].map((id, i) => (
-                                    <Image key={id} src={`https://images.unsplash.com/${id}?auto=format&fit=crop&w=64&h=64`} alt="" w={8} h={8} borderRadius="full" border="2px solid #0f172a" ml={i > 0 ? '-8px' : 0} objectFit="cover" />
+                                    <Image key={id} src={`https://images.unsplash.com/${id}?auto=format&fit=crop&w=64&h=64`} alt="" w={8} h={8} borderRadius="full" border="2px solid var(--color-bg-primary)" ml={i > 0 ? '-8px' : 0} objectFit="cover" />
                                 ))}
-                                <Flex w={8} h={8} borderRadius="full" border="2px solid #0f172a" bg="gray.600" align="center" justify="center" fontSize="10px" fontWeight="bold" color="white" ml="-8px">+2k</Flex>
+                                <Flex w={8} h={8} borderRadius="full" border="2px solid var(--color-bg-primary)" bg="gray.600" align="center" justify="center" fontSize="10px" fontWeight="bold" color="var(--color-text-primary)" ml="-8px">+2k</Flex>
                             </Flex>
                             <Text fontSize="xs" color="gray.500" mt={2}>Join the community today.</Text>
                         </Box>
@@ -201,7 +203,7 @@ const SignUp = () => {
                     <Box flex={1} p={{ base: 8, md: 12 }} overflowY="auto">
                         <Box maxW="md" mx="auto">
                             <Box mb={8}>
-                                <Heading fontFamily="heading" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" color="white" mb={2}>Create Your Profile</Heading>
+                                <Heading fontFamily="heading" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" color="var(--color-text-primary)" mb={2}>Create Your Profile</Heading>
                                 <Text color="gray.400" fontSize="sm">Start competing. Rise through the ranks.</Text>
                             </Box>
 
@@ -228,7 +230,7 @@ const SignUp = () => {
                                         </Flex>
                                         <InputGroup>
                                             <InputLeftElement pointerEvents="none" h="100%">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" /></svg>
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" /></svg>
                                             </InputLeftElement>
                                             <Input type="text" placeholder="AlgoMaster99" value={username} onChange={(e) => setUsername(e.target.value)} {...inputStyles} />
                                             {avatarUrl && (
@@ -261,7 +263,7 @@ const SignUp = () => {
                                         </Flex>
                                         <InputGroup>
                                             <InputLeftElement pointerEvents="none" h="100%">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
                                             </InputLeftElement>
                                             <Input type="email" placeholder="dev@example.com" value={email} onChange={(e) => setEmail(e.target.value)} {...inputStyles} />
                                         </InputGroup>
@@ -272,9 +274,9 @@ const SignUp = () => {
                                         <Text fontSize="xs" fontWeight="semibold" color="gray.400" textTransform="uppercase" letterSpacing="wider" ml={1} mb={1}>Password</Text>
                                         <InputGroup>
                                             <InputLeftElement pointerEvents="none" h="100%">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
                                             </InputLeftElement>
-                                            <Input type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} {...inputStyles} pr="2.5rem" />
+                                            <Input type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} {...inputStyles} pr="3rem" />
                                             <InputRightElement h="100%" right="1" display="flex" alignItems="center" justifyContent="center">
                                                 <IconButton
                                                     variant="unstyled"
@@ -285,7 +287,7 @@ const SignUp = () => {
                                                     onClick={() => setShowPassword(!showPassword)}
                                                     icon={showPassword ? <EyeOffIcon w={4} h={4} /> : <EyeIcon w={4} h={4} />}
                                                     color="gray.500"
-                                                    _hover={{ color: 'gray.300' }}
+                                                    _hover={{ color: 'var(--color-text-heading)' }}
                                                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                                                 />
                                             </InputRightElement>

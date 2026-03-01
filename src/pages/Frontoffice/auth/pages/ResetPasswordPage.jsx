@@ -117,7 +117,7 @@ const ResetPasswordPage = () => {
     };
 
     const inputStyles = {
-        bg: '#0f172a',
+        bg: 'var(--color-bg-primary)',
         border: '1px solid',
         borderColor: 'gray.600',
         borderRadius: '8px',
@@ -191,7 +191,7 @@ const ResetPasswordPage = () => {
                 </>
             )}
 
-            <Divider borderColor="gray.600" my={6} />
+            <Divider borderColor="var(--color-border)" my={6} />
 
             <Box textAlign="center">
                 <Link as={RouterLink} to="/signin" color="#22d3ee" fontSize="sm" _hover={{ textDecoration: 'underline' }} display="inline-flex" alignItems="center" gap={1}>

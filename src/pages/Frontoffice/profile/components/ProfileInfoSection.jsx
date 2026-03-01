@@ -15,6 +15,7 @@ import {
     Badge,
     Icon,
     Spinner,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
@@ -32,9 +33,9 @@ const PencilIcon = (props) => (
 
 /* Shared input styles */
 const inputStyles = {
-    bg: '#0f172a',
+    bg: 'var(--color-bg-primary)',
     border: '1px solid',
-    borderColor: '#334155',
+    borderColor: 'var(--color-border)',
     borderRadius: '6px',
     color: 'gray.100',
     _focus: { borderColor: '#22d3ee', boxShadow: '0 0 0 1px #22d3ee' },
@@ -91,15 +92,15 @@ const ProfileInfoSection = () => {
             initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.5, delay: 0.1, ease: 'easeOut' }}
-            bg="#1e293b"
+            bg="var(--color-bg-secondary)"
             borderRadius="12px"
-            boxShadow="0 4px 20px rgba(0,0,0,0.4)"
+            boxShadow="var(--shadow-card)"
             borderTop="2px solid #22d3ee"
             p={{ base: 6, md: 8 }}
         >
             {/* Header row */}
             <Flex justify="space-between" align="center" mb={6}>
-                <Text fontFamily="heading" fontSize="lg" fontWeight="600" color="gray.100">
+                <Text fontFamily="heading" fontSize="lg" fontWeight="600" color={useColorModeValue("gray.800","gray.100")}>
                     Profile Information
                 </Text>
 
@@ -136,8 +137,8 @@ const ProfileInfoSection = () => {
                         <Button
                             size="sm"
                             variant="outline"
-                            borderColor="gray.600"
-                            color="gray.300"
+                            borderColor="var(--color-border)"
+                            color={useColorModeValue("gray.600","gray.300")}
                             _hover={{ borderColor: 'gray.500', color: 'gray.100' }}
                             borderRadius="6px"
                             fontSize="sm"
@@ -165,7 +166,7 @@ const ProfileInfoSection = () => {
                             <Text
                                 fontSize="xs"
                                 fontWeight="600"
-                                color="gray.400"
+                                color={useColorModeValue("gray.500","gray.400")}
                                 textTransform="uppercase"
                                 letterSpacing="wider"
                                 mb={2}
@@ -180,10 +181,10 @@ const ProfileInfoSection = () => {
                                 />
                             ) : (
                                 <Text
-                                    color="gray.100"
+                                    color={useColorModeValue("gray.800","gray.100")}
                                     fontWeight="500"
                                     borderBottom="1px solid"
-                                    borderColor="#334155"
+                                    borderColor="var(--color-border)"
                                     pb={2}
                                     _groupHover={{ borderColor: '#475569' }}
                                     transition="border-color 0.2s"
@@ -198,7 +199,7 @@ const ProfileInfoSection = () => {
                             <Text
                                 fontSize="xs"
                                 fontWeight="600"
-                                color="gray.400"
+                                color={useColorModeValue("gray.500","gray.400")}
                                 textTransform="uppercase"
                                 letterSpacing="wider"
                                 mb={2}
@@ -217,12 +218,12 @@ const ProfileInfoSection = () => {
                                     align="center"
                                     justify="space-between"
                                     borderBottom="1px solid"
-                                    borderColor="#334155"
+                                    borderColor="var(--color-border)"
                                     pb={2}
                                     _groupHover={{ borderColor: '#475569' }}
                                     transition="border-color 0.2s"
                                 >
-                                    <Text color="gray.100" fontWeight="500">
+                                    <Text color={useColorModeValue("gray.800","gray.100")} fontWeight="500">
                                         {user.email}
                                     </Text>
                                     {user.emailVerified && (
@@ -253,7 +254,7 @@ const ProfileInfoSection = () => {
                             <Text
                                 fontSize="xs"
                                 fontWeight="600"
-                                color="gray.400"
+                                color={useColorModeValue("gray.500","gray.400")}
                                 textTransform="uppercase"
                                 letterSpacing="wider"
                                 mb={2}
@@ -270,11 +271,11 @@ const ProfileInfoSection = () => {
                                 />
                             ) : (
                                 <Text
-                                    color="gray.300"
+                                    color={useColorModeValue("gray.600","gray.300")}
                                     fontSize="sm"
                                     lineHeight="1.7"
                                     borderBottom="1px solid"
-                                    borderColor="#334155"
+                                    borderColor="var(--color-border)"
                                     pb={2}
                                     _groupHover={{ borderColor: '#475569' }}
                                     transition="border-color 0.2s"

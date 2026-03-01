@@ -13,7 +13,7 @@ import { Box } from '@chakra-ui/react';
 import { CodeEditor } from '../../../../editor';
 
 const CodeEditorContainer = ({ code, setCode, language, readOnly = false }) => (
-    <Box flex={1} overflow="hidden" position="relative" bg="#0f172a">
+    <Box flex={1} overflow="hidden" position="relative" bg="var(--color-bg-primary)">
         <CodeEditor
             code={code}
             onChange={setCode}

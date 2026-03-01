@@ -17,15 +17,15 @@ const ChallengeCardSkeleton = ({ count = 6 }) => {
                 <Box
                     key={i}
                     p={5}
-                    bg="rgba(30,41,59,0.6)"
+                    bg="var(--color-bg-card)"
                     borderRadius="12px"
-                    border="1px solid rgba(100,116,139,0.3)"
+                    border="1px solid var(--color-border)"
                     transition="all 0.2s"
                 >
                     {/* Header */}
                     <Flex justify="space-between" align="start" mb={3}>
-                        <Skeleton height="24px" width="180px" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
-                        <Skeleton height="24px" width="60px" borderRadius="full" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
+                        <Skeleton height="24px" width="180px" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
+                        <Skeleton height="24px" width="60px" borderRadius="full" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
                     </Flex>
 
                     {/* Description */}
@@ -34,8 +34,8 @@ const ChallengeCardSkeleton = ({ count = 6 }) => {
                         spacing={2}
                         mb={4}
                         speed={speed}
-                        startColor="rgba(30,41,59,0.8)"
-                        endColor="rgba(30,41,59,1)"
+                        startColor="var(--color-skeleton-base)"
+                        endColor="var(--color-skeleton-shimmer)"
                     />
 
                     {/* Tags */}
@@ -47,16 +47,16 @@ const ChallengeCardSkeleton = ({ count = 6 }) => {
                                 width="60px"
                                 borderRadius="full"
                                 speed={speed}
-                                startColor="rgba(30,41,59,0.8)"
-                                endColor="rgba(30,41,59,1)"
+                                startColor="var(--color-skeleton-base)"
+                                endColor="var(--color-skeleton-shimmer)"
                             />
                         ))}
                     </Flex>
 
                     {/* Stats row */}
-                    <Flex justify="space-between" align="center" pt={3} borderTop="1px solid rgba(100,116,139,0.2)">
-                        <Skeleton height="16px" width="80px" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
-                        <Skeleton height="16px" width="100px" speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
+                    <Flex justify="space-between" align="center" pt={3} borderTop="1px solid var(--color-border-subtle)">
+                        <Skeleton height="16px" width="80px" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
+                        <Skeleton height="16px" width="100px" speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
                     </Flex>
                 </Box>
             ))}

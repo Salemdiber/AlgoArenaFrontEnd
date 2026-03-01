@@ -12,6 +12,7 @@ import {
     Switch,
     Badge,
     Icon,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -62,9 +63,9 @@ const TwoFactorSection = () => {
             initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.5, delay: 0.3, ease: 'easeOut' }}
-            bg="#1e293b"
+            bg="var(--color-bg-secondary)"
             borderRadius="12px"
-            boxShadow="0 4px 20px rgba(0,0,0,0.4)"
+            boxShadow="var(--shadow-card)"
             borderTop="3px solid #22d3ee"
             p={{ base: 6, md: 8 }}
             position="relative"
@@ -95,7 +96,7 @@ const TwoFactorSection = () => {
                 zIndex={1}
             >
                 <Flex align="center" gap={3}>
-                    <Text fontFamily="heading" fontSize="lg" fontWeight="600" color="gray.100">
+                    <Text fontFamily="heading" fontSize="lg" fontWeight="600" color={useColorModeValue("gray.800","gray.100")}>
                         Two-Factor Authentication
                     </Text>
                     <Badge
@@ -128,7 +129,7 @@ const TwoFactorSection = () => {
                     onChange={handleToggle}
                     sx={{
                         '& .chakra-switch__track': {
-                            bg: twoFactorEnabled ? '#22d3ee' : '#334155',
+                            bg: twoFactorEnabled ? '#22d3ee' : 'var(--color-border)',
                             boxShadow: twoFactorEnabled ? '0 0 20px rgba(34, 211, 238, 0.3)' : 'none',
                         },
                     }}
@@ -137,7 +138,7 @@ const TwoFactorSection = () => {
 
             {/* Description + buttons */}
             <Box position="relative" zIndex={1}>
-                <Text color="gray.400" fontSize="sm" lineHeight="1.7" maxW="2xl" mb={6}>
+                <Text color={useColorModeValue("gray.500","gray.400")} fontSize="sm" lineHeight="1.7" maxW="2xl" mb={6}>
                     Add an extra layer of security to your account. You'll need to enter a verification code in addition to your password when signing in.
                 </Text>
 
@@ -161,8 +162,8 @@ const TwoFactorSection = () => {
 
                     <Button
                         variant="outline"
-                        borderColor="#475569"
-                        color="gray.300"
+                        borderColor="var(--color-border-hover)"
+                        color={useColorModeValue("gray.600","gray.300")}
                         fontWeight="500"
                         borderRadius="6px"
                         fontSize="sm"

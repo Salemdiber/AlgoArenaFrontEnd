@@ -12,7 +12,7 @@ const ChallengePlaySkeleton = () => {
     const speed = settings?.reducedMotion ? 0 : 0.8;
 
     return (
-        <Box h="100vh" display="flex" flexDirection="column" bg="#0f172a">
+        <Box h="100vh" display="flex" flexDirection="column" bg="var(--color-bg-primary)">
             {/* Header */}
             <Box p={4} borderBottom="1px solid rgba(100,116,139,0.2)">
                 <Flex justify="space-between" align="center">
@@ -50,8 +50,8 @@ const ChallengePlaySkeleton = () => {
                     <Box mb={4}>
                         {[1, 2, 3].map((i) => (
                             <Box key={i} mb={3} p={3} bg="rgba(30,41,59,0.3)" borderRadius="8px">
-                                <Skeleton height="14px" width="180px" mb={2} speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
-                                <SkeletonText noOfLines={2} spacing={2} speed={speed} startColor="rgba(30,41,59,0.8)" endColor="rgba(30,41,59,1)" />
+                                <Skeleton height="14px" width="180px" mb={2} speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
+                                <SkeletonText noOfLines={2} spacing={2} speed={speed} startColor="var(--color-skeleton-base)" endColor="var(--color-skeleton-shimmer)" />
                             </Box>
                         ))}
                     </Box>
@@ -82,7 +82,7 @@ const ChallengePlaySkeleton = () => {
                     </Box>
 
                     {/* Terminal */}
-                    <Box h="280px" p={4} bg="rgba(0,0,0,0.5)" borderTop="1px solid rgba(100,116,139,0.2)">
+                    <Box h="280px" p={4} bg="rgba(0,0,0,0.5)" borderTop="1px solid var(--color-border-subtle)">
                         <Flex justify="space-between" align="center" mb={3}>
                             <Skeleton height="16px" width="80px" speed={speed} startColor="rgba(30,41,59,0.6)" endColor="rgba(30,41,59,0.9)" />
                             <Skeleton height="32px" width="100px" borderRadius="6px" speed={speed} startColor="rgba(30,41,59,0.6)" endColor="rgba(30,41,59,0.9)" />

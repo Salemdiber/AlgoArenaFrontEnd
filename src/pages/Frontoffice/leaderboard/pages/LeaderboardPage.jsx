@@ -81,7 +81,7 @@ const LeaderboardPage = () => {
             pt={{ base: 24, md: 28 }}
             pb={{ base: 10, md: 16 }}
             px={{ base: 4, sm: 6, lg: 8 }}
-            bg="#0f172a"
+            bg="var(--color-bg-primary)"
             bgImage="linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px)"
             bgSize="50px 50px"
             position="relative"
@@ -111,7 +111,7 @@ const LeaderboardPage = () => {
                         justify="space-between"
                         mb={6}
                     >
-                        <Text fontFamily="heading" fontSize="2xl" fontWeight="bold" color="white">
+                        <Text fontFamily="heading" fontSize="2xl" fontWeight="bold" color="var(--color-text-primary)">
                             Elite Contenders
                         </Text>
                         <Text fontFamily="body" fontSize="sm" color="gray.400">

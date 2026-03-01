@@ -49,26 +49,26 @@ const StatCard = ({ title, value, label, trend, trendUp, icon, color = 'cyan', i
             </div>
 
             {/* Value */}
-            <h3 className="font-heading text-3xl font-bold text-gray-100 mb-1">
+            <h3 className="font-heading text-3xl font-bold mb-1" style={{ color: 'var(--color-text-heading)' }}>
                 {value}
             </h3>
 
             {/* Label */}
-            <p className="text-sm text-gray-400">{label}</p>
+            <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{label}</p>
 
             {/* Trend / Live Indicator */}
             <div className="mt-3 flex items-center gap-2">
                 {isLive ? (
                     <>
                         <span className="status-dot status-online" />
-                        <span className="text-xs text-gray-500">Real-time</span>
+                        <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Real-time</span>
                     </>
                 ) : trend ? (
                     <>
                         <span className={`text-xs font-medium ${trendUp ? current.trend : 'text-red-400'}`}>
                             {trend}
                         </span>
-                        <span className="text-xs text-gray-500">vs last month</span>
+                        <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>vs last month</span>
                     </>
                 ) : null}
             </div>

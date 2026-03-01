@@ -4,8 +4,8 @@ const AILogs = () => {
     return (
         <div className="space-y-6 animate-fade-in-up">
             <div className="mb-6">
-                <h1 className="font-heading text-3xl font-bold text-gray-100 mb-2">AI Evaluation Logs</h1>
-                <p className="text-gray-400">Monitor AI code evaluation activity and performance</p>
+                <h1 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-3xl font-bold  mb-2">AI Evaluation Logs</h1>
+                <p style={{ color: 'var(--color-text-muted)' }} className="">Monitor AI code evaluation activity and performance</p>
             </div>
 
             {/* Stats Grid */}
@@ -25,13 +25,13 @@ const AILogs = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
-                    <select className="form-select w-full md:w-48 bg-[#0f172a]">
+                    <select className="form-select w-full md:w-48 bg-(--color-bg-input)">
                         <option>All Status</option>
                         <option>Success</option>
                         <option>Failed</option>
                         <option>Timeout</option>
                     </select>
-                    <select className="form-select w-full md:w-48 bg-[#0f172a]">
+                    <select className="form-select w-full md:w-48 bg-(--color-bg-input)">
                         <option>All Complexity</option>
                         <option>O(1)</option>
                         <option>O(n)</option>
@@ -112,7 +112,7 @@ const StatBox = ({ label, value, color, icon }) => {
     };
 
     return (
-        <div className="glass-panel rounded-2xl p-6 border border-gray-700/50 bg-[#1e293b]/60 backdrop-blur-md">
+        <div className="glass-panel rounded-2xl p-6 border  bg-(--color-bg-card) backdrop-blur-md">
             <div className="flex items-center justify-between mb-4">
                 <div className={`p-3 rounded-lg ${colorClasses[color]}`}>
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -123,8 +123,8 @@ const StatBox = ({ label, value, color, icon }) => {
                     </svg>
                 </div>
             </div>
-            <h3 className="font-heading text-2xl font-bold text-gray-100 mb-1">{value}</h3>
-            <p className="text-sm text-gray-400">{label}</p>
+            <h3 style={{ color: 'var(--color-text-heading)' }} className="font-heading text-2xl font-bold  mb-1">{value}</h3>
+            <p style={{ color: 'var(--color-text-muted)' }} className="text-sm ">{label}</p>
         </div>
     );
 };
@@ -156,17 +156,17 @@ const LogItem = ({ status, title, user, time, runtime, complexity, complexityCol
                 </span>
             </div>
             <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-200 truncate group-hover:text-cyan-400 transition-colors">{title}</p>
-                <p className="text-xs text-gray-400 mt-1">Evaluated by {user} • {time}</p>
+                <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm font-medium  truncate group-hover:text-cyan-400 transition-colors">{title}</p>
+                <p style={{ color: 'var(--color-text-muted)' }} className="text-xs  mt-1">Evaluated by {user} • {time}</p>
             </div>
 
             <div className="hidden md:flex items-center gap-6">
                 <div className="text-right">
-                    <p className="text-xs text-gray-400">Runtime</p>
+                    <p style={{ color: 'var(--color-text-muted)' }} className="text-xs ">Runtime</p>
                     <p className={`text-sm font-mono ${textColors[runtimeColor]}`}>{runtime}</p>
                 </div>
                 <div className="text-right">
-                    <p className="text-xs text-gray-400">Complexity</p>
+                    <p style={{ color: 'var(--color-text-muted)' }} className="text-xs ">Complexity</p>
                     <p className={`text-sm font-mono ${textColors[complexityColor]}`}>{complexity}</p>
                 </div>
                 <div className="w-24 h-8">

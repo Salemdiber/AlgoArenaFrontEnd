@@ -11,6 +11,7 @@ import {
     HStack,
     Select,
     Code,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
@@ -144,22 +145,32 @@ const Games = () => {
         runGameAnimation(currentGame);
     };
 
+    const sectionBg = useColorModeValue('rgba(241,245,249,0.6)', 'rgba(31,41,55,0.3)');
+    const cardBg = useColorModeValue('white', 'gray.900');
+    const borderColor = useColorModeValue('gray.200', 'gray.700');
+    const headingColor = useColorModeValue('gray.800', 'gray.100');
+    const textColor = useColorModeValue('gray.600', 'gray.300');
+    const codeBg = useColorModeValue('gray.100', 'gray.800');
+    const codeColor = useColorModeValue('gray.700', 'gray.300');
+    const mutedColor = useColorModeValue('gray.500', 'gray.400');
+    const inactiveGrid = useColorModeValue('gray.200', 'gray.700');
+    const selectBg = useColorModeValue('gray.100', 'gray.800');
+
     return (
-        <Box id="games" as="section" py={20} bg="rgba(31, 41, 55, 0.3)">
+        <Box id="games" as="section" py={20} bg={sectionBg}>
             <Container maxW="7xl">
                 <VStack spacing={16}>
-                    {/* Header */}
                     <VStack spacing={4} textAlign="center">
                         <Heading
                             as="h2"
                             fontSize={{ base: '3xl', sm: '4xl' }}
                             fontFamily="heading"
                             fontWeight="bold"
-                            color="gray.100"
+                            color={headingColor}
                         >
                             Your Code. Your Game.
                         </Heading>
-                        <Text fontSize="xl" color="gray.300">
+                        <Text fontSize="xl" color={textColor}>
                             Choose a game. Write the logic. Watch it evolve.
                         </Text>
                     </VStack>
@@ -184,11 +195,11 @@ const Games = () => {
                         {/* Code Editor */}
                         <GridItem>
                             <Box
-                                bg="gray.900"
+                                bg={cardBg}
                                 borderRadius="16px"
                                 p={6}
                                 border="1px solid"
-                                borderColor="gray.700"
+                                borderColor={borderColor}
                                 boxShadow="custom"
                                 position="relative"
                                 overflow="hidden"
@@ -218,10 +229,10 @@ const Games = () => {
                                         <Box w={3} h={3} borderRadius="full" bg="green.500" />
                                     </HStack>
                                     <Select
-                                        bg="gray.800"
-                                        color="gray.300"
+                                        bg={selectBg}
+                                        color={textColor}
                                         size="sm"
-                                        borderColor="gray.700"
+                                        borderColor={borderColor}
                                         width="auto"
                                     >
                                         <option>JavaScript</option>
@@ -233,7 +244,7 @@ const Games = () => {
                                     display="block"
                                     whiteSpace="pre"
                                     fontSize="sm"
-                                    color="gray.300"
+                                    color={codeColor}
                                     bg="transparent"
                                     p={0}
                                     mb={4}
@@ -247,28 +258,27 @@ const Games = () => {
                                     <Button flex={1} variant="primary" onClick={handleRunCode}>
                                         Run Code
                                     </Button>
-                                    <Button variant="ghost" borderColor="gray.700" onClick={handleRunCode}>
+                                    <Button variant="ghost" borderColor={borderColor} onClick={handleRunCode}>
                                         Reset
                                     </Button>
                                 </HStack>
                             </Box>
                         </GridItem>
 
-                        {/* Game Simulation Panel */}
                         <GridItem>
                             <MotionBox
-                                bg="gray.900"
+                                bg={cardBg}
                                 borderRadius="16px"
                                 p={6}
                                 border="1px solid"
-                                borderColor="gray.700"
+                                borderColor={borderColor}
                                 boxShadow="custom"
                                 initial={{ opacity: 0, x: 30 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.5 }}
                             >
                                 <HStack justify="space-between" mb={4}>
-                                    <Heading as="h3" size="md" fontFamily="heading" color="gray.100">
+                                    <Heading as="h3" size="md" fontFamily="heading" color={headingColor}>
                                         {gameData[currentGame].title}
                                     </Heading>
                                     <Text fontSize="xs" color="brand.500" fontWeight="semibold">
@@ -276,14 +286,13 @@ const Games = () => {
                                     </Text>
                                 </HStack>
 
-                                {/* Game Grid */}
-                                <Box bg="gray.800" borderRadius="8px" p={4} mb={4}>
+                                <Box bg={codeBg} borderRadius="8px" p={4} mb={4}>
                                     <Grid templateColumns="repeat(8, 1fr)" gap={1} mb={4}>
                                         {Array.from({ length: 32 }).map((_, i) => (
                                             <MotionBox
                                                 key={i}
                                                 aspectRatio={1}
-                                                bg={activeIndices.includes(i) ? 'brand.500' : 'gray.700'}
+                                                bg={activeIndices.includes(i) ? 'brand.500' : inactiveGrid}
                                                 borderRadius="4px"
                                                 animate={{
                                                     scale: activeIndices.includes(i) ? [0.8, 1.1, 1] : 1,
@@ -294,29 +303,28 @@ const Games = () => {
                                     </Grid>
                                 </Box>
 
-                                {/* Stats */}
                                 <Grid templateColumns="repeat(3, 1fr)" gap={4}>
-                                    <Box bg="gray.800" borderRadius="8px" p={3} textAlign="center">
+                                    <Box bg={codeBg} borderRadius="8px" p={3} textAlign="center">
                                         <Text fontSize="2xl" fontWeight="bold" color="brand.500">
                                             {stats.score}
                                         </Text>
-                                        <Text fontSize="xs" color="gray.400">
+                                        <Text fontSize="xs" color={mutedColor}>
                                             Score
                                         </Text>
                                     </Box>
-                                    <Box bg="gray.800" borderRadius="8px" p={3} textAlign="center">
+                                    <Box bg={codeBg} borderRadius="8px" p={3} textAlign="center">
                                         <Text fontSize="2xl" fontWeight="bold" color="green.400">
                                             {stats.lines}
                                         </Text>
-                                        <Text fontSize="xs" color="gray.400">
+                                        <Text fontSize="xs" color={mutedColor}>
                                             Progress
                                         </Text>
                                     </Box>
-                                    <Box bg="gray.800" borderRadius="8px" p={3} textAlign="center">
+                                    <Box bg={codeBg} borderRadius="8px" p={3} textAlign="center">
                                         <Text fontSize="2xl" fontWeight="bold" color="yellow.400">
                                             {stats.level}
                                         </Text>
-                                        <Text fontSize="xs" color="gray.400">
+                                        <Text fontSize="xs" color={mutedColor}>
                                             Level
                                         </Text>
                                     </Box>

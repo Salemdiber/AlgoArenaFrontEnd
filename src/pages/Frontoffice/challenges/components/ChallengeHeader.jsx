@@ -14,6 +14,7 @@ import {
     Tooltip,
     HStack,
     VStack,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useChallengeContext } from '../context/ChallengeContext';
@@ -198,6 +199,9 @@ const ChallengeHeader = () => {
             backdropFilter="blur(12px)"
             borderBottom="1px solid"
             borderColor="rgba(255,255,255,0.07)"
+            bg="var(--color-bg-secondary)"
+            borderBottom="1px solid"
+            borderColor={useColorModeValue("gray.200","gray.700")}
             px={4}
             py={2.5}
             align="center"
@@ -211,6 +215,8 @@ const ChallengeHeader = () => {
                     variant="ghost"
                     color="gray.500"
                     _hover={{ color: 'gray.100', bg: 'rgba(255,255,255,0.06)' }}
+                    color={useColorModeValue("gray.500","gray.400")}
+                    _hover={{ color: 'gray.100' }}
                     onClick={() => navigate('/challenges')}
                     aria-label="Back to challenges"
                     size="sm"
@@ -255,6 +261,27 @@ const ChallengeHeader = () => {
                     color="gray.400"
                     border="1px solid rgba(255,255,255,0.1)"
                     _hover={{ bg: 'rgba(255,255,255,0.1)', color: 'gray.200' }}
+                <Box>
+                    <Text fontFamily="heading" fontWeight="bold" color={useColorModeValue("gray.800","gray.100")} fontSize="md">
+                        {selectedChallenge.title}
+                    </Text>
+                    <Text fontSize="xs" color={useColorModeValue("gray.500","gray.400")}>
+                        {diffMeta.label} • {selectedChallenge.tags.join(' • ')}
+                    </Text>
+                </Box>
+            </Flex>
+
+            {/* Right: Timer + actions */}
+            <Flex align="center" gap={4}>
+                <Flex align="center" gap={2} fontSize="sm" color={useColorModeValue("gray.500","gray.400")}>
+                    <ClockIcon w={4} h={4} color="brand.500" />
+                    <Text fontFamily="mono" color="brand.500" fontWeight="bold">{timerStr}</Text>
+                </Flex>
+                <Button
+                    size="sm"
+                    bg="var(--color-tag-bg)"
+                    color={useColorModeValue("gray.600","gray.300")}
+                    _hover={{ bg: 'gray.600' }}
                     fontWeight="semibold"
                     fontSize="xs"
                     onClick={resetCode}

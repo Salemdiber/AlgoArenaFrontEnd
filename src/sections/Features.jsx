@@ -7,6 +7,7 @@ import {
     GridItem,
     VStack,
     Icon,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
@@ -97,17 +98,25 @@ const features = [
 ];
 
 const Features = () => {
+    const sectionBg = useColorModeValue('rgba(241,245,249,0.6)', 'rgba(31,41,55,0.3)');
+    const sectionBg2 = useColorModeValue('white', 'gray.900');
+    const cardBg = useColorModeValue('white', 'gray.900');
+    const cardBg2 = useColorModeValue('gray.50', 'gray.800');
+    const borderColor = useColorModeValue('gray.200', 'gray.700');
+    const headingColor = useColorModeValue('gray.800', 'gray.100');
+    const textColor = useColorModeValue('gray.600', 'gray.300');
+
     return (
         <>
             {/* How It Works Section */}
-            <Box as="section" py={20} bg="rgba(31, 41, 55, 0.3)">
+            <Box as="section" py={20} bg={sectionBg}>
                 <Container maxW="7xl">
                     <VStack spacing={16} mb={20}>
                         <VStack spacing={4} textAlign="center">
-                            <Heading as="h2" size="2xl" color="gray.100" fontFamily="heading">
+                            <Heading as="h2" size="2xl" color={headingColor} fontFamily="heading">
                                 How It Works
                             </Heading>
-                            <Text fontSize="xl" color="gray.300">
+                            <Text fontSize="xl" color={textColor}>
                                 Three steps to competitive coding mastery
                             </Text>
                         </VStack>
@@ -116,12 +125,12 @@ const Features = () => {
                             {steps.map((step, index) => (
                                 <MotionBox
                                     key={index}
-                                    bg="gray.900"
+                                    bg={cardBg}
                                     borderRadius="16px"
                                     p={8}
                                     textAlign="center"
                                     border="1px solid"
-                                    borderColor="gray.700"
+                                    borderColor={borderColor}
                                     boxShadow="custom"
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ duration: 0.3 }}
@@ -144,10 +153,10 @@ const Features = () => {
                                             {step.icon}
                                         </Icon>
                                     </Box>
-                                    <Heading as="h3" size="lg" mb={4} color="gray.100">
+                                    <Heading as="h3" size="lg" mb={4} color={headingColor}>
                                         {step.title}
                                     </Heading>
-                                    <Text color="gray.300">
+                                    <Text color={textColor}>
                                         {step.desc}
                                     </Text>
                                 </MotionBox>
@@ -158,14 +167,14 @@ const Features = () => {
             </Box>
 
             {/* Features Grid Section */}
-            <Box id="features" as="section" py={20} bg="gray.900">
+            <Box id="features" as="section" py={20} bg={sectionBg2}>
                 <Container maxW="7xl">
                     <VStack spacing={16}>
                         <VStack spacing={4} textAlign="center">
-                            <Heading as="h2" size="2xl" color="gray.100" fontFamily="heading">
+                            <Heading as="h2" size="2xl" color={headingColor} fontFamily="heading">
                                 Built for Competitive Coders
                             </Heading>
-                            <Text fontSize="xl" color="gray.300">
+                            <Text fontSize="xl" color={textColor}>
                                 Everything you need to master algorithms
                             </Text>
                         </VStack>
@@ -174,11 +183,11 @@ const Features = () => {
                             {features.map((feature, index) => (
                                 <Box
                                     key={index}
-                                    bg="gray.800"
+                                    bg={cardBg2}
                                     borderRadius="16px"
                                     p={6}
                                     border="1px solid"
-                                    borderColor="gray.700"
+                                    borderColor={borderColor}
                                     boxShadow="custom"
                                     transition="transform 0.3s"
                                     _hover={{ transform: 'translateY(-5px)' }}
@@ -197,10 +206,10 @@ const Features = () => {
                                             {feature.icon}
                                         </Icon>
                                     </Box>
-                                    <Heading as="h3" size="md" mb={3} color="gray.100">
+                                    <Heading as="h3" size="md" mb={3} color={headingColor}>
                                         {feature.title}
                                     </Heading>
-                                    <Text fontSize="sm" color="gray.300">
+                                    <Text fontSize="sm" color={textColor}>
                                         {feature.desc}
                                     </Text>
                                 </Box>

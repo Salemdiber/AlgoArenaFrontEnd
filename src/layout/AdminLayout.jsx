@@ -11,21 +11,20 @@ const AdminLayout = () => {
     const closeSidebar = () => setIsSidebarOpen(false);
 
     return (
-        <div className="flex h-screen bg-[#0f172a] font-body text-gray-100 overflow-hidden">
-            {/* Background decorative gradients like original */}
+        <div className="flex h-screen font-body overflow-hidden" style={{ background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', transition: 'background-color 0.3s ease, color 0.3s ease' }}>
             {/* Creative Background */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-                {/* Deep dark base with subtle mesh */}
-                <div className="absolute inset-0 bg-[#0f172a]" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(17,24,39,0)_0%,rgba(17,24,39,1)_100%)]" />
+                {/* Base */}
+                <div className="absolute inset-0" style={{ background: 'var(--color-bg-primary)' }} />
+                <div className="absolute inset-0" style={{ background: `radial-gradient(circle at 50% 50%, transparent 0%, var(--color-radial-vignette) 100%)` }} />
 
                 {/* Animated Gradient Orbs */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px] animate-pulse-glow" />
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] animate-blob" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[100px] animate-pulse-glow" style={{ background: 'var(--color-orb-cyan)' }} />
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: '2s', background: 'var(--color-orb-purple)' }} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[120px] animate-blob" style={{ background: 'var(--color-orb-blue)' }} />
 
                 {/* Cyber Grid Overlay */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)]" />
+                <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(var(--color-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--color-grid-line) 1px, transparent 1px)`, backgroundSize: '50px 50px', maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 100%)' }} />
             </div>
 
             {/* Mobile overlay backdrop */}
@@ -38,7 +37,7 @@ const AdminLayout = () => {
 
             <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
 
-            {/* Main Content Wrapper - Fixes sidebar and allows independent scrolling */}
+            {/* Main Content Wrapper */}
             <div className="flex-1 flex flex-col min-w-0 transition-all duration-300 relative z-10 h-full overflow-hidden">
                 <TopNavbar onToggleSidebar={toggleSidebar} />
                 <main className="flex-1 p-6 overflow-y-auto custom-scrollbar scroll-smooth">
