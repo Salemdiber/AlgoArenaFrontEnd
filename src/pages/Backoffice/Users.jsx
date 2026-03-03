@@ -206,9 +206,7 @@ const UserRow = ({ username, email, role, _id, status, avatar, bio, rank, xp, on
                     )}
                     <div>
                         <p className="text-sm font-medium text-gray-200">@{username}</p>
-                        <p className="text-xs text-gray-400">{username}</p>
-                        <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm font-medium ">@{username}</p>
-                        <p style={{ color: 'var(--color-text-muted)' }} className="text-xs ">{name}</p>
+                        {bio && <p style={{ color: 'var(--color-text-muted)' }} className="text-xs ">{bio}</p>}
                     </div>
                 </div>
             </td>
@@ -249,19 +247,15 @@ const UserRow = ({ username, email, role, _id, status, avatar, bio, rank, xp, on
             </td>
 
             {/* ── XP ── */}
-            <td className="px-6 py-4 whitespace-nowrap">
-                {xp != null ? (
+            <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-cyan-400">
+                {typeof xp === 'number' ? (
                     <span className="text-sm font-mono font-semibold" style={{ color: '#facc15' }}>
                         {xp >= 1000 ? `${(xp / 1000).toFixed(1).replace(/\.0$/, '')}k` : xp}
-                        <span className="text-gray-500 font-normal text-xs ml-1">XP</span>
                     </span>
                 ) : (
-                    <span className="text-gray-600 text-xs font-mono">0 XP</span>
+                    <span className="text-gray-600 text-xs font-mono">0</span>
                 )}
             </td>
-
-            <td style={{ color: 'var(--color-text-secondary)' }} className="px-6 py-4 whitespace-nowrap text-sm ">{rank}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-cyan-400">{score}</td>
             <td className="px-6 py-4 whitespace-nowrap">
                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${displayStatus === 'Active' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
                     displayStatus === 'Offline' ? 'bg-gray-500/10 text-gray-400 border-gray-500/20' :
