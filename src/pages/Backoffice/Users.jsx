@@ -206,7 +206,6 @@ const UserRow = ({ username, email, role, _id, status, avatar, bio, rank, xp, cr
                         <p className="text-sm font-medium text-gray-200">@{username}</p>
                         {bio && <p style={{ color: 'var(--color-text-muted)' }} className="text-xs ">{bio}</p>}
                     </div>
-                    <span className="font-medium text-sm" style={{ color: 'var(--color-text-primary)' }}>@{username}</span>
                 </div>
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--color-text-secondary)' }}>{email}</td>
