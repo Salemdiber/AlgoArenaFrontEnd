@@ -18,6 +18,7 @@ const CreateBattleModal = () => {
         setCreateMode,
         setCreateConfig,
         confirmCreateBattle,
+        challenges,
     } = useBattleState();
 
     const [aiBattlesEnabled, setAiBattlesEnabled] = useState(true);
@@ -30,15 +31,38 @@ const CreateBattleModal = () => {
         }
     }, [createModal.isOpen]);
 
-    if (!createModal.isOpen) return null;
+    const { step, mode, totalRounds, difficulty, timeLimit, challengeType } = createModal;
 
-    const { step, mode, totalRounds, difficulty, timeLimit } = createModal;
+    const typeOptions = React.useMemo(() => {
+        const set = new Set();
+        challenges.forEach((challenge) => {
+            if (challenge?.type) set.add(challenge.type);
+            if (Array.isArray(challenge?.tags)) challenge.tags.forEach((tag) => set.add(tag));
+            if (challenge?.difficulty) set.add(challenge.difficulty);
+        });
+        return Array.from(set);
+    }, [challenges]);
+
+    const assignedChallenges = React.useMemo(() => {
+        const pool = challengeType
+            ? challenges.filter((challenge) => (
+                challenge?.type === challengeType
+                || (Array.isArray(challenge?.tags) && challenge.tags.includes(challengeType))
+                || challenge?.difficulty === challengeType
+            ))
+            : challenges;
+
+        if (!pool.length) return [];
+        return Array.from({ length: totalRounds }, (_, idx) => pool[idx % pool.length]);
+    }, [challengeType, challenges, totalRounds]);
 
     const canGoNext = () => {
         if (step === 1) return mode !== null;
-        if (step === 2) return totalRounds >= 1 && totalRounds <= 10;
+        if (step === 2) return totalRounds >= 1 && totalRounds <= 10 && assignedChallenges.length > 0;
         return true;
     };
+
+    if (!createModal.isOpen) return null;
 
     const handleNext = () => {
         if (step < 3) setCreateStep(step + 1);
@@ -49,6 +73,7 @@ const CreateBattleModal = () => {
     };
 
     const handleConfirm = () => {
+        if (assignedChallenges.length === 0) return;
         confirmCreateBattle();
     };
 
@@ -109,11 +134,21 @@ const CreateBattleModal = () => {
                         totalRounds={totalRounds}
                         difficulty={difficulty}
                         timeLimit={timeLimit}
+                        challengeType={challengeType}
+                        typeOptions={typeOptions}
+                        assignedChallenges={assignedChallenges}
                         setCreateConfig={setCreateConfig}
                     />
                 )}
                 {step === 3 && (
-                    <StepConfirm mode={mode} totalRounds={totalRounds} difficulty={difficulty} timeLimit={timeLimit} />
+                    <StepConfirm
+                        mode={mode}
+                        totalRounds={totalRounds}
+                        difficulty={difficulty}
+                        timeLimit={timeLimit}
+                        challengeType={challengeType}
+                        assignedChallenges={assignedChallenges}
+                    />
                 )}
 
                 {/* Footer Actions */}
@@ -193,7 +228,15 @@ const StepMode = ({ mode, setCreateMode, aiBattlesEnabled }) => (
 
 /* ── Step 2: Configure ──────────────────────────────── */
 
-const StepConfigure = ({ totalRounds, difficulty, timeLimit, setCreateConfig }) => (
+const StepConfigure = ({
+    totalRounds,
+    difficulty,
+    timeLimit,
+    challengeType,
+    typeOptions,
+    assignedChallenges,
+    setCreateConfig,
+}) => (
     <div>
         <h3 className="battle-text-lg battle-font-semibold battle-mb-md">Configure Settings</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -229,6 +272,43 @@ const StepConfigure = ({ totalRounds, difficulty, timeLimit, setCreateConfig }) 
                 </select>
             </div>
 
+            {/* Challenge Type */}
+            <div>
+                <label className="battle-text-sm battle-text-muted" style={{ display: 'block', marginBottom: '0.5rem' }}>
+                    Challenge Type
+                </label>
+                <select
+                    className="battle-select"
+                    value={challengeType}
+                    onChange={(e) => setCreateConfig({ challengeType: e.target.value })}
+                >
+                    <option value="">All Types</option>
+                    {typeOptions.map((type) => (
+                        <option key={type} value={type}>{type}</option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Assigned Challenges */}
+            <div>
+                <label className="battle-text-sm battle-text-muted" style={{ display: 'block', marginBottom: '0.5rem' }}>
+                    Challenges by Round
+                </label>
+                <div className="battle-card" style={{ border: '1px solid var(--color-border)' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        {assignedChallenges.length === 0 ? (
+                            <span className="battle-text-sm battle-text-muted">No challenges available.</span>
+                        ) : (
+                            assignedChallenges.map((challenge, idx) => (
+                                <span key={`round-${idx}`} className="battle-text-sm">
+                                    Round {idx + 1}: {challenge?.title || '—'}
+                                </span>
+                            ))
+                        )}
+                    </div>
+                </div>
+            </div>
+
             {/* Time Limit */}
             <div>
                 <label className="battle-text-sm battle-text-muted" style={{ display: 'block', marginBottom: '0.5rem' }}>
@@ -252,7 +332,7 @@ const StepConfigure = ({ totalRounds, difficulty, timeLimit, setCreateConfig }) 
 
 /* ── Step 3: Confirm ────────────────────────────────── */
 
-const StepConfirm = ({ mode, totalRounds, difficulty, timeLimit }) => {
+const StepConfirm = ({ mode, totalRounds, difficulty, timeLimit, challengeType, assignedChallenges }) => {
     const modeLabel = mode === BattleMode.ONE_VS_ONE ? '1vs1 Battle' : '1vsAI Battle';
     const timeMins = Math.floor(timeLimit / 60);
 
@@ -278,6 +358,26 @@ const StepConfirm = ({ mode, totalRounds, difficulty, timeLimit }) => {
                     <div className="battle-flex-between">
                         <span className="battle-text-muted">Time per Round</span>
                         <span className="battle-font-semibold">{timeMins} minutes</span>
+                    </div>
+                    <div className="battle-flex-between">
+                        <span className="battle-text-muted">Challenge Type</span>
+                        <span className="battle-font-semibold">{challengeType || 'All Types'}</span>
+                    </div>
+                    <div>
+                        <span className="battle-text-muted" style={{ display: 'block', marginBottom: '0.5rem' }}>
+                            Challenges by Round
+                        </span>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                            {assignedChallenges.length === 0 ? (
+                                <span className="battle-text-sm battle-text-muted">No challenges available.</span>
+                            ) : (
+                                assignedChallenges.map((challenge, idx) => (
+                                    <span key={`confirm-round-${idx}`} className="battle-text-sm">
+                                        Round {idx + 1}: {challenge?.title || '—'}
+                                    </span>
+                                ))
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
