@@ -195,10 +195,7 @@ const UserRankStatsBar = () => {
     const animatedProgress = useAnimatedProgress(progressPercent);
 
     if (isLoadingStats) return <RankStatsSkeleton />;
-
-    if (!user.rank || !rankMeta) {
-        return <UnrankedBar xp={user.xp} streak={user.streak} />;
-    }
+    if (!user.rank || !rankMeta) return <UnrankedBar xp={user.xp} streak={user.streak} />;
 
     const currentIdx = RANK_ORDER.indexOf(user.rank);
     const nextRankKey = currentIdx >= 0 && currentIdx < RANK_ORDER.length - 1
@@ -324,3 +321,4 @@ const UserRankStatsBar = () => {
 };
 
 export default UserRankStatsBar;
+
