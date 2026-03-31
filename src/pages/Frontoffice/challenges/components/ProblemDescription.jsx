@@ -28,7 +28,11 @@ import {
     List,
     ListItem,
 } from '@chakra-ui/react';
+
+import useLanguage from '../../../../hooks/useLanguage';
+
 import { TimeIcon, InfoIcon } from '@chakra-ui/icons';
+
 import { useChallengeContext } from '../context/ChallengeContext';
 import { DIFFICULTY_META } from '../data/mockChallenges';
 import { CodeEditor } from '../../../../editor';
@@ -86,6 +90,10 @@ const SubmissionMetrics = ({ submission }) => {
 };
 
 const ProblemDescription = () => {
+
+    const { t } = useLanguage();
+    const { selectedChallenge, activeTab } = useChallengeContext();
+
     const {
         selectedChallenge,
         selectedChallengeId,
@@ -98,6 +106,7 @@ const ProblemDescription = () => {
         currentSubmission,
         submissionHistoryByChallenge,
     } = useChallengeContext();
+
 
     const [openHints, setOpenHints] = useState({});
 
@@ -119,6 +128,11 @@ const ProblemDescription = () => {
 
     if (activeTab === 1) {
         return (
+            <Box>
+                <Text color={useColorModeValue("gray.500", "gray.400")} fontStyle="italic">
+                    {t('challenge.discussion_coming')}
+                </Text>
+            </Box>
             <VStack align="stretch" spacing={4}>
                 {!latestSubmission ? (
                     <Text color={gray500_400} fontStyle="italic">
@@ -181,6 +195,8 @@ const ProblemDescription = () => {
 
     if (activeTab === 2) {
         return (
+
+
             <VStack spacing={6} align="stretch">
                 <Card bg="var(--color-bg-card)" border="1px solid" borderColor="var(--color-border)">
                     <CardBody>
@@ -284,10 +300,12 @@ const ProblemDescription = () => {
                 <HStack spacing={6} fontSize="sm" color={gray500_400}>
                     <Flex align="center" gap={2}>
                         <StarIcon w={4} h={4} color="yellow.400" />
-                        <Text>+{selectedChallenge.xpReward} XP Reward</Text>
+                        <Text>+{selectedChallenge.xpReward} {t('challenge.xp_reward')}</Text>
                     </Flex>
                     <Text>
+
                         Acceptance: <Text as="strong" color={gray800_100}>{selectedChallenge.acceptanceRate}%</Text>
+
                     </Text>
                 </HStack>
             </Box>
@@ -295,6 +313,7 @@ const ProblemDescription = () => {
             <Divider borderColor={gray200_700} />
 
             <Box>
+
                 <Text fontFamily="heading" fontWeight="bold" color={gray800_100} mb={3}>
                     Problem Statement
                 </Text>
@@ -322,6 +341,7 @@ const ProblemDescription = () => {
 
             {selectedChallenge.examples.map((ex, i) => (
                 <Box key={i}>
+
                     <Text fontFamily="heading" fontWeight="bold" color={gray800_100} mb={3}>
                         Example {i + 1}
                     </Text>
@@ -345,6 +365,7 @@ const ProblemDescription = () => {
             ))}
 
             <Box>
+
                 <Text fontFamily="heading" fontWeight="bold" color={gray800_100} mb={3}>
                     Constraints
                 </Text>
@@ -366,6 +387,7 @@ const ProblemDescription = () => {
 
             {selectedChallenge.hints?.length > 0 && (
                 <Box>
+
                     <Text fontFamily="heading" fontWeight="bold" color={gray800_100} mb={3}>
                         Hints
                     </Text>
@@ -384,7 +406,7 @@ const ProblemDescription = () => {
                                     onClick={() => toggleHint(i)}
                                     transition="color 0.2s"
                                 >
-                                    Hint {i + 1}
+                                    {t('challenge.hint')} {i + 1}
                                 </Button>
                                 <Collapse in={!!openHints[i]}>
                                     <Box px={4} pb={3}>
@@ -399,6 +421,7 @@ const ProblemDescription = () => {
                 </Box>
             )}
         </VStack>
+
     );
 };
 
