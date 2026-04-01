@@ -4,6 +4,8 @@ import { Box, Flex, Text, Select } from '@chakra-ui/react';
 const LANGUAGES = [
     { value: 'javascript', label: 'JavaScript' },
     { value: 'python', label: 'Python' },
+    { value: 'java', label: 'Java' },
+    { value: 'cpp', label: 'C++' },
 ];
 
 /**
@@ -57,12 +59,7 @@ const SpeedCodeEditor = ({ code, onChange, language, onLanguageChange }) => {
                 {/* Language selector */}
                 <Select
                     value={language}
-                    onChange={(e) => {
-                        const val = (e.target.value || '').toString().toLowerCase();
-                        // Normalize and restrict to allowed languages
-                        const allowed = new Set(LANGUAGES.map((l) => l.value));
-                        onLanguageChange(allowed.has(val) ? val : 'javascript');
-                    }}
+                    onChange={(e) => onLanguageChange(e.target.value)}
                     size="xs"
                     maxW="130px"
                     bg="#0f172a"
