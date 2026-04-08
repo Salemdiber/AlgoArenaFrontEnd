@@ -472,8 +472,6 @@ const ChallengePlayPage = () => {
     const menuIconColor = useColorModeValue('gray.600', 'gray.300');
     const drawerTextColor = useColorModeValue('gray.800', 'gray.100');
     const drawerCloseIconColor = useColorModeValue('gray.500', 'gray.400');
-    const leaveModalBodyTextColor = useColorModeValue('gray.800', 'gray.100');
-    const leaveModalMetaTextColor = useColorModeValue('gray.600', 'gray.300');
 
     if (isLoadingChallenges) {
         return <ChallengePlaySkeleton />;
@@ -678,18 +676,10 @@ const ChallengePlayPage = () => {
                 </Flex>
             </MotionBox>
 
-            <Modal isOpen={leaveModal.isOpen} onClose={leaveModal.onClose} isCentered size="lg" motionPreset="slideInBottom">
+            <Modal isOpen={leaveModal.isOpen} onClose={leaveModal.onClose} isCentered size="lg">
                 <ModalOverlay bg="blackAlpha.600" />
-                <ModalContent
-                    bg="var(--color-bg-card)"
-                    border="1px solid"
-                    borderColor="var(--color-border)"
-                    borderTop="3px solid"
-                    borderTopColor="orange.400"
-                    borderRadius="md"
-                    boxShadow="0 24px 50px rgba(15,23,42,0.45)"
-                    overflow="hidden"
-                >
+                <ModalContent bg="var(--color-bg-card)" border="1px solid" borderColor="var(--color-border)" boxShadow="0 24px 50px rgba(15,23,42,0.45)" overflow="hidden">
+                    <Box h="3px" bg="linear-gradient(90deg, #f59e0b, #facc15)" />
                     <ModalCloseButton />
                     <ModalHeader>
                         <HStack spacing={2}>
@@ -697,84 +687,33 @@ const ChallengePlayPage = () => {
                             <Text>{t('challengePage.saveAndLeave')}</Text>
                         </HStack>
                     </ModalHeader>
-                    <ModalBody>
+                    <ModalBody color="var(--color-text-secondary)">
                         <VStack align="stretch" spacing={4}>
-                            <Text
-                                fontSize={{ base: 'sm', md: 'md' }}
-                                color={leaveModalBodyTextColor}
-                                lineHeight="1.6"
-                                fontWeight="normal"
-                            >
+                            <Text>
                                 {t('challengePage.progressWillBeSaved')}
                             </Text>
-                            <Flex align="center" gap={2}>
-                                <Icon as={FiClock} color="blue.400" boxSize="16px" />
-                                <Text fontSize="sm" color={leaveModalMetaTextColor} fontStyle="italic">
-                                    {t('challengePage.workingFor', { minutes: Math.max(1, Math.floor(elapsedSeconds / 60)) })}
-                                </Text>
+                            <Flex align="center" gap={2.5} color="var(--color-text-muted)">
+                                <Icon as={FiClock} color="orange.300" />
+                                <Text>{t('challengePage.workingFor', { minutes: Math.max(1, Math.floor(elapsedSeconds / 60)) })}</Text>
                             </Flex>
                             <Alert status="info" variant="subtle" borderRadius="md">
                                 <AlertIcon />
-                                <AlertDescription fontSize={{ base: 'xs', md: 'sm' }} lineHeight="1.5">
+                                <Text fontSize="sm">
                                     {t('challengePage.xpReductionNote')}
-                                </AlertDescription>
+                                </Text>
                             </Alert>
                         </VStack>
                     </ModalBody>
                     <ModalFooter>
-                        <Stack direction={{ base: 'column', md: 'row' }} spacing={3} w="full" align="stretch" justify="flex-end" flexWrap="wrap">
-                            <Button
-                                colorScheme="blue"
-                                leftIcon={<Icon as={FiPlay} />}
-                                onClick={leaveModal.onClose}
-                                h="auto"
-                                minH="44px"
-                                whiteSpace="normal"
-                                wordBreak="break-word"
-                                py={3}
-                                px={4}
-                                lineHeight="1.3"
-                                textAlign="center"
-                                w={{ base: 'full', md: 'auto' }}
-                                flex={{ base: 'none', md: 1 }}
-                            >
+                        <Stack direction={{ base: 'column', md: 'row' }} spacing={3} w="full">
+                            <Button colorScheme="blue" leftIcon={<Icon as={FiPlay} />} px={6} py={3} onClick={leaveModal.onClose} w={{ base: 'full', md: 'auto' }}>
                                 {t('challengePage.continueCoding')}
                             </Button>
-                            <Button
-                                variant="outline"
-                                colorScheme="orange"
-                                leftIcon={<Icon as={FiBookmark} />}
-                                onClick={handleLeaveConfirm}
-                                h="auto"
-                                minH="44px"
-                                whiteSpace="normal"
-                                wordBreak="break-word"
-                                py={3}
-                                px={4}
-                                lineHeight="1.3"
-                                textAlign="center"
-                                w={{ base: 'full', md: 'auto' }}
-                                flex={{ base: 'none', md: 1 }}
-                            >
+                            <Button variant="outline" colorScheme="orange" leftIcon={<Icon as={FiBookmark} />} px={6} py={3} onClick={handleLeaveConfirm} w={{ base: 'full', md: 'auto' }}>
                                 {t('challengePage.saveAndLeave')}
                             </Button>
                             {code.trim().length > 0 && (
-                                <Button
-                                    variant="ghost"
-                                    colorScheme="green"
-                                    leftIcon={<Icon as={FiCheckCircle} />}
-                                    onClick={handleSubmitFromModal}
-                                    h="auto"
-                                    minH="44px"
-                                    whiteSpace="normal"
-                                    wordBreak="break-word"
-                                    py={3}
-                                    px={4}
-                                    lineHeight="1.3"
-                                    textAlign="center"
-                                    w={{ base: 'full', md: 'auto' }}
-                                    flex={{ base: 'none', md: 1 }}
-                                >
+                                <Button variant="ghost" colorScheme="green" leftIcon={<Icon as={FiCheckCircle} />} px={6} py={3} onClick={handleSubmitFromModal} w={{ base: 'full', md: 'auto' }}>
                                     {t('challengePage.submitSolution')}
                                 </Button>
                             )}
