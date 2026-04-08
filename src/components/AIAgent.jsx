@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../pages/Frontoffice/auth/context/AuthContext';
 
 const AIAgent = () => {
     const { t } = useTranslation();
+    const { currentUser, isLoggedIn } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const [mode, setMode] = useState('chat');
     const [input, setInput] = useState('');
@@ -90,7 +92,7 @@ const AIAgent = () => {
             if (typeof puter === 'undefined') throw new Error("Puter SDK not loaded");
 
             const systemPrompt = `Analyze the user's intent to navigate. 
-Valid destinations: 'home', 'landing', 'battles', 'challenges', 'leaderboard', 'community', 'dashboard', 'profile'.
+Valid destinations: 'home', 'landing', 'battles', 'challenges', 'leaderboard', 'community', 'dashboard', 'profile', 'signin', 'signup'.
 Extract ONLY the single word destination representing the platform page. If unclear, return 'unknown'.
 User input: "${userText}"`;
 
@@ -102,16 +104,38 @@ User input: "${userText}"`;
 
             if (target === 'landing') target = 'home';
 
+            const userRole = String(currentUser?.role || '').toUpperCase();
+            const isAdmin = userRole === 'ADMIN' || userRole === 'ORGANIZER';
+
             switch (target) {
-                case 'Signin': route = '/signin'; spokenText = t('aiAgent.navigatingToSignin'); break;
-                case 'Signup': route = '/signup'; spokenText = t('aiAgent.navigatingToSignup'); break;
+                case 'signin': route = '/signin'; spokenText = t('aiAgent.navigatingToSignin'); break;
+                case 'signup': route = '/signup'; spokenText = t('aiAgent.navigatingToSignup'); break;
                 case 'home': route = '/'; spokenText = t('aiAgent.navigatingToHome'); break;
                 case 'challenges': route = '/challenges'; spokenText = t('aiAgent.navigatingToChallenges'); break;
                 case 'battles': route = '/battles'; spokenText = t('aiAgent.navigatingToBattles'); break;
                 case 'leaderboard': route = '/leaderboard'; spokenText = t('aiAgent.navigatingToLeaderboard'); break;
                 case 'community': route = '/community'; spokenText = t('aiAgent.navigatingToCommunity'); break;
-                case 'profile': route = '/profile'; spokenText = t('aiAgent.openingProfile'); break;
-                case 'dashboard': route = '/admin'; spokenText = t('aiAgent.goingToDashboard'); break;
+                case 'profile':
+                    if (!isLoggedIn) {
+                        route = null;
+                        spokenText = t('aiAgent.loginRequired');
+                    } else {
+                        route = '/profile';
+                        spokenText = t('aiAgent.openingProfile');
+                    }
+                    break;
+                case 'dashboard':
+                    if (!isLoggedIn) {
+                        route = null;
+                        spokenText = t('aiAgent.loginRequired');
+                    } else if (!isAdmin) {
+                        route = null;
+                        spokenText = t('aiAgent.dashboardRestricted');
+                    } else {
+                        route = '/admin';
+                        spokenText = t('aiAgent.goingToDashboard');
+                    }
+                    break;
                 default:
                     route = null;
                     spokenText = t('aiAgent.unrecognizedDestination');
@@ -249,18 +273,19 @@ Your primary responsibilities:
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="group relative w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-(--color-bg-primary) to-(--color-bg-secondary) text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:-translate-y-1 transition-all duration-300 border border-(--color-border) overflow-visible"
+                    className="group relative w-16 h-16 rounded-full flex items-center justify-center text-white shadow-[0_0_25px_rgba(139,92,246,0.35),0_0_60px_rgba(34,211,238,0.15)] hover:shadow-[0_0_45px_rgba(139,92,246,0.55),0_0_80px_rgba(34,211,238,0.3)] hover:-translate-y-1 transition-all duration-300 border-0 overflow-visible"
+                    style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 50%, #ec4899 100%)' }}
                     aria-label={t('aiAgent.openAssistant')}
                 >
-                    <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div className="absolute inset-[-4px] rounded-full border border-dashed border-(--color-border) animate-[spin_8s_linear_infinite] group-hover:border-cyan-400/60 hidden md:block"></div>
-                    <div className="relative z-10 flex items-center justify-center filter drop-shadow-[0_0_8px_rgba(34,211,238,0.8)] group-hover:scale-110 transition-transform duration-300">
-                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/30 via-purple-500/20 to-pink-500/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="absolute inset-[-4px] rounded-full border border-dashed border-purple-400/40 animate-[spin_8s_linear_infinite] group-hover:border-purple-400/70 hidden md:block"></div>
+                    <div className="relative z-10 flex items-center justify-center filter drop-shadow-[0_0_12px_rgba(255,255,255,0.6)] group-hover:scale-110 transition-transform duration-300">
+                        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24">
+                            <path d="M12 2L13.09 8.26L18 6L14.74 10.91L21 12L14.74 13.09L18 18L13.09 15.74L12 22L10.91 15.74L6 18L9.26 13.09L3 12L9.26 10.91L6 6L10.91 8.26L12 2Z" fill="currentColor" stroke="currentColor" strokeWidth="0.5" />
                         </svg>
                     </div>
-                    <div className="absolute top-0 right-0 w-3.5 h-3.5 bg-cyan-400 rounded-full border-2 border-(--color-bg-primary) z-20" />
-                    <div className="absolute top-0 right-0 w-3.5 h-3.5 bg-cyan-400 rounded-full border-2 border-(--color-bg-primary) z-10 animate-ping opacity-75" />
+                    <div className="absolute top-0 right-0 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-white z-20 shadow-[0_0_8px_rgba(74,222,128,0.6)]" />
+                    <div className="absolute top-0 right-0 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-white z-10 animate-ping opacity-75" />
                 </button>
             )}
 
@@ -270,13 +295,13 @@ Your primary responsibilities:
 
                     {/* Header */}
                     <div className="relative flex flex-col bg-gradient-to-br from-(--color-bg-secondary) to-(--color-bg-primary) border-b border-(--color-border)">
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 opacity-50"></div>
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-400 via-purple-500 to-pink-500 opacity-70"></div>
 
                         <div className="flex items-center justify-between p-5 pb-4">
                             <div className="flex items-center gap-4">
-                                <div className="relative w-12 h-12 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.4)]">
-                                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                <div className="relative w-12 h-12 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.4)]" style={{ background: 'linear-gradient(135deg, #0ea5e9, #8b5cf6, #ec4899)' }}>
+                                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24">
+                                        <path d="M12 2L13.09 8.26L18 6L14.74 10.91L21 12L14.74 13.09L18 18L13.09 15.74L12 22L10.91 15.74L6 18L9.26 13.09L3 12L9.26 10.91L6 6L10.91 8.26L12 2Z" fill="currentColor" stroke="currentColor" strokeWidth="0.5" />
                                     </svg>
                                     <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-(--color-bg-secondary)"></div>
                                 </div>

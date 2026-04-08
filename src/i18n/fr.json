@@ -1,8 +1,8 @@
 {
   "languageSwitcher": {
-    "groupAria": "Langue de l'interface",
-    "english": "Anglais",
-    "french": "Français",
+    "groupAria": "Sélecteur de langue",
+    "english": "Passer en anglais",
+    "french": "Passer en français",
     "en": "EN",
     "fr": "FR"
   },
@@ -1440,7 +1440,10 @@
     "stopPlayback": "Arrêter la lecture",
     "readAloud": "Lire à voix haute",
     "listening": "Écoute en cours...",
-    "justNow": "À l'instant"
+    "justNow": "\u00c0 l'instant",
+    "dashboardRestricted": "D\u00e9sol\u00e9, les pages du tableau de bord et d'administration sont r\u00e9serv\u00e9es aux administrateurs et organisateurs uniquement. En tant que joueur, vous pouvez acc\u00e9der aux pages publiques comme les D\u00e9fis, Batailles, Classement, Communaut\u00e9 et votre Profil.",
+    "loginRequired": "Vous devez \u00eatre connect\u00e9 pour acc\u00e9der \u00e0 cette page. Veuillez vous connecter d'abord.",
+    "routeNotFound": "Cette destination ne semble pas exister. Essayez de dire quelque chose comme \u00abAller aux d\u00e9fis\u00bb ou \u00abOuvrir mon profil\u00bb."
   },
   "charts": {
     "day": "Jour {{n}}",

@@ -1,8 +1,8 @@
 {
   "languageSwitcher": {
-    "groupAria": "Interface language",
-    "english": "English",
-    "french": "French",
+    "groupAria": "Language selector",
+    "english": "Switch to English",
+    "french": "Switch to French",
     "en": "EN",
     "fr": "FR"
   },
@@ -1440,7 +1440,10 @@
     "stopPlayback": "Stop playback",
     "readAloud": "Read aloud",
     "listening": "Listening...",
-    "justNow": "Just now"
+    "justNow": "Just now",
+    "dashboardRestricted": "Sorry, dashboard and admin pages are restricted to administrators and organizers only. As a player, you can access front-office pages like Challenges, Battles, Leaderboard, Community, and your Profile.",
+    "loginRequired": "You need to be logged in to access that page. Please sign in first.",
+    "routeNotFound": "That destination doesn't seem to exist. Try saying something like 'Go to challenges' or 'Open my profile'."
   },
   "charts": {
     "day": "Day {{n}}",

@@ -1,6 +1,6 @@
-<div align="center">
+ï»¿<div align="center">
   <img src="public/logo_algoarena.png" alt="AlgoArena Logo" width="200" />
-  <h1>AlgoArena — Frontend</h1>
+  <h1>AlgoArena | Frontend</h1>
   <p><strong>A competitive programming platform where developers sharpen their algorithmic skills</strong></p>
 </div>
 
@@ -75,26 +75,26 @@ What makes the experience strong is the integration of AI-assisted flows and san
 ## Architecture Overview
 ```text
 +----------------------------------------------------------------------+
-¦                           Client Browser                            ¦
-¦                                                                      ¦
-¦  +---------------------+   +----------------------+                 ¦
-¦  ¦ Frontoffice UI      ¦   ¦ Backoffice UI        ¦                 ¦
-¦  ¦ - Challenges        ¦   ¦ - Dashboard          ¦                 ¦
-¦  ¦ - Battles           ¦   ¦ - Challenges         ¦                 ¦
-¦  ¦ - Leaderboard       ¦   ¦ - Activity Logs      ¦                 ¦
-¦  ¦ - Profile/Auth      ¦   ¦ - Settings/Users     ¦                 ¦
-¦  +---------------------+   +----------------------+                 ¦
-¦             ¦                         ¦                              ¦
-¦      +-----------------------------------------------------------+   ¦
-¦      ¦ React 19 + Chakra UI + React Router + Context Providers   ¦   ¦
-¦      ¦ API Client (token + refresh), service layer, route guards ¦   ¦
-¦      +------------------------------------------------------------+   ¦
+|                           Client Browser                            |
+|                                                                      |
+|  +---------------------+   +----------------------+                 |
+|  | Frontoffice UI      |   | Backoffice UI        |                 |
+|  | - Challenges        |   | - Dashboard          |                 |
+|  | - Battles           |   | - Challenges         |                 |
+|  | - Leaderboard       |   | - Activity Logs      |                 |
+|  | - Profile/Auth      |   | - Settings/Users     |                 |
+|  +---------------------+   +----------------------+                 |
+|             |                         |                              |
+|      +-----------------------------------------------------------+   |
+|      | React 19 + Chakra UI + React Router + Context Providers   |   |
+|      | API Client (token + refresh), service layer, route guards |   |
+|      +------------------------------------------------------------+   |
 +--------------------------------------+---------------------------------+
-                                       ¦ HTTP/REST (proxied by Vite)
+                                       | HTTP/REST (proxied by Vite)
                                        ?
 +----------------------------------------------------------------------+
-¦                       NestJS Backend API                            ¦
-¦                 (authentication, judging, analytics)                ¦
+|                       NestJS Backend API                            |
+|                 (authentication, judging, analytics)                |
 +----------------------------------------------------------------------+
 ```
 
@@ -127,8 +127,8 @@ src/
 +-- hooks/                  # Generic custom hooks
 +-- layout/                 # Public/Admin layout shells
 +-- pages/
-¦   +-- Backoffice/         # Admin pages (Dashboard, Challenges, ActivityLogs, etc.)
-¦   +-- Frontoffice/        # Auth, challenges, battles, leaderboard, profile, speed challenge
+|   +-- Backoffice/         # Admin pages (Dashboard, Challenges, ActivityLogs, etc.)
+|   +-- Frontoffice/        # Auth, challenges, battles, leaderboard, profile, speed challenge
 +-- sections/               # Landing page sections
 +-- services/               # API client + domain service wrappers
 +-- shared/                 # Shared contexts/loaders/skeletons/cursor
