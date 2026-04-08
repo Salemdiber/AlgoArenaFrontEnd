@@ -130,6 +130,20 @@ const Sidebar = ({ isOpen = false, onClose }) => {
                     }
                 />
                 <SidebarLink
+                    to="/admin/community-analytics"
+                    label="Community Analytics"
+                    onClick={onClose}
+                    icon={
+                        <IconWrapper>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5V4H2v16h5" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 16h6M9 12h8M9 8h4" />
+                            <circle cx="5" cy="8" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="5" cy="12" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="5" cy="16" r="1" fill="currentColor" stroke="none" />
+                        </IconWrapper>
+                    }
+                />
+                <SidebarLink
                     to="/admin/system-health"
                     label="System Health"
                     onClick={onClose}

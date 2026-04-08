@@ -24,7 +24,7 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { Link as RouterLink, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import Logo from '../assets/logo_algoarena.png';
 import AccessibilityDrawer from '../accessibility/components/AccessibilityDrawer';
@@ -63,6 +63,15 @@ const LogoutIcon = (props) => (
     </Icon>
 );
 
+const NotificationBellIcon = (props) => (
+    <Icon viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M15 17h5l-1.405-1.405A2.03 2.03 0 0 1 18 14.158V11a6 6 0 0 0-4-5.659V5a2 2 0 1 0-4 0v.341A6 6 0 0 0 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5" />
+        <path d="M9 17a3 3 0 0 0 6 0" />
+    </Icon>
+);
+
+const NOTIFICATION_STORAGE_KEY = 'discussion_user_notifications_v1';
+
 const navItems = [
     { label: 'Home', to: '/' },
     { label: 'Battles', to: '/battles' },
@@ -83,6 +92,82 @@ const Header = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { currentUser, isLoggedIn, logout } = useAuth();
+    const [notifications, setNotifications] = useState([]);
+
+    const currentUserId = String(currentUser?._id || currentUser?.id || currentUser?.userId || '');
+
+    const loadNotifications = () => {
+        if (!currentUserId) {
+            setNotifications([]);
+            return;
+        }
+
+        try {
+            const all = JSON.parse(localStorage.getItem(NOTIFICATION_STORAGE_KEY) || '{}');
+            const mine = Array.isArray(all[currentUserId]) ? all[currentUserId] : [];
+            const sorted = [...mine].sort((a, b) => Number(b?.createdAt || 0) - Number(a?.createdAt || 0));
+            setNotifications(sorted);
+        } catch {
+            setNotifications([]);
+        }
+    };
+
+    useEffect(() => {
+        loadNotifications();
+
+        const onStorage = (event) => {
+            if (!event.key || event.key === NOTIFICATION_STORAGE_KEY) {
+                loadNotifications();
+            }
+        };
+
+        const timer = window.setInterval(loadNotifications, 2000);
+        window.addEventListener('storage', onStorage);
+        return () => {
+            window.clearInterval(timer);
+            window.removeEventListener('storage', onStorage);
+        };
+    }, [currentUserId]);
+
+    const unreadCount = useMemo(
+        () => notifications.filter((item) => !item?.read).length,
+        [notifications],
+    );
+
+    const markNotificationsAsRead = () => {
+        if (!currentUserId || notifications.length === 0) return;
+        const hasUnread = notifications.some((item) => !item?.read);
+        if (!hasUnread) return;
+
+        const updatedMine = notifications.map((item) => ({ ...item, read: true }));
+        setNotifications(updatedMine);
+
+        try {
+            const all = JSON.parse(localStorage.getItem(NOTIFICATION_STORAGE_KEY) || '{}');
+            localStorage.setItem(
+                NOTIFICATION_STORAGE_KEY,
+                JSON.stringify({
+                    ...all,
+                    [currentUserId]: updatedMine,
+                }),
+            );
+        } catch {
+            // ignore notification persistence errors
+        }
+    };
+
+    const formatActionLine = (item) => {
+        const actor = String(item?.actorUsername || 'Someone');
+        const action = String(item?.actionText || 'interacted with your post');
+        return `${actor} ${action}`;
+    };
+
+    const formatDateTime = (value) => {
+        if (!value) return 'Just now';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return 'Just now';
+        return date.toLocaleString();
+    };
 
     // Filter out Dashboard for Player role or when not authenticated
     const filteredNavItems = navItems.filter(
@@ -194,6 +279,90 @@ const Header = () => {
                         ) : (
                             /* ─── Logged IN: show username + avatar dropdown ─── */
                             <HStack spacing={2} display={{ base: 'none', sm: 'flex' }}>
+                                <Menu placement="bottom-end" isLazy>
+                                    <MenuButton
+                                        as={IconButton}
+                                        aria-label="Notifications"
+                                        icon={<NotificationBellIcon w={5} h={5} />}
+                                        variant="ghost"
+                                        color="gray.300"
+                                        _hover={{ color: 'brand.500', bg: 'rgba(34, 211, 238, 0.08)' }}
+                                        _focus={{ boxShadow: 'none' }}
+                                        position="relative"
+                                    />
+                                    {unreadCount > 0 && (
+                                        <Box
+                                            position="absolute"
+                                            top="-1"
+                                            right="-1"
+                                            minW="18px"
+                                            h="18px"
+                                            px="1"
+                                            borderRadius="full"
+                                            bg="red.500"
+                                            color="white"
+                                            fontSize="10px"
+                                            fontWeight="bold"
+                                            display="flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            border="2px solid"
+                                            borderColor="gray.900"
+                                            pointerEvents="none"
+                                        >
+                                            {unreadCount > 9 ? '9+' : unreadCount}
+                                        </Box>
+                                    )}
+                                    <MenuList
+                                        bg="#1e293b"
+                                        borderColor="#334155"
+                                        boxShadow="0 8px 30px rgba(0,0,0,0.5)"
+                                        borderRadius="12px"
+                                        py={2}
+                                        minW="360px"
+                                        maxH="420px"
+                                        overflowY="auto"
+                                        onMouseEnter={markNotificationsAsRead}
+                                    >
+                                        {notifications.length === 0 ? (
+                                            <MenuItem bg="transparent" color="gray.400" _hover={{ bg: 'transparent' }}>
+                                                No notifications yet
+                                            </MenuItem>
+                                        ) : (
+                                            notifications.map((item) => (
+                                                <MenuItem
+                                                    key={`${item?.createdAt || 0}-${item?.actionText || 'event'}-${item?.postId || ''}`}
+                                                    bg={item?.read ? 'transparent' : 'rgba(34, 211, 238, 0.08)'}
+                                                    _hover={{ bg: 'rgba(34, 211, 238, 0.14)' }}
+                                                    alignItems="flex-start"
+                                                    py={2.5}
+                                                >
+                                                    <HStack align="start" spacing={3} w="full">
+                                                        <Avatar
+                                                            size="xs"
+                                                            name={item?.actorUsername || 'Someone'}
+                                                            src={item?.actorAvatar || undefined}
+                                                        />
+                                                        <VStack align="start" spacing={0.5} flex="1" minW="0">
+                                                            <Text color="gray.100" fontSize="sm" whiteSpace="normal">
+                                                                {formatActionLine(item)}
+                                                            </Text>
+                                                            {item?.preview && (
+                                                                <Text color="gray.400" fontSize="xs" whiteSpace="normal" noOfLines={2}>
+                                                                    {item.preview}
+                                                                </Text>
+                                                            )}
+                                                            <Text color="gray.500" fontSize="11px">
+                                                                {formatDateTime(item?.createdAt)}
+                                                            </Text>
+                                                        </VStack>
+                                                    </HStack>
+                                                </MenuItem>
+                                            ))
+                                        )}
+                                    </MenuList>
+                                </Menu>
+
                                 <Text
                                     fontSize="sm"
                                     fontWeight="600"
@@ -280,18 +449,29 @@ const Header = () => {
 
                         {/* Mobile: show avatar if logged in */}
                         {isLoggedIn && (
-                            <Avatar
-                                size="sm"
-                                name={currentUser?.username}
-                                src={currentUser?.avatar}
-                                display={{ base: 'flex', sm: 'none' }}
-                                border="2px solid"
-                                borderColor="gray.700"
-                                cursor="pointer"
-                                onClick={() => { navigate('/profile'); onClose(); }}
-                                _hover={{ borderColor: '#22d3ee' }}
-                                transition="all 0.2s"
-                            />
+                            <>
+                                <IconButton
+                                    aria-label="Notifications"
+                                    icon={<NotificationBellIcon w={5} h={5} />}
+                                    variant="ghost"
+                                    color="gray.300"
+                                    display={{ base: 'flex', sm: 'none' }}
+                                    _hover={{ color: 'brand.500', bg: 'rgba(34, 211, 238, 0.08)' }}
+                                    _focus={{ boxShadow: 'none' }}
+                                />
+                                <Avatar
+                                    size="sm"
+                                    name={currentUser?.username}
+                                    src={currentUser?.avatar}
+                                    display={{ base: 'flex', sm: 'none' }}
+                                    border="2px solid"
+                                    borderColor="gray.700"
+                                    cursor="pointer"
+                                    onClick={() => { navigate('/profile'); onClose(); }}
+                                    _hover={{ borderColor: '#22d3ee' }}
+                                    transition="all 0.2s"
+                                />
+                            </>
                         )}
 
                         {/* Hamburger – mobile only */}
