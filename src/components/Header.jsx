@@ -190,7 +190,7 @@ const Header = () => {
             { label: t('navigation.battles'), to: '/battles' },
             { label: t('navigation.challenges'), to: '/challenges' },
             { label: t('navigation.leaderboard'), to: '/leaderboard' },
-            { label: t('navigation.community'), to: '/#community' },
+            { label: t('navigation.community'), to: '/community' },
             { label: t('navigation.dashboard'), to: '/admin' },
         ],
         [t],

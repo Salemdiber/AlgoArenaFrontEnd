@@ -57,6 +57,8 @@ const SpeedChallengePage = lazy(() => import('./pages/Frontoffice/speedchallenge
 
 // Frontoffice Leaderboard
 const LeaderboardPage = lazy(() => import('./pages/Frontoffice/leaderboard/pages/LeaderboardPage'));
+const CommunityPage = lazy(() => import('./pages/Frontoffice/community/pages/CommunityPage'));
+const CommunityDashboardPage = lazy(() => import('./pages/Frontoffice/community/pages/CommunityDashboardPage'));
 
 // Frontoffice Profile
 const ProfilePage = lazy(() => import('./pages/Frontoffice/profile/pages/ProfilePage'));
@@ -70,6 +72,7 @@ const Challenges = lazy(() => import('./pages/Backoffice/Challenges'));
 const AILogs = lazy(() => import('./pages/Backoffice/AILogs'));
 const Leaderboards = lazy(() => import('./pages/Backoffice/Leaderboards'));
 const Analytics = lazy(() => import('./pages/Backoffice/Analytics'));
+const CommunityAnalytics = lazy(() => import('./pages/Backoffice/CommunityAnalytics'));
 const SystemHealth = lazy(() => import('./pages/Backoffice/SystemHealth'));
 const Settings = lazy(() => import('./pages/Backoffice/Settings'));
 const Profile = lazy(() => import('./pages/Backoffice/Profile'));
@@ -742,6 +745,10 @@ function App() {
                             <Route path="/battles/:id/summary" element={<BattlesAuthGuard><BattleSummaryPage /></BattlesAuthGuard>} />
                             <Route path="/challenges" element={<ChallengesAuthGuard><ChallengesListPage /></ChallengesAuthGuard>} />
                             <Route path="/leaderboard" element={<LeaderboardPage />} />
+                            <Route path="/community" element={<CommunityPage />} />
+                            <Route path="/community/dashboard" element={<CommunityDashboardPage />} />
+                            <Route path="/discussion" element={<Navigate to="/community" replace />} />
+                            <Route path="/discussion/dashboard" element={<Navigate to="/community/dashboard" replace />} />
                             <Route path="/profile" element={<ProfilePage />} />
                             <Route path="/speed-challenge" element={<SpeedChallengePage />} />
                             <Route path="/profile/2fa-setup" element={<TwoFactorSetupPage />} />
@@ -766,6 +773,7 @@ function App() {
                             <Route path="ai-logs" element={<AILogs />} />
                             <Route path="leaderboards" element={<Leaderboards />} />
                             <Route path="analytics" element={<Analytics />} />
+                            <Route path="community-analytics" element={<CommunityAnalytics />} />
                             <Route path="system-health" element={<SystemHealth />} />
                             <Route path="settings" element={<Settings />} />
                             <Route path="sessions" element={<Sessions />} />
